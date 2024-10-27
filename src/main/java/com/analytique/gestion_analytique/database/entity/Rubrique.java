@@ -39,7 +39,7 @@ public class Rubrique {
   @Column(name = "dateInsertion")
   private Date dateInsertion;
   
-  @Transient
+  
   private Set<PartsParCentre> parts;
 	@Transient
 	private Set<Depenses> depenses;
