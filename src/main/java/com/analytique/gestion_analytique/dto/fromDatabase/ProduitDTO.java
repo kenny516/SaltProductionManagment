@@ -1,9 +1,9 @@
-package com.analytique.gestion_analytique.dto.fromPersistence;
+package com.analytique.gestion_analytique.dto.fromDatabase;
 
 import java.util.List;
 
-import com.analytique.gestion_analytique.database.entity.Produit;
-import com.analytique.gestion_analytique.database.entity.UniteOeuvre;
+import com.analytique.gestion_analytique.database.entity.production.Produit;
+import com.analytique.gestion_analytique.database.entity.unite.UniteOeuvre;
 
 import jakarta.persistence.EntityManager;
 
@@ -31,7 +31,7 @@ public class ProduitDTO extends Produit {
 		}
 	}
 
-	public ProduitDTO(Long idProduit, EntityManager em) {
+	public ProduitDTO(Integer idProduit, EntityManager em) {
 		Produit produit = em.find(Produit.class, idProduit);
 		setId(produit.getId());
 		setNom(produit.getNom());

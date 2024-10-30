@@ -1,16 +1,12 @@
 package com.analytique.gestion_analytique.service;
 
 import java.util.List;
-import java.util.Set;
-
-import javax.swing.text.html.parser.Entity;
-
 import org.springframework.stereotype.Service;
 
-import com.analytique.gestion_analytique.database.entity.PartsParCentre;
-import com.analytique.gestion_analytique.database.entity.Rubrique;
+import com.analytique.gestion_analytique.database.entity.rubrique.Rubrique;
+import com.analytique.gestion_analytique.database.repository.PartsParCentreRepo;
 import com.analytique.gestion_analytique.database.repository.RubriqueRepo;
-import com.analytique.gestion_analytique.dto.fromPersistence.RubriqueDTO;
+import com.analytique.gestion_analytique.dto.fromDatabase.RubriqueDTO;
 
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
@@ -20,18 +16,18 @@ public class RubriqueService {
 	@PersistenceContext
 	private EntityManager entityManager;
 	private final RubriqueRepo rubriqueRepo;
-	private final PartsParCentreService ppcService;
+	private final PartsParCentreRepo parCentreRepo;
 	
-	public RubriqueService(RubriqueRepo rubriqueRepo, PartsParCentreService ppcService) {
+	public RubriqueService(RubriqueRepo rubriqueRepo, PartsParCentreRepo parCentreRepo) {
 		this.rubriqueRepo = rubriqueRepo;
-		this.ppcService = ppcService;
+		this.parCentreRepo = parCentreRepo;
 	}
 
 	public List<RubriqueDTO> getAllRubriques() {
-		return RubriqueDTO.map(rubriqueRepo.findAll(), entityManager, ppcService);
+		return RubriqueDTO.map(rubriqueRepo.findAll(), entityManager, parCentreRepo);
 	}
 
-	public Rubrique getRubriqueById(Long id) {
+	public Rubrique getRubriqueById(Integer id) {
 		return rubriqueRepo.findById(id).get();
 	}
 

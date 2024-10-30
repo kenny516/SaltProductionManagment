@@ -1,4 +1,4 @@
-package com.analytique.gestion_analytique.database.entity;
+package com.analytique.gestion_analytique.database.entity.rubrique;
 
 import java.sql.Date;
 import jakarta.persistence.Column;
@@ -10,33 +10,33 @@ import jakarta.persistence.Table;
 
 // Rubrique.java
 @Entity
-@Table(name = "Rubrique")
+@Table(name = "rubrique")
 public class Rubrique {
   
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
-  private Long id;
+  private Integer id;
   
   @Column(name = "nom")
   private String nom;
   
-  @Column(name = "estVariable")
+  @Column(name = "estvariable")
   private boolean estVariable;
   
-  @Column(name = "idUniteOeuvre")
-  private Long idUniteOeuvre;
+  @Column(name = "iduniteoeuvre")
+  private Integer idUniteOeuvre;
   
-  @Column(name = "idCateg")
-  private Long idCateg;
+  @Column(name = "idcateg")
+  private Integer idCateg;
   
-  @Column(name = "dateInsertion")
+  @Column(name = "dateinsertion")
   private Date dateInsertion;
 
-	public Long getId() {
+	public Integer getId() {
 		return id;
 	}
 
-	public void setId(Long id) {
+	public void setId(Integer id) {
 		this.id = id;
 	}
 
@@ -56,19 +56,19 @@ public class Rubrique {
 		this.estVariable = estVariable;
 	}
 
-	public Long getIdUniteOeuvre() {
+	public Integer getIdUniteOeuvre() {
 		return idUniteOeuvre;
 	}
 
-	public void setIdUniteOeuvre(Long idUniteOeuvre) {
+	public void setIdUniteOeuvre(Integer idUniteOeuvre) {
 		this.idUniteOeuvre = idUniteOeuvre;
 	}
 
-	public Long getIdCateg() {
+	public Integer getIdCateg() {
 		return idCateg;
 	}
 
-	public void setIdCateg(Long idCateg) {
+	public void setIdCateg(Integer idCateg) {
 		this.idCateg = idCateg;
 	}
 

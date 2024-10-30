@@ -1,4 +1,4 @@
-package com.analytique.gestion_analytique.database.entity;
+package com.analytique.gestion_analytique.database.entity.unite;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -7,27 +7,23 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 
-// Centre.java
 @Entity
-@Table(name = "Centre")
-public class Centre {
+@Table(name = "uniteoeuvre")
+public class UniteOeuvre {
   
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
-  private Long id;
+  private Integer id;
   
   @Column(name = "nom")
   private String nom;
   
-  @Column(name = "idNature")
-  private Long idNature;
-  
   // Getters and Setters
-  public Long getId() {
+  public Integer getId() {
     return id;
   }
   
-  public void setId(Long id) {
+  public void setId(Integer id) {
     this.id = id;
   }
   
@@ -38,13 +34,4 @@ public class Centre {
   public void setNom(String nom) {
     this.nom = nom;
   }
-  
-  public Long getIdNature() {
-    return idNature;
-  }
-  
-  public void setIdNature(Long idNature) {
-    this.idNature = idNature;
-  }
-	
 }

@@ -1,9 +1,9 @@
-package com.analytique.gestion_analytique.dto.fromPersistence;
+package com.analytique.gestion_analytique.dto.fromDatabase;
 
 import java.util.List;
 
-import com.analytique.gestion_analytique.database.entity.PartsParCentre;
-import com.analytique.gestion_analytique.database.entity.Rubrique;
+import com.analytique.gestion_analytique.database.entity.rubrique.PartsParCentre;
+import com.analytique.gestion_analytique.database.entity.rubrique.Rubrique;
 
 import jakarta.persistence.EntityManager;
 

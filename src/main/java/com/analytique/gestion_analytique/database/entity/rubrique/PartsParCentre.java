@@ -1,4 +1,4 @@
-package com.analytique.gestion_analytique.database.entity;
+package com.analytique.gestion_analytique.database.entity.rubrique;
 
 import java.math.BigDecimal;
 import java.sql.Date;
@@ -12,39 +12,39 @@ import jakarta.persistence.Table;
 
 // PartsParCentre.java
 @Entity
-@Table(name = "PartsParCentre")
+@Table(name = "partsparcentre")
 public class PartsParCentre {
   
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
-  private Long id;
+  private Integer id;
   
-  @Column(name = "idRubrique")
-  private Long idRubrique;
+  @Column(name = "idrubrique")
+  private Integer idRubrique;
   
-  @Column(name = "idCentre")
-  private Long idCentre;
+  @Column(name = "idcentre")
+  private Integer idCentre;
   
   @Column(name = "valeur")
   private BigDecimal valeur;
   
-  @Column(name = "dateInsertion")
+  @Column(name = "dateinsertion")
   private Date dateInsertion;
   
   // Getters and Setters
-  public Long getIdRubrique() {
+  public Integer getIdRubrique() {
     return idRubrique;
   }
   
-  public void setIdRubrique(Long idRubrique) {
+  public void setIdRubrique(Integer idRubrique) {
     this.idRubrique = idRubrique;
   }
   
-  public Long getIdCentre() {
+  public Integer getIdCentre() {
     return idCentre;
   }
   
-  public void setIdCentre(Long idCentre) {
+  public void setIdCentre(Integer idCentre) {
     this.idCentre = idCentre;
   }
   
@@ -64,11 +64,11 @@ public class PartsParCentre {
     this.dateInsertion = dateInsertion;
   }
 
-	public Long getId() {
+	public Integer getId() {
 		return id;
 	}
 
-	public void setId(Long id) {
+	public void setId(Integer id) {
 		this.id = id;
 	}
 }

@@ -1,13 +1,13 @@
-package com.analytique.gestion_analytique.dto.fromPersistence;
+package com.analytique.gestion_analytique.dto.fromDatabase;
 
 import java.util.List;
 
-import com.analytique.gestion_analytique.database.entity.Depenses;
-import com.analytique.gestion_analytique.database.entity.PartsParCentre;
-import com.analytique.gestion_analytique.database.entity.Rubrique;
-import com.analytique.gestion_analytique.database.entity.RubriqueCateg;
-import com.analytique.gestion_analytique.database.entity.UniteOeuvre;
-import com.analytique.gestion_analytique.service.PartsParCentreService;
+import com.analytique.gestion_analytique.database.entity.achat.Depenses;
+import com.analytique.gestion_analytique.database.entity.rubrique.PartsParCentre;
+import com.analytique.gestion_analytique.database.entity.rubrique.Rubrique;
+import com.analytique.gestion_analytique.database.entity.rubrique.RubriqueCateg;
+import com.analytique.gestion_analytique.database.entity.unite.UniteOeuvre;
+import com.analytique.gestion_analytique.database.repository.PartsParCentreRepo;
 
 import jakarta.persistence.EntityManager;
 
@@ -31,15 +31,15 @@ public class RubriqueDTO extends Rubrique{
 		this.rubriqueCateg = rubriqueCateg;
 	}
 
-	public void setActu(PartsParCentreService ppcService) {
-		actu = ppcService.getRecentPPCentre(this);
+	public void setActu(PartsParCentreRepo ppcRepo) {
+		actu = ppcRepo.findMostRecentByRubrique(getId());
 	}
 
 	public RubriqueDTO(){
 		super();
 	}
 
-	public RubriqueDTO(Rubrique rubrique, EntityManager em, PartsParCentreService ppcService) {
+	public RubriqueDTO(Rubrique rubrique, EntityManager em, PartsParCentreRepo ppcRepo) {
 		setId(rubrique.getId());
 		setNom(rubrique.getNom());
 		setIdUniteOeuvre(rubrique.getIdUniteOeuvre());
@@ -48,10 +48,10 @@ public class RubriqueDTO extends Rubrique{
 			setUniteOeuvre(em.find(UniteOeuvre.class, rubrique.getIdUniteOeuvre()));
 			setRubriqueCateg(em.find(RubriqueCateg.class, rubrique.getIdCateg()));
 		}
-		setActu(ppcService);
+		setActu(ppcRepo);
 	}
 
-	public RubriqueDTO(Long id, EntityManager em, PartsParCentreService ppcService) {
+	public RubriqueDTO(Integer id, EntityManager em, PartsParCentreRepo ppcRepo) {
 		Rubrique rubrique = em.find(Rubrique.class, id);
 		setId(rubrique.getId());
 		setNom(rubrique.getNom());
@@ -61,10 +61,24 @@ public class RubriqueDTO extends Rubrique{
 			setUniteOeuvre(em.find(UniteOeuvre.class, rubrique.getIdUniteOeuvre()));
 			setRubriqueCateg(em.find(RubriqueCateg.class, rubrique.getIdCateg()));
 		}
-		setActu(ppcService);
+		setActu(ppcRepo);
 	}
 
-	public static List<RubriqueDTO> map(List<Rubrique> rubriques, EntityManager em, PartsParCentreService ppcService) {
-		return rubriques.stream().map(r -> new RubriqueDTO(r, em, ppcService)).toList();
+	public static List<RubriqueDTO> map(List<Rubrique> rubriques, EntityManager em, PartsParCentreRepo ppcRepo) {
+		return rubriques.stream().map(r -> new RubriqueDTO(r, em, ppcRepo)).toList();
 	}
+	public List<PartsParCentre> getActu() {
+		return actu;
+	}
+	public void setActu(List<PartsParCentre> actu) {
+		this.actu = actu;
+	}
+	public List<Depenses> getDeps() {
+		return deps;
+	}
+	public void setDeps(List<Depenses> deps) {
+		this.deps = deps;
+	}
+
+	
 }

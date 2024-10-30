@@ -1,4 +1,4 @@
-package com.analytique.gestion_analytique.database.entity;
+package com.analytique.gestion_analytique.database.entity.rubrique;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -10,22 +10,22 @@ import jakarta.persistence.GenerationType;
 
 // RubriqueCateg.java
 @Entity
-@Table(name = "RubriqueCateg")
+@Table(name = "rubriquecateg")
 public class RubriqueCateg {
   
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
-  private Long id;
+  private Integer id;
   
   @Column(name = "nom")
   private String nom;
   
   // Getters and Setters
-  public Long getId() {
+  public Integer getId() {
     return id;
   }
   
-  public void setId(Long id) {
+  public void setId(Integer id) {
     this.id = id;
   }
   

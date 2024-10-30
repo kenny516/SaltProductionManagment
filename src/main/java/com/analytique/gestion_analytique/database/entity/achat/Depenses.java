@@ -1,4 +1,4 @@
-package com.analytique.gestion_analytique.database.entity;
+package com.analytique.gestion_analytique.database.entity.achat;
 
 import java.math.BigDecimal;
 import java.sql.Date;
@@ -16,25 +16,25 @@ public class Depenses {
   
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
-  private Long id;
+  private Integer id;
   
-  @Column(name = "dateDepense")
+  @Column(name = "datedepense")
   private Date dateDepense;
   
-  @Column(name = "prixU")
+  @Column(name = "prixu")
   private BigDecimal prixU;
   
   @Column(name = "quantite")
   private Double quantite;
   
-  @Column(name = "idRubrique")
-  private Long idRubrique;
+  @Column(name = "idrubrique")
+  private Integer idRubrique;
 
-	public Long getId() {
+	public Integer getId() {
 		return id;
 	}
 
-	public void setId(Long id) {
+	public void setId(Integer id) {
 		this.id = id;
 	}
 
@@ -62,11 +62,11 @@ public class Depenses {
 		this.quantite = quantite;
 	}
 
-	public Long getIdRubrique() {
+	public Integer getIdRubrique() {
 		return idRubrique;
 	}
 
-	public void setIdRubrique(Long idRubrique) {
+	public void setIdRubrique(Integer idRubrique) {
 		this.idRubrique = idRubrique;
 	}
 }

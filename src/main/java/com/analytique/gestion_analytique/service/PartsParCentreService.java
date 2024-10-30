@@ -4,13 +4,11 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
-import com.analytique.gestion_analytique.database.entity.Centre;
-import com.analytique.gestion_analytique.database.entity.PartsParCentre;
-import com.analytique.gestion_analytique.database.entity.Rubrique;
-import com.analytique.gestion_analytique.database.repository.CentreRepo;
+import com.analytique.gestion_analytique.database.entity.centre.Centre;
+import com.analytique.gestion_analytique.database.entity.rubrique.PartsParCentre;
+import com.analytique.gestion_analytique.database.entity.rubrique.Rubrique;
 import com.analytique.gestion_analytique.database.repository.PartsParCentreRepo;
-import com.analytique.gestion_analytique.database.repository.RubriqueRepo;
-import com.analytique.gestion_analytique.dto.fromPersistence.PPCentreDTO;
+import com.analytique.gestion_analytique.dto.fromDatabase.PPCentreDTO;
 
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;

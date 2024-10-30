@@ -1,9 +1,9 @@
-package com.analytique.gestion_analytique.dto.fromPersistence;
+package com.analytique.gestion_analytique.dto.fromDatabase;
 
 import java.util.List;
 
-import com.analytique.gestion_analytique.database.entity.Centre;
-import com.analytique.gestion_analytique.database.entity.NatureCentre;
+import com.analytique.gestion_analytique.database.entity.centre.Centre;
+import com.analytique.gestion_analytique.database.entity.centre.NatureCentre;
 
 import jakarta.persistence.EntityManager;
 
@@ -35,7 +35,7 @@ public class CentreDTO extends Centre {
 		return centres.stream().map(r -> new CentreDTO(r, em)).toList();
 	}
 
-	public CentreDTO(Long idCentre, EntityManager em) {
+	public CentreDTO(Integer idCentre, EntityManager em) {
 		Centre centre = em.find(Centre.class, idCentre);
 		this.setId(centre.getId());
 		this.setIdNature(centre.getIdNature());

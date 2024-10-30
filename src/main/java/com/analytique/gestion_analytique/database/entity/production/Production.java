@@ -1,4 +1,4 @@
-package com.analytique.gestion_analytique.database.entity;
+package com.analytique.gestion_analytique.database.entity.production;
 
 import java.math.BigDecimal;
 import java.sql.Date;
@@ -12,15 +12,15 @@ import jakarta.persistence.Table;
 
 // Production.java
 @Entity
-@Table(name = "Production")
+@Table(name = "production")
 public class Production {
   
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
-  private Long id;
+  private Integer id;
   
-  @Column(name = "idProduit")
-  private Long idProduit;
+  @Column(name = "idproduit")
+  private Integer idProduit;
   
   @Column(name = "date")
   private Date date;
@@ -29,19 +29,19 @@ public class Production {
   private BigDecimal quantite;
   
   // Getters and Setters
-  public Long getId() {
+  public Integer getId() {
     return id;
   }
   
-  public void setId(Long id) {
+  public void setId(Integer id) {
     this.id = id;
   }
 
-	public Long getIdProduit() {
+	public Integer getIdProduit() {
 		return idProduit;
 	}
 
-	public void setIdProduit(Long idProduit) {
+	public void setIdProduit(Integer idProduit) {
 		this.idProduit = idProduit;
 	}
 

@@ -1,9 +1,9 @@
-package com.analytique.gestion_analytique.dto.fromPersistence;
+package com.analytique.gestion_analytique.dto.fromDatabase;
 
 
 import java.util.List;
 
-import com.analytique.gestion_analytique.database.entity.Production;
+import com.analytique.gestion_analytique.database.entity.production.Production;
 
 import jakarta.persistence.EntityManager;
 
@@ -32,7 +32,7 @@ public class ProductionDTO extends Production {
 		}
 	}
 
-	public ProductionDTO(Long idProduction, EntityManager em){
+	public ProductionDTO(Integer idProduction, EntityManager em){
 		Production production = em.find(Production.class, idProduction);
 		setId(production.getId());
 		setDate(production.getDate());

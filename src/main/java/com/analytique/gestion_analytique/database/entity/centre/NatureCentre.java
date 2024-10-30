@@ -1,33 +1,31 @@
-package com.analytique.gestion_analytique.database.entity;
+package com.analytique.gestion_analytique.database.entity.centre;
+
 
 import jakarta.persistence.Column;
+import jakarta.persistence.Table;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.Table;
 
-// Produit.java
+// NatureCentre.java
 @Entity
-@Table(name = "Produit")
-public class Produit {
+@Table(name = "naturecentre")
+public class NatureCentre {
   
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
-  private Long id;
+  private Integer id;
   
   @Column(name = "nom")
   private String nom;
   
-  @Column(name = "idUniteOeuvre")
-  private Long idUniteOeuvre;
-  
   // Getters and Setters
-  public Long getId() {
+  public Integer getId() {
     return id;
   }
   
-  public void setId(Long id) {
+  public void setId(Integer id) {
     this.id = id;
   }
   
@@ -37,13 +35,5 @@ public class Produit {
   
   public void setNom(String nom) {
     this.nom = nom;
-  }
-  
-  public Long getIdUniteOeuvre() {
-    return idUniteOeuvre;
-  }
-  
-  public void setIdUniteOeuvre(Long idUniteOeuvre) {
-    this.idUniteOeuvre = idUniteOeuvre;
   }
 }
