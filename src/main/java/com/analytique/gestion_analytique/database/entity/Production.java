@@ -8,8 +8,6 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
 // Production.java
@@ -21,9 +19,8 @@ public class Production {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
   
-  @ManyToOne
-  @JoinColumn(name = "idProduit")
-  private Produit produit;
+  @Column(name = "idProduit")
+  private Long idProduit;
   
   @Column(name = "date")
   private Date date;
@@ -39,4 +36,29 @@ public class Production {
   public void setId(Long id) {
     this.id = id;
   }
+
+	public Long getIdProduit() {
+		return idProduit;
+	}
+
+	public void setIdProduit(Long idProduit) {
+		this.idProduit = idProduit;
+	}
+
+	public Date getDate() {
+		return date;
+	}
+
+	public void setDate(Date date) {
+		this.date = date;
+	}
+
+	public BigDecimal getQuantite() {
+		return quantite;
+	}
+
+	public void setQuantite(BigDecimal quantite) {
+		this.quantite = quantite;
+	}
+	
 }

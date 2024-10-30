@@ -8,8 +8,6 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
 // PartsParCentre.java
@@ -21,13 +19,11 @@ public class PartsParCentre {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
   
-  @ManyToOne
-  @JoinColumn(name = "idRubrique")
-  private Rubrique rubrique;
+  @Column(name = "idRubrique")
+  private Long idRubrique;
   
-  @ManyToOne
-  @JoinColumn(name = "idCentre")
-  private Centre centre;
+  @Column(name = "idCentre")
+  private Long idCentre;
   
   @Column(name = "valeur")
   private BigDecimal valeur;
@@ -36,28 +32,20 @@ public class PartsParCentre {
   private Date dateInsertion;
   
   // Getters and Setters
-  public Long getId() {
-    return id;
+  public Long getIdRubrique() {
+    return idRubrique;
   }
   
-  public void setId(Long id) {
-    this.id = id;
+  public void setIdRubrique(Long idRubrique) {
+    this.idRubrique = idRubrique;
   }
   
-  public Rubrique getRubrique() {
-    return rubrique;
+  public Long getIdCentre() {
+    return idCentre;
   }
   
-  public void setRubrique(Rubrique rubrique) {
-    this.rubrique = rubrique;
-  }
-  
-  public Centre getCentre() {
-    return centre;
-  }
-  
-  public void setCentre(Centre centre) {
-    this.centre = centre;
+  public void setIdCentre(Long idCentre) {
+    this.idCentre = idCentre;
   }
   
   public BigDecimal getValeur() {
@@ -75,4 +63,12 @@ public class PartsParCentre {
   public void setDateInsertion(Date dateInsertion) {
     this.dateInsertion = dateInsertion;
   }
+
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
 }

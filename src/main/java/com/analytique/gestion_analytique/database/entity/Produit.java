@@ -5,8 +5,6 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
 // Produit.java
@@ -21,9 +19,8 @@ public class Produit {
   @Column(name = "nom")
   private String nom;
   
-  @ManyToOne
-  @JoinColumn(name = "idUniteOeuvre")
-  private UniteOeuvre uniteOeuvre;
+  @Column(name = "idUniteOeuvre")
+  private Long idUniteOeuvre;
   
   // Getters and Setters
   public Long getId() {
@@ -42,11 +39,11 @@ public class Produit {
     this.nom = nom;
   }
   
-  public UniteOeuvre getUniteOeuvre() {
-    return uniteOeuvre;
+  public Long getIdUniteOeuvre() {
+    return idUniteOeuvre;
   }
   
-  public void setUniteOeuvre(UniteOeuvre uniteOeuvre) {
-    this.uniteOeuvre = uniteOeuvre;
+  public void setIdUniteOeuvre(Long idUniteOeuvre) {
+    this.idUniteOeuvre = idUniteOeuvre;
   }
 }

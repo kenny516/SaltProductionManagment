@@ -5,8 +5,6 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
 // Centre.java
@@ -21,9 +19,8 @@ public class Centre {
   @Column(name = "nom")
   private String nom;
   
-  @ManyToOne
-  @JoinColumn(name = "idNature")
-  private NatureCentre natureCentre;
+  @Column(name = "idNature")
+  private Long idNature;
   
   // Getters and Setters
   public Long getId() {
@@ -42,11 +39,12 @@ public class Centre {
     this.nom = nom;
   }
   
-  public NatureCentre getNatureCentre() {
-    return natureCentre;
+  public Long getIdNature() {
+    return idNature;
   }
   
-  public void setNatureCentre(NatureCentre natureCentre) {
-    this.natureCentre = natureCentre;
+  public void setIdNature(Long idNature) {
+    this.idNature = idNature;
   }
+	
 }

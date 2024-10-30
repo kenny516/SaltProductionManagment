@@ -33,5 +33,7 @@ public class AssoDepensesParts {
   public void setIdPart(Long idPart) {
     this.idPart = idPart;
   }
+
+	
   
 }

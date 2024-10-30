@@ -2,17 +2,11 @@ package com.analytique.gestion_analytique.database.entity;
 
 import java.math.BigDecimal;
 import java.sql.Date;
-import java.util.Set;
-
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.JoinTable;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 
 // Depenses.java
@@ -33,67 +27,46 @@ public class Depenses {
   @Column(name = "quantite")
   private Double quantite;
   
-  @ManyToOne
-  @JoinColumn(name = "idRubrique")
-  private Rubrique rubrique;
+  @Column(name = "idRubrique")
+  private Long idRubrique;
 
-	@OneToMany
-  @JoinTable(
-    name = "AssoDepensesParts",
-    joinColumns = @JoinColumn(name = "idDepense"),
-    inverseJoinColumns = @JoinColumn(name = "idPart")
-  )
-  private Set<PartsParCentre> partsParCentre;
-  
-  // Getters
-  public Long getId() {
-    return id;
-  }
-  
-  public Date getDateDepense() {
-    return dateDepense;
-  }
-  
-  public BigDecimal getPrixU() {
-    return prixU;
-  }
-  
-  public Double getQuantite() {
-    return quantite;
-  }
-  
-  public Rubrique getRubrique() {
-    return rubrique;
-  }
-  
-  // Setters
-  public void setId(Long id) {
-    this.id = id;
-  }
-  
-  public void setDateDepense(Date dateDepense) {
-    this.dateDepense = dateDepense;
-  }
-  
-  public void setPrixU(BigDecimal prixU) {
-    this.prixU = prixU;
-  }
-  
-  public void setQuantite(Double quantite) {
-    this.quantite = quantite;
-  }
-
-	public void setRubrique(Rubrique rubrique) {
-		this.rubrique = rubrique;
+	public Long getId() {
+		return id;
 	}
 
-	public Set<PartsParCentre> getPartsParCentre() {
-		return partsParCentre;
+	public void setId(Long id) {
+		this.id = id;
 	}
 
-	public void setPartsParCentre(Set<PartsParCentre> partsParCentre) {
-		this.partsParCentre = partsParCentre;
+	public Date getDateDepense() {
+		return dateDepense;
 	}
 
-	
+	public void setDateDepense(Date dateDepense) {
+		this.dateDepense = dateDepense;
+	}
+
+	public BigDecimal getPrixU() {
+		return prixU;
+	}
+
+	public void setPrixU(BigDecimal prixU) {
+		this.prixU = prixU;
+	}
+
+	public Double getQuantite() {
+		return quantite;
+	}
+
+	public void setQuantite(Double quantite) {
+		this.quantite = quantite;
+	}
+
+	public Long getIdRubrique() {
+		return idRubrique;
+	}
+
+	public void setIdRubrique(Long idRubrique) {
+		this.idRubrique = idRubrique;
+	}
 }
