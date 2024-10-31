@@ -7,7 +7,6 @@ import org.springframework.stereotype.Service;
 import com.analytique.gestion_analytique.database.entity.achat.Depenses;
 import com.analytique.gestion_analytique.database.entity.association.AssoDepensesParts;
 import com.analytique.gestion_analytique.database.entity.rubrique.PartsParCentre;
-import com.analytique.gestion_analytique.database.entity.rubrique.Rubrique;
 import com.analytique.gestion_analytique.database.repository.AssoDepensesPartsRepo;
 import com.analytique.gestion_analytique.database.repository.DepensesRepo;
 import com.analytique.gestion_analytique.database.repository.PartsParCentreRepo;
