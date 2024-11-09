@@ -4,7 +4,7 @@ CREATE TABLE Postes (
     id SERIAL PRIMARY KEY,
     titre VARCHAR(100) NOT NULL,
     description TEXT,
-    departement VARCHAR(100),
+    departement VARCHAR(100)
 );
 
 CREATE TABLE Candidats (
@@ -14,7 +14,7 @@ CREATE TABLE Candidats (
     email VARCHAR(150) UNIQUE NOT NULL,
     telephone VARCHAR(20),
     date_candidature DATE DEFAULT CURRENT_DATE,
-    poste_id INT REFERENCES Postes(id),
+    poste_id INT REFERENCES Postes(id)
 );
 
 CREATE TABLE Employes (
@@ -24,7 +24,7 @@ CREATE TABLE Employes (
     email VARCHAR(150) UNIQUE NOT NULL,
     telephone VARCHAR(20),
     date_embauche DATE DEFAULT CURRENT_DATE,
-    poste_id INT REFERENCES Postes(id),
+    poste_id INT REFERENCES Postes(id)
 );
 
 CREATE TABLE Competences (
