@@ -23,12 +23,14 @@ CREATE TABLE typeNote(
     id SERIAL PRIMARY KEY,
     nomType VARCHAR(50) NOT NULL
 );
+
 CREATE TABLE noteCandidat(
     idCandidat INT REFERENCES Candidats(id),
     idTypeNote int REFERENCES TypeNote(id),
     note int ,
     PRIMARY KEY (idCandidat, idTypeNote)
 );
+
 CREATE TABLE Employes (
     id SERIAL PRIMARY KEY,
     nom VARCHAR(100) NOT NULL,
