@@ -6,6 +6,7 @@ CREATE TABLE Postes (
     id SERIAL PRIMARY KEY,
     titre VARCHAR(100) NOT NULL,
     description TEXT,
+    
     departement VARCHAR(100)
 );
 
@@ -28,7 +29,7 @@ CREATE TABLE noteCandidat(
     idCandidat INT REFERENCES Candidats(id),
     idTypeNote int REFERENCES TypeNote(id),
     note int ,
-    PRIMARY KEY (idCandidat, idTypeNote)
+    PRIMARY KEY (idCandidat, idTypeNote) 
 );
 
 CREATE TABLE Employes (
