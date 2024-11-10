@@ -29,7 +29,7 @@ public class Employe {
     @ManyToOne
     @JoinColumn(name = "poste_id")
     private Poste poste;
-
+ 
     public Long getId() {
         return id;
     }

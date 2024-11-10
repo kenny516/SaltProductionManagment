@@ -6,7 +6,7 @@ CREATE TABLE Postes (
     id SERIAL PRIMARY KEY,
     titre VARCHAR(100) NOT NULL,
     description TEXT,
-    
+
     departement VARCHAR(100)
 );
 
@@ -85,3 +85,33 @@ CREATE TABLE CompetencesCandidats (
     niveau INT CHECK (niveau >= 1 AND niveau <= 5),
     PRIMARY KEY (candidat_id, competence_id)
 );
+
+ALTER TABLE Candidats ADD COLUMN status VARCHAR(20) DEFAULT 'En attente';
+
+CREATE OR REPLACE FUNCTION evaluer_statut_candidat()
+RETURNS TRIGGER AS $$
+DECLARE
+    moyenne_niveau FLOAT;
+BEGIN
+    -- Calculer la moyenne des niveaux de compétence pour le candidat et son poste
+    SELECT AVG(cc.niveau) INTO moyenne_niveau
+    FROM CompetencesCandidats cc
+    JOIN detailsPoste dp ON cc.competence_id = dp.idCompetence
+    WHERE cc.candidat_id = NEW.candidat_id
+    AND dp.idPoste = (SELECT poste_id FROM Candidats WHERE id = NEW.candidat_id);
+
+    -- Mettre à jour le statut du candidat en fonction de la moyenne
+    IF moyenne_niveau IS NOT NULL AND moyenne_niveau >= 3 THEN
+        UPDATE Candidats SET status = 'Retenu' WHERE id = NEW.candidat_id;
+    ELSE
+        UPDATE Candidats SET status = 'Refusé' WHERE id = NEW.candidat_id;
+    END IF;
+
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE OR REPLACE TRIGGER trigger_evaluer_statut_candidat
+AFTER INSERT ON CompetencesCandidats
+FOR EACH ROW
+EXECUTE FUNCTION evaluer_statut_candidat();

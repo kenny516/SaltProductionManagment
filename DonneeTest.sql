@@ -8,7 +8,7 @@ VALUES
 -- Insertion des données dans la table Candidats
 INSERT INTO Candidats (nom, prenom, email, telephone, date_candidature, poste_id)
 VALUES 
-    ('Dupont', 'Jean', 'jean.dupont@example.com', '0612345678', CURRENT_DATE, 1),
+    ('Dupont', 'Jean', 'jeann.dupont@example.com', '0612345678', CURRENT_DATE, 1),
     ('Martin', 'Marie', 'marie.martin@example.com', '0698765432', CURRENT_DATE, 2),
     ('Durand', 'Paul', 'paul.durand@example.com', '0712345678', CURRENT_DATE, 3);
 
