@@ -1,6 +1,6 @@
-CREATE DATABASE Gestion_talent;
+CREATE DATABASE gestion_talent;
 
-\c Gestion_talent;
+\c gestion_talent;
 
 CREATE TABLE Postes (
     id SERIAL PRIMARY KEY,
@@ -24,7 +24,7 @@ CREATE TABLE typeNote(
     nomType VARCHAR(50) NOT NULL
 );
 CREATE TABLE noteCandidat(
-    idCandidat INT REFERENCES Candidat(id),
+    idCandidat INT REFERENCES Candidats(id),
     idTypeNote int REFERENCES TypeNote(id),
     note int ,
     PRIMARY KEY (idCandidat, idTypeNote)
@@ -44,7 +44,7 @@ CREATE TABLE PostEmploye(
     idEmploye int REFERENCES Employes(id),
     idPoste INT REFERENCES Postes(id),
     dateDebut date,
-    dateFin default null
+    dateFin date default null
 );
 
 CREATE TABLE TypeContrat (
@@ -57,7 +57,7 @@ CREATE TABLE ContratEmploye(
     idContrat INT REFERENCES TypeContrat(id),
     dateDebut DATE,
     dateFin DATE 
-)
+);
 CREATE TABLE Competences (
     id SERIAL PRIMARY KEY,
     nom VARCHAR(100) NOT NULL,
@@ -72,13 +72,13 @@ CREATE TABLE detailsPoste(
 CREATE TABLE CompetencesEmployes (
     employe_id INT REFERENCES Employes(id) ON DELETE CASCADE,
     competence_id INT REFERENCES Competences(id) ON DELETE CASCADE,
-    niveau INT CHECK (niveau >= 1 AND niveau <= 5)
+    niveau INT CHECK (niveau >= 1 AND niveau <= 5),
     PRIMARY KEY (employe_id, competence_id)
 );
 
 CREATE TABLE CompetencesCandidats (
     candidat_id INT REFERENCES Candidats(id) ON DELETE CASCADE,
     competence_id INT REFERENCES Competences(id) ON DELETE CASCADE,
-    niveau INT CHECK (niveau >= 1 AND niveau <= 5)
+    niveau INT CHECK (niveau >= 1 AND niveau <= 5),
     PRIMARY KEY (candidat_id, competence_id)
 );
