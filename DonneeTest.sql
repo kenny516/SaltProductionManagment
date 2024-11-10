@@ -82,14 +82,3 @@ VALUES
     (1, 1, 4), -- Jean Dupont a une compétence en Java
     (2, 2, 3), -- Marie Martin a une compétence en SQL
     (3, 3, 5); -- Paul Durand a une compétence élevée en gestion de projet
-
-
-        SELECT e FROM Employes e
-        JOIN CompetencesEmployes ce ON e.id = ce.employes.id
-        WHERE ce.competence.id IN (
-            SELECT dp.competence.id FROM DetailsPoste dp WHERE dp.poste.id = 1
-        )
-        GROUP BY e.id
-        HAVING COUNT(ce.competence.id) = (
-            SELECT COUNT(dp.competence.id) FROM DetailsPoste dp WHERE dp.poste.id = 1
-        )
