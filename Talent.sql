@@ -38,7 +38,6 @@ CREATE TABLE Employes (
     email VARCHAR(150) UNIQUE NOT NULL,
     telephone VARCHAR(20),
     date_embauche DATE DEFAULT CURRENT_DATE,
-    poste_id INT REFERENCES Postes(id)
 );
 
 CREATE TABLE PostEmploye(
@@ -84,3 +83,5 @@ CREATE TABLE CompetencesCandidats (
     niveau INT CHECK (niveau >= 1 AND niveau <= 5),
     PRIMARY KEY (candidat_id, competence_id)
 );
+
+SELECT * FROM Candidats WHERE 

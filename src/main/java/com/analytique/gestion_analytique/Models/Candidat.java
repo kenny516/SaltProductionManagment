@@ -1,11 +1,21 @@
 package com.analytique.gestion_analytique.Models;
 
 import java.time.LocalDate;
-
+import java.util.*;
 import jakarta.persistence.*;
 
 @Entity
 @Table(name = "Candidats")
+// pour avoir la liste des candidats qui passent pour l'entretien
+// Pour l'appeler List<Candidat> qualifiedCandidats = candidatRepository.candidatReussiTest("TEST");
+
+@NamedQuery(
+    name = "Candidat.findQualifiedByTypeNote",
+    query = "SELECT c FROM Candidat c " +
+            "JOIN c.noteCandidats nc " +
+            "JOIN nc.typeNote tn " +
+            "WHERE nc.note >= 6 AND tn.nomType = :nomType"
+)
 public class Candidat {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -85,5 +95,10 @@ public class Candidat {
     public void setPoste(Poste poste) {
         this.poste = poste;
     }
+    
+    public void employer()throws Exception{
+        
+    }
+    
 
 }
