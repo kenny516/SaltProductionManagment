@@ -14,9 +14,5 @@ public class CandidatService {
         this.employeService = employeService;
     }
    
-    // fonction pour embaucher un candidat
-    public Employe embaucher(Candidat candidat, LocalDate dateEmbauche){
-        Employe emp = new Employe(candidat.getNom(), candidat.getPrenom(), candidat.getEmail(), candidat.getTelephone(), dateEmbauche, candidat.getPoste());
-        return employeService.insererEmploye(emp);
-    }
+    
 }
