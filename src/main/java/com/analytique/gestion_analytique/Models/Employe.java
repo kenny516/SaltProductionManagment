@@ -40,7 +40,6 @@ public class Employe {
     }
     
     
-
     public Long getId() {
         return id;
     }

@@ -1,18 +1,27 @@
 package com.analytique.gestion_analytique.Services;
-import com.analytique.gestion_analytique.Repositories.*;
-import com.analytique.gestion_analytique.Models.*;
 
-import java.time.LocalDate;
-
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import com.analytique.gestion_analytique.Models.Candidat;
+import com.analytique.gestion_analytique.Repository.CandidatRepository;
+
+import java.util.List;
+
 @Service
 public class CandidatService {
-    private final CandidatRepository candidatRepository;
+
+    @Autowired
+    private CandidatRepository candidatRepository;
+
+    public List<Candidat> getCandidatsRetenus(Long posteId) {
+        return candidatRepository.findByPosteIdAndStatus(posteId, "Retenu");
+    }
+    
     private final EmployeService employeService;
     public CandidatService(CandidatRepository candidatRepository, EmployeService employeService) {
         this.candidatRepository = candidatRepository;
         this.employeService = employeService;
     }
-   
-    
 }
+
