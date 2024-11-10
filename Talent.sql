@@ -1,5 +1,7 @@
 CREATE DATABASE Gestion_talent;
 
+\c Gestion_talent;
+
 CREATE TABLE Postes (
     id SERIAL PRIMARY KEY,
     titre VARCHAR(100) NOT NULL,
