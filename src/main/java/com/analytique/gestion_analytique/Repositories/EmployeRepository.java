@@ -19,7 +19,7 @@ public interface EmployeRepository extends JpaRepository<Employe, Long> {
         JOIN detailsPoste dp ON dp.idPoste = ep.idPoste AND ce.competence_id = dp.idCompetence
         WHERE ep.idPoste = :posteId
         GROUP BY e.id, e.nom, e.prenom, ep.idPoste
-        HAVING AVG(ce.niveau) > 3;
+        HAVING AVG(ce.niveau) > 3
         """)
     List<Employe> findQualifiedEmployeesForPost(@Param("posteId") Long posteId);
 }

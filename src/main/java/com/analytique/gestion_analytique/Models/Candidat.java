@@ -2,14 +2,14 @@ package com.analytique.gestion_analytique.Models;
 
 import java.time.LocalDate;
 import jakarta.persistence.*;
-
+import java.util.*;
 @Entity
 @Table(name = "Candidats")
 // pour avoir la liste des candidats qui passent pour l'entretien
 // Pour l'appeler List<Candidat> qualifiedCandidats = candidatRepository.candidatReussiTest("TEST");
 
 @NamedQuery(
-    name = "Candidat.findQualifiedByTypeNote",
+    name = "Candidat.candidatReussiTest",
     query = "SELECT c FROM Candidat c " +
             "JOIN c.noteCandidat nc " +
             "JOIN nc.typeNote tn " +
@@ -106,9 +106,9 @@ public class Candidat {
         this.poste = poste;
     }
     
-    public void employer()throws Exception{
-        
-    }
+    
+    @OneToMany(mappedBy = "candidat")
+    private List<NoteCandidat> noteCandidat;
     
 
 }
