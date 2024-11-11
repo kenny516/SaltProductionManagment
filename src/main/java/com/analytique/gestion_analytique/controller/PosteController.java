@@ -1,19 +1,15 @@
 package com.analytique.gestion_analytique.controller;
 
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import com.analytique.gestion_analytique.Models.Poste;
 import com.analytique.gestion_analytique.Repositories.PosteRepository;
 
-import org.springframework.web.bind.annotation.RequestMapping;
-
 import java.util.List;
-
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 
 @RestController
 @RequestMapping("api/poste")
+@CrossOrigin(origins = "http://localhost:3000")
 public class PosteController {
 
 	PosteRepository pRepo;
