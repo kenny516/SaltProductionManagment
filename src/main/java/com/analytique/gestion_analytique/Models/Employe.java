@@ -30,6 +30,16 @@ public class Employe {
     @JoinColumn(name = "poste_id")
     private Poste poste;
 
+    public Employe(String nom, String prenom, String email, String telephone, LocalDate dateEmbauche, Poste poste) {
+        this.nom = nom;
+        this.prenom = prenom;
+        this.email = email;
+        this.telephone = telephone;
+        this.dateEmbauche = dateEmbauche != null ? dateEmbauche : LocalDate.now();
+        this.poste = poste;
+    }
+    
+    
     public Long getId() {
         return id;
     }
