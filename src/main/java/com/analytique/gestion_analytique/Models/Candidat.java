@@ -1,7 +1,6 @@
 package com.analytique.gestion_analytique.Models;
 
 import java.time.LocalDate;
-import java.util.*;
 import jakarta.persistence.*;
 
 @Entity

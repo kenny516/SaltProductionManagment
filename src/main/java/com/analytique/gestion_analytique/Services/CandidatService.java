@@ -13,12 +13,13 @@ public class CandidatService {
 
     @Autowired
     private CandidatRepository candidatRepository;
+		@Autowired
+		private final EmployeService employeService;
 
     public List<Candidat> getCandidatsRetenus(Long posteId) {
         return candidatRepository.findByPosteIdAndStatus(posteId, "Retenu");
     }
     
-    private final EmployeService employeService;
     public CandidatService(CandidatRepository candidatRepository, EmployeService employeService) {
         this.candidatRepository = candidatRepository;
         this.employeService = employeService;

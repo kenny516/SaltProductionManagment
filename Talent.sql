@@ -1,3 +1,6 @@
+\c postgres;
+drop DATABASE gestion_talent;
+
 CREATE DATABASE gestion_talent;
 
 \c gestion_talent;
@@ -38,7 +41,7 @@ CREATE TABLE Employes (
     prenom VARCHAR(100) NOT NULL,
     email VARCHAR(150) UNIQUE NOT NULL,
     telephone VARCHAR(20),
-    date_embauche DATE DEFAULT CURRENT_DATE,
+    date_embauche DATE DEFAULT CURRENT_DATE
 );
 
 CREATE TABLE PostEmploye(
@@ -86,6 +89,7 @@ CREATE TABLE CompetencesCandidats (
 );
 
 ALTER TABLE Candidats ADD COLUMN status VARCHAR(20) DEFAULT 'En attente';
+ALTER TABLE Employes ADD COLUMN poste_id int REFERENCES Postes(id);
 
 CREATE OR REPLACE FUNCTION evaluer_statut_candidat()
 RETURNS TRIGGER AS $$
