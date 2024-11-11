@@ -38,7 +38,7 @@ CREATE TABLE Employes (
     prenom VARCHAR(100) NOT NULL,
     email VARCHAR(150) UNIQUE NOT NULL,
     telephone VARCHAR(20),
-    date_embauche DATE DEFAULT CURRENT_DATE,
+    date_embauche DATE DEFAULT CURRENT_DATE
 );
 
 CREATE TABLE PostEmploye(
