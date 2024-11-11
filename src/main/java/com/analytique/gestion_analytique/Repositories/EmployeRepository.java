@@ -12,13 +12,13 @@ import java.util.List;
 @Repository
 public interface EmployeRepository extends JpaRepository<Employe, Integer> {
     @Query(value = """
-        SELECT e.id, e.nom, e.prenom, ep.idPoste, AVG(ce.niveau) AS moyenne_niveau
-        FROM Employes e
-        JOIN PostEmploye ep ON e.id = ep.idEmploye
-        JOIN CompetencesEmployes ce ON e.id = ce.employe_id
-        JOIN detailsPoste dp ON dp.idPoste = ep.idPoste AND ce.competence_id = dp.idCompetence
-        WHERE ep.idPoste = :posteId
-        GROUP BY e.id, e.nom, e.prenom, ep.idPoste
+        SELECT e.id, e.nom, e.prenom, ep.poste.id, AVG(ce.niveau) AS moyenne_niveau
+        FROM Employe e
+        JOIN PostEmploye ep ON e.id = ep.employe.id
+        JOIN CompetencesEmployes ce ON e.id = ce.employe.id
+        JOIN DetailsPoste dp ON dp.poste.id = ep.poste.id AND ce.competence.id = dp.competence.id
+        WHERE ep.poste.id = :posteId
+        GROUP BY e.id, e.nom, e.prenom, ep.poste.id
         HAVING AVG(ce.niveau) > 3
         """)
     List<Employe> findQualifiedEmployeesForPost(@Param("posteId") Integer posteId);
