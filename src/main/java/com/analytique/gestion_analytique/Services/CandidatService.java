@@ -15,7 +15,7 @@ public class CandidatService {
     private CandidatRepository candidatRepository;
 
 
-    public List<Candidat> getCandidatsRetenus(Long posteId) {
+    public List<Candidat> getCandidatsRetenus(Integer posteId) {
         return candidatRepository.findByPosteIdAndStatus(posteId, "Retenu");
     }
     

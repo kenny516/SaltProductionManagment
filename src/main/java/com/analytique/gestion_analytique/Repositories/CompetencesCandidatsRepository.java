@@ -6,6 +6,6 @@ import com.analytique.gestion_analytique.Models.CompetencesCandidats;
 import com.analytique.gestion_analytique.Models.CompetencesCandidatsId;
 
 public interface CompetencesCandidatsRepository extends JpaRepository<CompetencesCandidats, CompetencesCandidatsId> {
-    List<CompetencesCandidats> findByCandidatId(Long candidatId);
+    List<CompetencesCandidats> findByCandidatId(Integer candidatId);
     
 } 
