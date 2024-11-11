@@ -1,20 +1,16 @@
 package com.analytique.gestion_analytique.controller;
 
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import com.analytique.gestion_analytique.Models.Competence;
 import com.analytique.gestion_analytique.Repositories.CompetenceRepository;
 
 import java.util.List;
 
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestParam;
-
 
 @RestController
 @RequestMapping("/api/competence")
+@CrossOrigin(origins = "http://localhost:3000")
 public class CompetenceContoller {
 	CompetenceRepository cRepo;
 

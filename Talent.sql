@@ -9,7 +9,6 @@ CREATE TABLE Postes (
     id SERIAL PRIMARY KEY,
     titre VARCHAR(100) NOT NULL,
     description TEXT,
-
     departement VARCHAR(100)
 );
 
