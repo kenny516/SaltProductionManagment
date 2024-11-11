@@ -8,7 +8,6 @@ import com.analytique.gestion_analytique.Repositories.CandidatRepository;
 import com.analytique.gestion_analytique.Repositories.EmployeRepository;
 import com.analytique.gestion_analytique.Repositories.CompetencesCandidatsRepository;
 import com.analytique.gestion_analytique.Repositories.CompetencesEmployesRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -16,20 +15,25 @@ import java.util.List;
 
 @Service
 public class CandidatToEmpService {
-
-    @Autowired
     private CandidatRepository candidatRepository;
-
-    @Autowired
     private EmployeRepository employeRepository;
-
-    @Autowired
     private CompetencesCandidatsRepository competencesCandidatsRepository;
-
-    @Autowired
     private CompetencesEmployesRepository competencesEmployesRepository;
 
-    @Transactional
+		
+
+    public CandidatToEmpService(CandidatRepository candidatRepository, EmployeRepository employeRepository,
+				CompetencesCandidatsRepository competencesCandidatsRepository,
+				CompetencesEmployesRepository competencesEmployesRepository) {
+			this.candidatRepository = candidatRepository;
+			this.employeRepository = employeRepository;
+			this.competencesCandidatsRepository = competencesCandidatsRepository;
+			this.competencesEmployesRepository = competencesEmployesRepository;
+		}
+
+
+
+		@Transactional
     public Employe embaucherCandidat(Integer candidatId) {
         Candidat candidat = candidatRepository.findById(candidatId)
                 .orElseThrow(() -> new IllegalArgumentException("Candidat non trouvé"));

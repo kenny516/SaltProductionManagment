@@ -9,7 +9,7 @@ public class TypeNote {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @Column(name = "nomType", nullable = false, length = 50)
+    @Column(name = "nomtype", nullable = false, length = 50)
     private String nomType;
 
     public Integer getId() {

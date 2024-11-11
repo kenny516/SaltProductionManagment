@@ -8,12 +8,12 @@ import jakarta.persistence.*;
 public class DetailsPoste {
     @Id
     @ManyToOne
-    @JoinColumn(name = "idPoste")
+    @JoinColumn(name = "idposte")
     private Poste poste;
 
     @Id
     @ManyToOne
-    @JoinColumn(name = "idCompetence")
+    @JoinColumn(name = "idcompetence")
     private Competence competence;
 
 }

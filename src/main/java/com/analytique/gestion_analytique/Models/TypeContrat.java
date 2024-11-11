@@ -8,10 +8,10 @@ public class TypeContrat {
     @Id
     private Integer id;
 
-    @Column(name = "nomType", nullable = false, unique = true, length = 50)
+    @Column(name = "nomtype", nullable = false, unique = true, length = 50)
     private String nomType;
 
-    @Column(name = "dureeMois")
+    @Column(name = "dureemois")
     private Integer dureeMois;
 
     public Integer getId() {

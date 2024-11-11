@@ -11,17 +11,17 @@ public class PostEmploye {
     private Integer id;
 
     @ManyToOne
-    @JoinColumn(name = "idEmploye")
+    @JoinColumn(name = "idemploye")
     private Employe employe;
 
     @ManyToOne
-    @JoinColumn(name = "idPoste")
+    @JoinColumn(name = "idposte")
     private Poste poste;
 
-    @JoinColumn(name = "dateDebut")
+    @Column(name = "datedebut")
     private LocalDate dateDebut;
 
-    @Column(nullable = true)
+    @Column(name = "datefin")
     private LocalDate dateFin;
 
     public Integer getId() {
