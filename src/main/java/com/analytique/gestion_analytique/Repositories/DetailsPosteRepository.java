@@ -6,5 +6,4 @@ import com.analytique.gestion_analytique.Models.DetailsPoste;
 import com.analytique.gestion_analytique.Models.DetailsPosteId;
 
 public interface DetailsPosteRepository extends JpaRepository<DetailsPoste, DetailsPosteId>{
-
 }

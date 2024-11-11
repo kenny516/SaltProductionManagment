@@ -5,7 +5,7 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 
 import com.analytique.gestion_analytique.Models.Employe;
-import com.analytique.gestion_analytique.Repository.EmployeRepository;
+import com.analytique.gestion_analytique.Repositories.EmployeRepository;
 
 @Service
 public class EmployeService {

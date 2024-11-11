@@ -11,7 +11,7 @@ import jakarta.persistence.*;
 @NamedQuery(
     name = "Candidat.findQualifiedByTypeNote",
     query = "SELECT c FROM Candidat c " +
-            "JOIN c.noteCandidats nc " +
+            "JOIN c.noteCandidat nc " +
             "JOIN nc.typeNote tn " +
             "WHERE nc.note >= 6 AND tn.nomType = :nomType"
 )
