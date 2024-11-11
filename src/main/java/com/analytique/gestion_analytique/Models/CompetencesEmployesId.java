@@ -3,22 +3,22 @@ package com.analytique.gestion_analytique.Models;
 import java.io.Serializable;
 
 public class CompetencesEmployesId implements Serializable {
-	private Long employe;
-	private Long competence;
+	private Integer employe;
+	private Integer competence;
 
-	public Long getEmploye() {
+	public Integer getEmploye() {
 			return employe;
 	}
 
-	public void setEmploye(Long employe_id) {
+	public void setEmploye(Integer employe_id) {
 			this.employe = employe_id;
 	}
 
-	public Long getCompetence() {
+	public Integer getCompetence() {
 			return competence;
 	}
 
-	public void setCompetence(Long competence_id) {
+	public void setCompetence(Integer competence_id) {
 			this.competence = competence_id;
 	}
 

@@ -10,7 +10,7 @@ import com.analytique.gestion_analytique.Models.Employe;
 import java.util.List;
 
 @Repository
-public interface EmployeRepository extends JpaRepository<Employe, Long> {
+public interface EmployeRepository extends JpaRepository<Employe, Integer> {
     @Query(value = """
         SELECT e.id, e.nom, e.prenom, ep.idPoste, AVG(ce.niveau) AS moyenne_niveau
         FROM Employes e
@@ -21,5 +21,5 @@ public interface EmployeRepository extends JpaRepository<Employe, Long> {
         GROUP BY e.id, e.nom, e.prenom, ep.idPoste
         HAVING AVG(ce.niveau) > 3
         """)
-    List<Employe> findQualifiedEmployeesForPost(@Param("posteId") Long posteId);
+    List<Employe> findQualifiedEmployeesForPost(@Param("posteId") Integer posteId);
 }

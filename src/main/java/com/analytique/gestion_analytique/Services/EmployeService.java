@@ -15,7 +15,7 @@ public class EmployeService {
         this.employeRepository = employeRepository;
     }
 
-    public List<Employe> getQualifiedEmployeesForPost(Long posteId) {
+    public List<Employe> getQualifiedEmployeesForPost(Integer posteId) {
         return employeRepository.findQualifiedEmployeesForPost(posteId);
     }
     public Employe insererEmploye(Employe emp){

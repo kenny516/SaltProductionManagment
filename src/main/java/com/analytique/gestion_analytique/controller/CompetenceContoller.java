@@ -28,7 +28,7 @@ public class CompetenceContoller {
 	}
 
 	@GetMapping("/poste/{id}")
-	public List<Competence> getCompetencesByPoste(@PathVariable Long id) {
+	public List<Competence> getCompetencesByPoste(@PathVariable Integer id) {
 		return cRepo.findByPoste(id);
 	}
 	

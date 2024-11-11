@@ -3,20 +3,20 @@ package com.analytique.gestion_analytique.Models;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name = "typeNote")
+@Table(name = "typenote")
 public class TypeNote {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Integer id;
 
     @Column(name = "nomType", nullable = false, length = 50)
     private String nomType;
 
-    public Long getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 

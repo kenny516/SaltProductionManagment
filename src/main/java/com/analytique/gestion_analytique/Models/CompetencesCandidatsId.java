@@ -3,19 +3,19 @@ package com.analytique.gestion_analytique.Models;
 import java.io.Serializable;
 
 public class CompetencesCandidatsId implements Serializable {
-    private Long candidat;
-    private Long competence;
+    private Integer candidat;
+    private Integer competence;
 
-    public Long getCandidat() {
+    public Integer getCandidat() {
         return candidat;
     }
-    public void setCandidat(Long candidat) {
+    public void setCandidat(Integer candidat) {
         this.candidat = candidat;
     }
-    public Long getCompetence() {
+    public Integer getCompetence() {
         return competence;
     }
-    public void setCompetence(Long competence) {
+    public void setCompetence(Integer competence) {
         this.competence = competence;
     }
     

@@ -7,8 +7,8 @@ import com.analytique.gestion_analytique.Models.Candidat;
 
 import java.util.List;
 
-public interface CandidatRepository extends JpaRepository<Candidat, Long> {
-	List<Candidat> findByPosteIdAndStatus(Long posteId, String status);
+public interface CandidatRepository extends JpaRepository<Candidat, Integer> {
+	List<Candidat> findByPosteIdAndStatus(Integer posteId, String status);
 
 	// Pour l'appeler List<Candidat> qualifiedCandidats =
 	// candidatRepository.candidatReussiTest("TEST");

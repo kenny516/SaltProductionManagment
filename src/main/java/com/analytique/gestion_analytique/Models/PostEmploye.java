@@ -5,10 +5,10 @@ import java.time.LocalDate;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name = "PostEmploye")
+@Table(name = "Postemploye")
 public class PostEmploye {
     @Id
-    private Long id;
+    private Integer id;
 
     @ManyToOne
     @JoinColumn(name = "idEmploye")
@@ -24,11 +24,11 @@ public class PostEmploye {
     @Column(nullable = true)
     private LocalDate dateFin;
 
-    public Long getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 

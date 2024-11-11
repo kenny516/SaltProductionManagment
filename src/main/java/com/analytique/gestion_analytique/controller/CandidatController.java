@@ -36,6 +36,4 @@ public class CandidatController {
 	public List<Candidat> getAll() {
 		return candidatService.findAll();
 	}
-	
-
 }

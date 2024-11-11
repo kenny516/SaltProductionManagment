@@ -10,9 +10,9 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface CompetenceRepository extends JpaRepository<Competence, Long> {
+public interface CompetenceRepository extends JpaRepository<Competence, Integer> {
   String getbyposteString = "select * from Competences where id in (select idCompetence from detailsPoste where idPoste = :idPoste)";
 	
 	@Query(value = getbyposteString , nativeQuery = true)
-	List<Competence> findByPoste(@Param("idPoste") Long idPoste);
+	List<Competence> findByPoste(@Param("idPoste") Integer idPoste);
 }

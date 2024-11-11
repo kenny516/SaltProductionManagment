@@ -30,7 +30,7 @@ public class CandidatToEmpService {
     private CompetencesEmployesRepository competencesEmployesRepository;
 
     @Transactional
-    public Employe embaucherCandidat(Long candidatId) {
+    public Employe embaucherCandidat(Integer candidatId) {
         Candidat candidat = candidatRepository.findById(candidatId)
                 .orElseThrow(() -> new IllegalArgumentException("Candidat non trouvé"));
 
