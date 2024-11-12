@@ -33,7 +33,7 @@ class GestionAnalytiqueApplicationTests {
 	void insertionCandidat(){
 		List<CompetenceUser> list = new ArrayList<>();
 		list.add(new CompetenceUser(1, 3));
-		CandidatureData cd = new CandidatureData("patte", " man", "mail", "00", 1,LocalDateTime.now(), list);
+		CandidatureData cd = new CandidatureData("patteer", "maner2", "mailereee", "0023", 2,LocalDateTime.now(), list);
 
 		cs.saveCandidat(cd);
 

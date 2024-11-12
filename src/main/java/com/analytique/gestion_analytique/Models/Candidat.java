@@ -39,7 +39,7 @@ public class Candidat {
     @JoinColumn(name = "poste_id")
     private Poste poste;
 
-    @JoinColumn(name = "status")
+    @Column(name = "status")
     private String status;
 
     public String getStatus() {
