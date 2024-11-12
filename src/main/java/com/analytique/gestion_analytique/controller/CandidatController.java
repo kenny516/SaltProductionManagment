@@ -41,7 +41,7 @@ public class CandidatController {
 	@PostMapping("")
 	public ResponseEntity<?> saveCandidat(@RequestBody CandidatureData candidature) {
 		try {
-			return ResponseEntity.status(HttpStatus.CREATED).body(candidatService.saveCandidat(candidature));
+			return ResponseEntity.ok(candidatService.saveCandidat(candidature));
 		} catch (Exception e) {
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
 		}
