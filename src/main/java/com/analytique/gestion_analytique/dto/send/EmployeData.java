@@ -7,7 +7,7 @@ import com.analytique.gestion_analytique.Models.Competence;
 import com.analytique.gestion_analytique.Models.Employe;
 import com.analytique.gestion_analytique.Models.Poste;
 
-public class EmployeData extends Employe{
+public class EmployeData extends Employe {
 	List<Competence> competences;
 
 	public List<Competence> getCompetences() {
@@ -18,9 +18,11 @@ public class EmployeData extends Employe{
 		this.competences = competences;
 	}
 
-	public EmployeData(String nom, String prenom, String email, String telephone, LocalDate dateEmbauche, Poste poste,
+	public EmployeData(int id, String nom, String prenom, String email, String telephone, LocalDate dateEmbauche,
+			Poste poste,
 			List<Competence> competences) {
 		super(nom, prenom, email, telephone, dateEmbauche, poste);
+		setId(id);
 		this.competences = competences;
 	}
 
@@ -28,9 +30,11 @@ public class EmployeData extends Employe{
 		this.competences = competences;
 	}
 
-	public EmployeData(){}
+	public EmployeData() {
+	}
 
-	public static EmployeData map(Employe e,List<Competence> competences){
-		return new EmployeData(e.getNom(),e.getPrenom(),e.getEmail(),e.getTelephone(),e.getDateEmbauche(),e.getPoste(),competences);
+	public static EmployeData map(Employe e, List<Competence> competences) {
+		return new EmployeData(e.getId(),e.getNom(), e.getPrenom(), e.getEmail(), e.getTelephone(), e.getDateEmbauche(), e.getPoste(),
+				competences);
 	}
 }

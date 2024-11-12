@@ -26,8 +26,6 @@ public class EmployeController {
 	}
 
 	@GetMapping("")
-
-	
 	public List<EmployeData> getAll() {
 		return employeService.getAll();
 	}
