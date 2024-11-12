@@ -8,12 +8,17 @@ import com.analytique.gestion_analytique.Models.CompetencesCandidats;
 import com.analytique.gestion_analytique.Repositories.CandidatRepository;
 import com.analytique.gestion_analytique.Repositories.CompetenceRepository;
 import com.analytique.gestion_analytique.Repositories.CompetencesCandidatsRepository;
-import com.analytique.gestion_analytique.dto.send.CandidatureData;
+import com.analytique.gestion_analytique.dto.receive.CandidatureData;
+
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
 
 import java.util.List;
 
 @Service
 public class CandidatService {
+	@PersistenceContext 
+	private EntityManager em;
 
 	private CandidatRepository candidatRepository;
 	private CompetencesCandidatsRepository cCandidatsRepository;
@@ -32,14 +37,12 @@ public class CandidatService {
 	}
 
 	public Candidat saveCandidat(CandidatureData cd){
-		if (cd.getCandidat().getPoste() == null) {
-			throw new IllegalArgumentException("poste null");
-		}
-		Candidat candidat = candidatRepository.save(cd.getCandidat());
+		Candidat candidat = cd.extractCandidat(em);
+		candidat = candidatRepository.save(candidat);
 
-		for (CompetencesCandidats competences : cd.getCompetences()) {
+		for (CompetencesCandidats competences : cd.extractCCandidat(em)) {
 			competences.setCandidat(candidat);
-			competences = cCandidatsRepository.save(competences);
+			cCandidatsRepository.save(competences);
 		}
 
 		return candidat;
