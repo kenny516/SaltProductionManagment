@@ -38,9 +38,17 @@ public class Employe {
         this.dateEmbauche = dateEmbauche != null ? dateEmbauche : LocalDate.now();
         this.poste = poste;
     }
+
+		
     
     
-    public Integer getId() {
+    public Employe() {
+		}
+
+
+
+
+		public Integer getId() {
         return id;
     }
 
