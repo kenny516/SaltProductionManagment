@@ -1,12 +1,10 @@
 package com.analytique.gestion_analytique.Services;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.analytique.gestion_analytique.Models.Candidat;
 import com.analytique.gestion_analytique.Models.CompetencesCandidats;
 import com.analytique.gestion_analytique.Repositories.CandidatRepository;
-import com.analytique.gestion_analytique.Repositories.CompetenceRepository;
 import com.analytique.gestion_analytique.Repositories.CompetencesCandidatsRepository;
 import com.analytique.gestion_analytique.dto.receive.CandidatureData;
 

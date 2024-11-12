@@ -13,7 +13,7 @@ import jakarta.persistence.EntityManager;
 public class CandidatureData {
 	String nom, prenom, email, telephone;
 	int poste_id;
-	LocalDateTime candidaturTime;
+	LocalDateTime dateCandidature;
 	List<CompetenceUser> competences;
 
 	public String getNom() {
@@ -56,29 +56,32 @@ public class CandidatureData {
 		this.poste_id = poste_id;
 	}
 
-	public LocalDateTime getCandidaturTime() {
-		return candidaturTime;
+	public LocalDateTime getDateCandidature() {
+		return dateCandidature;
 	}
 
-	public void setCandidaturTime(LocalDateTime candidaturTime) {
-		this.candidaturTime = candidaturTime;
+	public void setDateCandidature(LocalDateTime candidaturTime) {
+		this.dateCandidature = candidaturTime;
 	}
+
+	
 
 	public CandidatureData(String nom, String prenom, String email, String telephone, int poste_id,
-			LocalDateTime candidaturTime) {
+			LocalDateTime candidaturTime, List<CompetenceUser> competences) {
 		this.nom = nom;
 		this.prenom = prenom;
 		this.email = email;
 		this.telephone = telephone;
 		this.poste_id = poste_id;
-		this.candidaturTime = candidaturTime;
+		this.dateCandidature = candidaturTime;
+		this.competences = competences;
 	}
 
 	public Candidat extractCandidat(EntityManager em) {
 		Candidat c = new Candidat();
 		c.setNom(nom);
 		c.setPrenom(prenom);
-		c.setDateCandidature(candidaturTime.toLocalDate());
+		c.setDateCandidature(dateCandidature.toLocalDate());
 		c.setEmail(email);
 		c.setTelephone(telephone);
 		c.setPoste(em.getReference(Poste.class, poste_id));

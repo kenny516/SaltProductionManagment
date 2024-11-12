@@ -21,4 +21,9 @@ public class EmployeService {
     public Employe insererEmploye(Employe emp){
         return  employeRepository.save(emp);
     }
+
+
+		public List<Employe> getAll(){
+			return employeRepository.findAll();
+		}
 }
