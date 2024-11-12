@@ -43,7 +43,7 @@ public class CandidatController {
 		try {
 			return ResponseEntity.ok(candidatService.saveCandidat(candidature));
 		} catch (Exception e) {
-			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
+			return ResponseEntity.internalServerError().body(e.getMessage());
 		}
 	}
 

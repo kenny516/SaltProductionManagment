@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.analytique.gestion_analytique.Models.Employe;
 import com.analytique.gestion_analytique.Services.EmployeService;
+import com.analytique.gestion_analytique.dto.send.EmployeData;
 
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -27,7 +28,7 @@ public class EmployeController {
 	@GetMapping("")
 
 	
-	public List<Employe> getAll() {
+	public List<EmployeData> getAll() {
 		return employeService.getAll();
 	}
 }

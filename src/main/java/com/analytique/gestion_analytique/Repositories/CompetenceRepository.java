@@ -12,7 +12,11 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface CompetenceRepository extends JpaRepository<Competence, Integer> {
   String getbyposteString = "select * from Competences where id in (select idCompetence from detailsPoste where idPoste = :idPoste)";
+  String getbyEmployeString = "select * from Competences where id in (select competence_id from competencesemployes where employe_id = :idEmploye)";
 	
 	@Query(value = getbyposteString , nativeQuery = true)
 	List<Competence> findByPoste(@Param("idPoste") Integer idPoste);
+
+	@Query(value = getbyEmployeString , nativeQuery = true)
+	List<Competence> findByEmploye(@Param("idEmploye") Integer idEmploye);
 }
