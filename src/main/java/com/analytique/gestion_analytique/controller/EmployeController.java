@@ -5,13 +5,13 @@ import java.util.List;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.analytique.gestion_analytique.Models.Employe;
 import com.analytique.gestion_analytique.Services.EmployeService;
 import com.analytique.gestion_analytique.dto.send.EmployeData;
 
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.PathVariable;
 
 
 @RestController
@@ -28,5 +28,19 @@ public class EmployeController {
 	@GetMapping("")
 	public List<EmployeData> getAll() {
 		return employeService.getAll();
+	}
+
+	@GetMapping("/{id}")
+	public ResponseEntity<?> getbyId(@PathVariable Integer id) {
+		try {
+			return ResponseEntity.ok(employeService.getOne(id));
+		} catch (Exception e) {
+			return ResponseEntity.internalServerError().body(e.getMessage());
+		}
+	}
+
+	@GetMapping("/poste/{id}")
+	public List<EmployeData> getEmployeByPoste(@PathVariable Integer id) {
+		return employeService.getQualifiedEmployeesForPost(id);
 	}
 }

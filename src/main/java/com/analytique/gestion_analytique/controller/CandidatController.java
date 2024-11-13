@@ -48,11 +48,21 @@ public class CandidatController {
 	}
 
 	@PostMapping("/embaucher/{candidat}")
-	public ResponseEntity<?> embaucher(@PathVariable Integer candidatId) {
+	public ResponseEntity<?> embaucher(@PathVariable Integer candidat) {
 		try {
-			return ResponseEntity.status(HttpStatus.CREATED).body(candidatToEmpService.embaucherCandidat(candidatId));
+			return ResponseEntity.status(HttpStatus.CREATED).body(candidatToEmpService.embaucherCandidat(candidat));
 		} catch (Exception e) {
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
+		}
+	}
+
+	
+	@GetMapping("/{id}")
+	public ResponseEntity<?> getOne(@PathVariable Integer id) {
+		try {
+			return ResponseEntity.ok(candidatService.getById(id));
+		} catch (Exception e) {
+			return ResponseEntity.internalServerError().body(e.getMessage());
 		}
 	}
 

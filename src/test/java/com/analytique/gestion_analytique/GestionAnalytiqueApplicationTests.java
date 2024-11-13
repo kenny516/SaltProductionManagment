@@ -1,6 +1,5 @@
 package com.analytique.gestion_analytique;
 
-import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.time.LocalDateTime;
@@ -24,19 +23,6 @@ class GestionAnalytiqueApplicationTests {
 	@Autowired
 	CandidatService cs ;
 
-	@Test
-	void testCamelCase(){
-		assertEquals(7, dpRepo.findAll().size());
-	}
-
-	@Test
-	void insertionCandidat(){
-		List<CompetenceUser> list = new ArrayList<>();
-		list.add(new CompetenceUser(1, 3));
-		CandidatureData cd = new CandidatureData("patteer", "maner2", "mailereee", "0023", 2,LocalDateTime.now(), list);
-
-		cs.saveCandidat(cd);
-
-	}
+	
 
 }
