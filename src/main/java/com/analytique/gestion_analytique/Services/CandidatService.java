@@ -26,13 +26,12 @@ public class CandidatService {
 	private CompetencesCandidatsRepository cCandidatsRepository;
 	private NoteCandidatRepository noteCandidatRepository;
 
-	
-
-	public CandidatService(CandidatRepository candidatRepository, CompetencesCandidatsRepository cCandidatsRepository,
-			com.analytique.gestion_analytique.Repositories.NoteCandidatRepository noteCandidatRepository) {
+	public CandidatService(EntityManager em, CandidatRepository candidatRepository,
+			CompetencesCandidatsRepository cCandidatsRepository, NoteCandidatRepository noteCandidatRepository) {
+		this.em = em;
 		this.candidatRepository = candidatRepository;
 		this.cCandidatsRepository = cCandidatsRepository;
-		noteCandidatRepository = noteCandidatRepository;
+		this.noteCandidatRepository = noteCandidatRepository;
 	}
 
 	public List<Candidat> findAll() {
