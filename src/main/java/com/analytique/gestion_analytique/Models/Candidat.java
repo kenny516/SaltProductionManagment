@@ -1,15 +1,24 @@
 package com.analytique.gestion_analytique.Models;
 
 import java.time.LocalDate;
-
 import jakarta.persistence.*;
-
+import java.util.*;
 @Entity
 @Table(name = "Candidats")
+// pour avoir la liste des candidats qui passent pour l'entretien
+// Pour l'appeler List<Candidat> qualifiedCandidats = candidatRepository.candidatReussiTest("TEST");
+
+@NamedQuery(
+    name = "Candidat.candidatReussiTest",
+    query = "SELECT c FROM Candidat c " +
+            "JOIN c.noteCandidat nc " +
+            "JOIN nc.typeNote tn " +
+            "WHERE nc.note >= 6 AND tn.nomType = :nomType"
+)
 public class Candidat {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Integer id;
 
     @Column(nullable = false, length = 100)
     private String nom;
@@ -30,11 +39,22 @@ public class Candidat {
     @JoinColumn(name = "poste_id")
     private Poste poste;
 
-    public Long getId() {
+    @Column(name = "status")
+    private String status;
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    public Integer getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
@@ -85,5 +105,10 @@ public class Candidat {
     public void setPoste(Poste poste) {
         this.poste = poste;
     }
+    
+    
+    @OneToMany(mappedBy = "candidat")
+    private List<NoteCandidat> noteCandidat;
+    
 
 }

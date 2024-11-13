@@ -3,7 +3,7 @@ package com.analytique.gestion_analytique.Models;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name = "CompetencesEmployes")
+@Table(name = "Competencesemployes")
 @IdClass(CompetencesEmployesId.class)
 public class CompetencesEmployes {
     @Id

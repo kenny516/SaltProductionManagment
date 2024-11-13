@@ -5,21 +5,23 @@ import java.time.LocalDate;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name = "ContratEmploye")
+@Table(name = "Contratemploye")
 @IdClass(ContratEmployeId.class)
 public class ContratEmploye {
     @Id
     @ManyToOne
-    @JoinColumn(name = "idEmploye")
+    @JoinColumn(name = "idemploye")
     private Employe employe;
 
     @Id
     @ManyToOne
-    @JoinColumn(name = "idContrat")
+    @JoinColumn(name = "idcontrat")
     private TypeContrat contrat;
 
+		@Column(name = "datedebut")
     private LocalDate dateDebut;
-    private LocalDate dateFin;
+		@Column(name = "datefin")
+		private LocalDate dateFin;
     public Employe getEmploye() {
         return employe;
     }

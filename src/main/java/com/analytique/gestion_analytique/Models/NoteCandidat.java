@@ -3,17 +3,17 @@ package com.analytique.gestion_analytique.Models;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name = "noteCandidat")
+@Table(name = "notecandidat")
 @IdClass(NoteCandidatId.class)
 public class NoteCandidat {
     @Id
     @ManyToOne
-    @JoinColumn(name = "idCandidat")
+    @JoinColumn(name = "idcandidat")
     private Candidat candidat;
 
     @Id
     @ManyToOne
-    @JoinColumn(name = "idTypeNote")
+    @JoinColumn(name = "idtypenote")
     private TypeNote typeNote;
 
     private Integer note;

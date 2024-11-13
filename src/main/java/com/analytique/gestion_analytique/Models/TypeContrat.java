@@ -3,22 +3,22 @@ package com.analytique.gestion_analytique.Models;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name = "TypeContrat")
+@Table(name = "Typecontrat")
 public class TypeContrat {
     @Id
-    private Long id;
+    private Integer id;
 
-    @Column(name = "nomType", nullable = false, unique = true, length = 50)
+    @Column(name = "nomtype", nullable = false, unique = true, length = 50)
     private String nomType;
 
-    @Column(name = "dureeMois")
+    @Column(name = "dureemois")
     private Integer dureeMois;
 
-    public Long getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 

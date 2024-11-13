@@ -3,19 +3,19 @@ package com.analytique.gestion_analytique.Models;
 import java.io.Serializable;
 
 public class NoteCandidatId implements Serializable {
-    private Long candidat;
-    private Long typeNote;
+    private Integer candidat;
+    private Integer typeNote;
     
-    public Long getCandidat() {
+    public Integer getCandidat() {
         return candidat;
     }
-    public void setCandidat(Long candidat) {
+    public void setCandidat(Integer candidat) {
         this.candidat = candidat;
     }
-    public Long getTypeNote() {
+    public Integer getTypeNote() {
         return typeNote;
     }
-    public void setTypeNote(Long typeNote) {
+    public void setTypeNote(Integer typeNote) {
         this.typeNote = typeNote;
     }
 

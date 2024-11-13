@@ -1,3 +1,6 @@
+\c postgres;
+drop DATABASE gestion_talent;
+
 CREATE DATABASE gestion_talent;
 
 \c gestion_talent;
@@ -28,7 +31,7 @@ CREATE TABLE noteCandidat(
     idCandidat INT REFERENCES Candidats(id),
     idTypeNote int REFERENCES TypeNote(id),
     note int ,
-    PRIMARY KEY (idCandidat, idTypeNote)
+    PRIMARY KEY (idCandidat, idTypeNote) 
 );
 
 CREATE TABLE Employes (
@@ -37,8 +40,7 @@ CREATE TABLE Employes (
     prenom VARCHAR(100) NOT NULL,
     email VARCHAR(150) UNIQUE NOT NULL,
     telephone VARCHAR(20),
-    date_embauche DATE DEFAULT CURRENT_DATE,
-    poste_id INT REFERENCES Postes(id)
+    date_embauche DATE DEFAULT CURRENT_DATE
 );
 
 CREATE TABLE PostEmploye(
@@ -84,3 +86,34 @@ CREATE TABLE CompetencesCandidats (
     niveau INT CHECK (niveau >= 1 AND niveau <= 5),
     PRIMARY KEY (candidat_id, competence_id)
 );
+
+ALTER TABLE Candidats ADD COLUMN status VARCHAR(20) DEFAULT 'En attente';
+ALTER TABLE Employes ADD COLUMN poste_id int REFERENCES Postes(id);
+
+CREATE OR REPLACE FUNCTION evaluer_statut_candidat()
+RETURNS TRIGGER AS $$
+DECLARE
+    moyenne_niveau FLOAT;
+BEGIN
+    -- Calculer la moyenne des niveaux de compétence pour le candidat et son poste
+    SELECT AVG(cc.niveau) INTO moyenne_niveau
+    FROM CompetencesCandidats cc
+    JOIN detailsPoste dp ON cc.competence_id = dp.idCompetence
+    WHERE cc.candidat_id = NEW.candidat_id
+    AND dp.idPoste = (SELECT poste_id FROM Candidats WHERE id = NEW.candidat_id);
+
+    -- Mettre à jour le statut du candidat en fonction de la moyenne
+    IF moyenne_niveau IS NOT NULL AND moyenne_niveau >= 3 THEN
+        UPDATE Candidats SET status = 'Retenu' WHERE id = NEW.candidat_id;
+    ELSE
+        UPDATE Candidats SET status = 'Refusé' WHERE id = NEW.candidat_id;
+    END IF;
+
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE OR REPLACE TRIGGER trigger_evaluer_statut_candidat
+AFTER INSERT ON CompetencesCandidats
+FOR EACH ROW
+EXECUTE FUNCTION evaluer_statut_candidat();

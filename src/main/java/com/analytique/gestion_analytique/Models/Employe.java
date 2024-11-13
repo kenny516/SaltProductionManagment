@@ -9,7 +9,7 @@ import jakarta.persistence.*;
 public class Employe {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Integer id;
 
     @Column(nullable = false, length = 100)
     private String nom;
@@ -30,11 +30,29 @@ public class Employe {
     @JoinColumn(name = "poste_id")
     private Poste poste;
 
-    public Long getId() {
+    public Employe(String nom, String prenom, String email, String telephone, LocalDate dateEmbauche, Poste poste) {
+        this.nom = nom;
+        this.prenom = prenom;
+        this.email = email;
+        this.telephone = telephone;
+        this.dateEmbauche = dateEmbauche != null ? dateEmbauche : LocalDate.now();
+        this.poste = poste;
+    }
+
+		
+    
+    
+    public Employe() {
+		}
+
+
+
+
+		public Integer getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
