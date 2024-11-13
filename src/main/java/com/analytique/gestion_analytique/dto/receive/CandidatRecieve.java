@@ -7,6 +7,7 @@ import java.util.List;
 import com.analytique.gestion_analytique.Models.Candidat;
 import com.analytique.gestion_analytique.Models.CompetencesCandidats;
 import com.analytique.gestion_analytique.Models.Poste;
+import com.analytique.gestion_analytique.dto.CompetenceUser;
 
 import jakarta.persistence.EntityManager;
 

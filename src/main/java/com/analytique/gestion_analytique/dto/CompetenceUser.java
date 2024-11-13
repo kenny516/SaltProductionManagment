@@ -1,4 +1,4 @@
-package com.analytique.gestion_analytique.dto.receive;
+package com.analytique.gestion_analytique.dto;
 
 import com.analytique.gestion_analytique.Models.Competence;
 import com.analytique.gestion_analytique.Models.CompetencesCandidats;
