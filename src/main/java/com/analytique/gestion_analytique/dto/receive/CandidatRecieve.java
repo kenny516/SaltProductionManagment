@@ -96,8 +96,6 @@ public class CandidatRecieve {
 			CompetencesCandidats cc = competences.extractCandidat(em);
 			csc.add(cc);
 		}
-		;
-
 		return csc;
 	}
 
