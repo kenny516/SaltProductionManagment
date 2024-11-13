@@ -6,38 +6,40 @@ import com.analytique.gestion_analytique.Models.CompetencesEmployes;
 
 import jakarta.persistence.EntityManager;
 
-public class CompetenceUser {
-	int id;
+public class CompetenceUser extends Competence {
 	int niveau;
-	public int getId() {
-		return id;
-	}
-	public void setId(int id) {
-		this.id = id;
-	}
-	public int getNiveau() {
-		return niveau;
-	}
-	public void setNiveau(int niveau) {
-		this.niveau = niveau;
-	}
-	public CompetenceUser(int id, int niveau) {
-		this.id = id;
-		this.niveau = niveau;
+
+	public CompetenceUser() {
 	}
 
-	public CompetencesCandidats extractCandidat(EntityManager em){
+	public CompetenceUser(Competence c, int niveau) {
+		setId(c.getId());
+		setNom(c.getNom());
+		setDescription(c.getDescription());
+		setNiveau(niveau);
+
+	}
+
+	public CompetencesCandidats extractCandidat(EntityManager em) {
 		CompetencesCandidats cc = new CompetencesCandidats();
 		cc.setCompetence(em.getReference(Competence.class, getId()));
 		cc.setNiveau(getNiveau());
 		return cc;
 	}
 
-	public CompetencesEmployes extractEmployes(EntityManager em){
+	public CompetencesEmployes extractEmployes(EntityManager em) {
 		CompetencesEmployes ce = new CompetencesEmployes();
 		ce.setCompetence(em.getReference(Competence.class, getId()));
 		ce.setNiveau(getNiveau());
 
 		return ce;
+	}
+
+	public int getNiveau() {
+		return niveau;
+	}
+
+	public void setNiveau(int niveau) {
+		this.niveau = niveau;
 	}
 }

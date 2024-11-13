@@ -9,6 +9,7 @@ import com.analytique.gestion_analytique.Repositories.CandidatRepository;
 import com.analytique.gestion_analytique.Repositories.CompetenceRepository;
 import com.analytique.gestion_analytique.Repositories.CompetencesCandidatsRepository;
 import com.analytique.gestion_analytique.Repositories.NoteCandidatRepository;
+import com.analytique.gestion_analytique.dto.CompetenceUser;
 import com.analytique.gestion_analytique.dto.NoteUser;
 import com.analytique.gestion_analytique.dto.receive.CandidatRecieve;
 import com.analytique.gestion_analytique.dto.send.CandidatSend;
@@ -59,10 +60,8 @@ public class CandidatService {
 	public CandidatSend getById(Integer id) {
 		Candidat c = candidatRepository.findById(id).get();
 		List<CompetencesCandidats> cc = cCandidatsRepository.findByCandidatId(id);
-		List<Competence> comptences = cc.stream().map(CompetencesCandidats::getCompetence).collect(Collectors.toList());
-		List<NoteUser> notes = noteCandidatRepository.findByCandidat(id).stream()
-				.map(nc -> new NoteUser(nc))
-				.collect(Collectors.toList());
+		List<CompetenceUser> comptences = cc.stream().map(comp -> new CompetenceUser(comp.getCompetence(), comp.getNiveau())).collect(Collectors.toList());
+		List<NoteUser> notes = noteCandidatRepository.findByCandidat(id).stream().map(nc -> new NoteUser(nc)).collect(Collectors.toList());
 		return new CandidatSend(c, comptences,notes);
 	}
 
