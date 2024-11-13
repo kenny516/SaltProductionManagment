@@ -60,9 +60,12 @@ public class CandidatService {
 	public CandidatSend getById(Integer id) {
 		Candidat c = candidatRepository.findById(id).get();
 		List<CompetencesCandidats> cc = cCandidatsRepository.findByCandidatId(id);
-		List<CompetenceUser> comptences = cc.stream().map(comp -> new CompetenceUser(comp.getCompetence(), comp.getNiveau())).collect(Collectors.toList());
-		List<NoteUser> notes = noteCandidatRepository.findByCandidat(id).stream().map(nc -> new NoteUser(nc)).collect(Collectors.toList());
-		return new CandidatSend(c, comptences,notes);
+		List<CompetenceUser> comptences = cc.stream()
+				.map(comp -> new CompetenceUser(comp.getCompetence(), comp.getCandidat().getId(), comp.getNiveau()))
+				.collect(Collectors.toList());
+		List<NoteUser> notes = noteCandidatRepository.findByCandidat(id).stream().map(nc -> new NoteUser(nc))
+				.collect(Collectors.toList());
+		return new CandidatSend(c, comptences, notes);
 	}
 
 }
