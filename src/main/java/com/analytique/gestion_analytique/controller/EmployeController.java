@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.analytique.gestion_analytique.Services.EmployeService;
-import com.analytique.gestion_analytique.dto.send.EmployeData;
+import com.analytique.gestion_analytique.dto.send.EmployeSend;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -26,7 +26,7 @@ public class EmployeController {
 	}
 
 	@GetMapping("")
-	public List<EmployeData> getAll() {
+	public List<EmployeSend> getAll() {
 		return employeService.getAll();
 	}
 
@@ -40,7 +40,7 @@ public class EmployeController {
 	}
 
 	@GetMapping("/poste/{id}")
-	public List<EmployeData> getEmployeByPoste(@PathVariable Integer id) {
+	public List<EmployeSend> getEmployeByPoste(@PathVariable Integer id) {
 		return employeService.getQualifiedEmployeesForPost(id);
 	}
 }

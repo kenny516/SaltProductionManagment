@@ -11,7 +11,7 @@ import com.analytique.gestion_analytique.Repositories.CompetenceRepository;
 import com.analytique.gestion_analytique.Repositories.PosteRepository;
 import com.analytique.gestion_analytique.Services.CandidatService;
 import com.analytique.gestion_analytique.Services.CandidatToEmpService;
-import com.analytique.gestion_analytique.dto.receive.CandidatureData;
+import com.analytique.gestion_analytique.dto.receive.CandidatRecieve;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
@@ -39,7 +39,7 @@ public class CandidatController {
 	}
 
 	@PostMapping("")
-	public ResponseEntity<?> saveCandidat(@RequestBody CandidatureData candidature) {
+	public ResponseEntity<?> saveCandidat(@RequestBody CandidatRecieve candidature) {
 		try {
 			return ResponseEntity.ok(candidatService.saveCandidat(candidature));
 		} catch (Exception e) {

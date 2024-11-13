@@ -4,9 +4,11 @@ import java.util.List;
 
 import com.analytique.gestion_analytique.Models.Candidat;
 import com.analytique.gestion_analytique.Models.Competence;
+import com.analytique.gestion_analytique.Models.NoteCandidat;
 
-public class CandidatData extends Candidat {
+public class CandidatSend extends Candidat {
 	List<Competence> competences;
+	List<NoteCandidat> notes;
 
 	public List<Competence> getCompetences() {
 		return competences;
@@ -16,7 +18,9 @@ public class CandidatData extends Candidat {
 		this.competences = competences;
 	}
 
-	public CandidatData(Candidat c,List<Competence> competences) {
+	
+
+	public CandidatSend(Candidat c,List<Competence> competences,List<NoteCandidat> notes) {
 		setId(c.getId());
 		setNom(c.getNom());
 		setPrenom(c.getPrenom());
@@ -25,10 +29,19 @@ public class CandidatData extends Candidat {
 		setTelephone(c.getTelephone());
 		setPoste(c.getPoste());
 		setStatus(c.getStatus());
-		this.competences = competences;
+		setCompetences(competences);
+		setNotes(notes);
 	}
 
-	public CandidatData(){}
+	public CandidatSend(){}
+
+	public List<NoteCandidat> getNotes() {
+		return notes;
+	}
+
+	public void setNotes(List<NoteCandidat> notes) {
+		this.notes = notes;
+	}
 
 	
 }

@@ -16,5 +16,23 @@ public class DetailsPoste {
     @JoinColumn(name = "idcompetence")
     private Competence competence;
 
+		public Poste getPoste() {
+			return poste;
+		}
+
+		public void setPoste(Poste poste) {
+			this.poste = poste;
+		}
+
+		public Competence getCompetence() {
+			return competence;
+		}
+
+		public void setCompetence(Competence competence) {
+			this.competence = competence;
+		}
+
+		
+
 }
 

@@ -12,7 +12,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 import com.analytique.gestion_analytique.Repositories.DetailsPosteRepository;
 import com.analytique.gestion_analytique.Services.CandidatService;
-import com.analytique.gestion_analytique.dto.receive.CandidatureData;
+import com.analytique.gestion_analytique.dto.receive.CandidatRecieve;
 import com.analytique.gestion_analytique.dto.receive.CompetenceUser;
 
 @SpringBootTest

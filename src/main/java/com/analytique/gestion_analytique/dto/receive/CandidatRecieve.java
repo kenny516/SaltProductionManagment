@@ -10,7 +10,7 @@ import com.analytique.gestion_analytique.Models.Poste;
 
 import jakarta.persistence.EntityManager;
 
-public class CandidatureData {
+public class CandidatRecieve {
 	String nom, prenom, email, telephone;
 	int poste_id;
 	LocalDateTime dateCandidature;
@@ -66,7 +66,7 @@ public class CandidatureData {
 
 	
 
-	public CandidatureData(String nom, String prenom, String email, String telephone, int poste_id,
+	public CandidatRecieve(String nom, String prenom, String email, String telephone, int poste_id,
 			LocalDateTime candidaturTime, List<CompetenceUser> competences) {
 		this.nom = nom;
 		this.prenom = prenom;

@@ -9,7 +9,7 @@ import com.analytique.gestion_analytique.Models.Employe;
 import com.analytique.gestion_analytique.Repositories.CompetenceRepository;
 import com.analytique.gestion_analytique.Repositories.ContratEmployeRepository;
 import com.analytique.gestion_analytique.Repositories.EmployeRepository;
-import com.analytique.gestion_analytique.dto.send.EmployeData;
+import com.analytique.gestion_analytique.dto.send.EmployeSend;
 
 @Service
 public class EmployeService {
@@ -24,10 +24,10 @@ public class EmployeService {
 		this.contratEmployeRepository = contratEmployeRepository;
 	}
 
-	public List<EmployeData> getQualifiedEmployeesForPost(Integer posteId) {
+	public List<EmployeSend> getQualifiedEmployeesForPost(Integer posteId) {
 		return employeRepository.findQualifiedEmployeesForPost(posteId)
 				.stream()
-				.map(e -> EmployeData.map(e, competenceRepository.findByEmploye(e.getId()),
+				.map(e -> EmployeSend.map(e, competenceRepository.findByEmploye(e.getId()),
 						contratEmployeRepository.findByMaxDateAndEmployeId(e.getId())))
 				.toList();
 	}
@@ -36,19 +36,19 @@ public class EmployeService {
 		return employeRepository.save(emp);
 	}
 
-	public List<EmployeData> getAll() {
+	public List<EmployeSend> getAll() {
 		return employeRepository
 				.findAll()
 				.stream()
-				.map(e -> EmployeData.map(e, competenceRepository.findByEmploye(e.getId()),
+				.map(e -> EmployeSend.map(e, competenceRepository.findByEmploye(e.getId()),
 						contratEmployeRepository.findByMaxDateAndEmployeId(e.getId())))
 				.toList();
 	}
 
-	public Optional<EmployeData> getOne(int id) {
+	public Optional<EmployeSend> getOne(int id) {
 		return employeRepository
 				.findById(id)
-				.map(e -> EmployeData.map(e, competenceRepository.findByEmploye(e.getId()),
+				.map(e -> EmployeSend.map(e, competenceRepository.findByEmploye(e.getId()),
 						contratEmployeRepository.findByMaxDateAndEmployeId(e.getId())));
 	}
 }

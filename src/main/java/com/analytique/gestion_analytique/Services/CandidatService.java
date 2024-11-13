@@ -7,8 +7,9 @@ import com.analytique.gestion_analytique.Models.CompetencesCandidats;
 import com.analytique.gestion_analytique.Repositories.CandidatRepository;
 import com.analytique.gestion_analytique.Repositories.CompetenceRepository;
 import com.analytique.gestion_analytique.Repositories.CompetencesCandidatsRepository;
-import com.analytique.gestion_analytique.dto.receive.CandidatureData;
-import com.analytique.gestion_analytique.dto.send.CandidatData;
+import com.analytique.gestion_analytique.Repositories.NoteCandidatRepository;
+import com.analytique.gestion_analytique.dto.receive.CandidatRecieve;
+import com.analytique.gestion_analytique.dto.send.CandidatSend;
 
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
@@ -23,10 +24,15 @@ public class CandidatService {
 
 	private CandidatRepository candidatRepository;
 	private CompetencesCandidatsRepository cCandidatsRepository;
+	private NoteCandidatRepository noteCandidatRepository;
 
-	public CandidatService(CandidatRepository candidatRepository, CompetencesCandidatsRepository cCandidatsRepository) {
+	
+
+	public CandidatService(CandidatRepository candidatRepository, CompetencesCandidatsRepository cCandidatsRepository,
+			com.analytique.gestion_analytique.Repositories.NoteCandidatRepository noteCandidatRepository) {
 		this.candidatRepository = candidatRepository;
 		this.cCandidatsRepository = cCandidatsRepository;
+		noteCandidatRepository = noteCandidatRepository;
 	}
 
 	public List<Candidat> findAll() {
@@ -37,7 +43,7 @@ public class CandidatService {
 		return candidatRepository.findByPosteIdAndStatus(posteId, "Retenu");
 	}
 
-	public Candidat saveCandidat(CandidatureData cd) {
+	public Candidat saveCandidat(CandidatRecieve cd) {
 		Candidat candidat = cd.extractCandidat(em);
 		candidat = candidatRepository.save(candidat);
 
@@ -49,10 +55,10 @@ public class CandidatService {
 		return candidat;
 	}
 
-	public CandidatData getById(Integer id) {
+	public CandidatSend getById(Integer id) {
 		Candidat c = candidatRepository.findById(id).get();
 		List<CompetencesCandidats> cc = cCandidatsRepository.findByCandidatId(id);
-		return new CandidatData(c, cc.stream().map(CompetencesCandidats::getCompetence).collect(Collectors.toList()));
+		return new CandidatSend(c, cc.stream().map(CompetencesCandidats::getCompetence).collect(Collectors.toList()),noteCandidatRepository.findByCandidat(id));
 	}
 
 }
