@@ -76,14 +76,14 @@ CREATE TABLE detailsPoste(
 CREATE TABLE CompetencesEmployes (
     employe_id INT REFERENCES Employes(id) ON DELETE CASCADE,
     competence_id INT REFERENCES Competences(id) ON DELETE CASCADE,
-    niveau INT CHECK (niveau >= 1 AND niveau <= 5),
+    niveau INT CHECK (niveau >= 0 AND niveau <= 5),
     PRIMARY KEY (employe_id, competence_id)
 );
 
 CREATE TABLE CompetencesCandidats (
     candidat_id INT REFERENCES Candidats(id) ON DELETE CASCADE,
     competence_id INT REFERENCES Competences(id) ON DELETE CASCADE,
-    niveau INT CHECK (niveau >= 1 AND niveau <= 5),
+    niveau INT CHECK (niveau >= 0 AND niveau <= 5),
     PRIMARY KEY (candidat_id, competence_id)
 );
 
