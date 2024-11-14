@@ -87,4 +87,11 @@ public class CandidatService {
 		return result;
 	}
 
+	public List<Candidat> getElligibles(Integer posteId) {
+		if (posteId == null) {
+			return candidatRepository.findElligibles();
+		}
+		return candidatRepository.findElligiblesByPoste(posteId);
+	}
+
 }

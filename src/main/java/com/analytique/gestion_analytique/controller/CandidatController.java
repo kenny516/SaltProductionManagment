@@ -16,6 +16,9 @@ import com.analytique.gestion_analytique.Repositories.TypeNoteRepository;
 import com.analytique.gestion_analytique.Services.CandidatService;
 import com.analytique.gestion_analytique.Services.CandidatToEmpService;
 import com.analytique.gestion_analytique.dto.receive.CandidatRecieve;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+
 
 @RestController
 @RequestMapping("/api/candidat")
@@ -96,5 +99,11 @@ public class CandidatController {
 			return ResponseEntity.internalServerError().body(e.getMessage());
 		}
 	}
+
+	@GetMapping("/elligibles/{id}")
+	public List<Candidat> getMethodName(@PathVariable(required=false) Integer id) {
+		return candidatService.getElligibles(id);
+	}
+	
 
 }
