@@ -81,7 +81,10 @@ public class CandidatController {
 	}
 
 	@PostMapping("/note")
-	public ResponseEntity<?> insertNote(@RequestBody int id,@RequestBody int typenote,@RequestBody int note) {
+	public ResponseEntity<?> insertNote(@RequestBody Map<String,Integer> body) {
+		int id = body.get("id");
+		int typenote = body.get("typenote");
+		int note = body.get("note");
 		try {
 			switch (candidatService.intsertNote(id, typenote, note)) {
 				case 0:
