@@ -74,10 +74,8 @@ public class CandidatController {
 
 	@GetMapping("/{id}")
 	public ResponseEntity<?> getOne(@PathVariable Integer id) {
-		clearResponse();
 		try {
-			response.put("value" , candidatService.getById(id));
-			return ResponseEntity.ok(response);
+			return ResponseEntity.ok(candidatService.getById(id));
 		} catch (Exception e) {
 			return ResponseEntity.internalServerError().body(e.getMessage());
 		}
