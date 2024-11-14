@@ -1,19 +1,21 @@
 package com.analytique.gestion_analytique.controller;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import com.analytique.gestion_analytique.Models.Candidat;
 import com.analytique.gestion_analytique.Repositories.CompetenceRepository;
 import com.analytique.gestion_analytique.Repositories.PosteRepository;
+import com.analytique.gestion_analytique.Repositories.TypeNoteRepository;
 import com.analytique.gestion_analytique.Services.CandidatService;
 import com.analytique.gestion_analytique.Services.CandidatToEmpService;
 import com.analytique.gestion_analytique.dto.receive.CandidatRecieve;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 
 @RestController
 @RequestMapping("/api/candidat")
@@ -24,13 +26,21 @@ public class CandidatController {
 	CandidatToEmpService candidatToEmpService;
 	PosteRepository pRepo;
 	CompetenceRepository cRepo;
+	TypeNoteRepository tnRepo;
 
-	public CandidatController(CandidatService candidatService, PosteRepository pRepo, CompetenceRepository cRepo,
-			CandidatToEmpService candidatToEmpService) {
+	Map<String, Object> response = new HashMap<>();
+
+	void clearResponse(){
+		response.clear();
+	}
+
+	public CandidatController(CandidatService candidatService, CandidatToEmpService candidatToEmpService,
+			PosteRepository pRepo, CompetenceRepository cRepo, TypeNoteRepository tnRepo) {
 		this.candidatService = candidatService;
+		this.candidatToEmpService = candidatToEmpService;
 		this.pRepo = pRepo;
 		this.cRepo = cRepo;
-		this.candidatToEmpService = candidatToEmpService;
+		this.tnRepo = tnRepo;
 	}
 
 	@GetMapping("")
@@ -40,9 +50,12 @@ public class CandidatController {
 
 	@PostMapping("")
 	public ResponseEntity<?> saveCandidat(@RequestBody CandidatRecieve candidature) {
+		clearResponse();
 		try {
-			return ResponseEntity.ok(candidatService.saveCandidat(candidature));
+			response.put("id",candidatService.saveCandidat(candidature).getId());
+			return ResponseEntity.ok(response);
 		} catch (Exception e) {
+			response.put("error", "");
 			return ResponseEntity.internalServerError().body(e.getMessage());
 		}
 	}
@@ -56,11 +69,26 @@ public class CandidatController {
 		}
 	}
 
-	
 	@GetMapping("/{id}")
 	public ResponseEntity<?> getOne(@PathVariable Integer id) {
+		clearResponse();
 		try {
-			return ResponseEntity.ok(candidatService.getById(id));
+			response.put("value" , candidatService.getById(id));
+			return ResponseEntity.ok(response);
+		} catch (Exception e) {
+			return ResponseEntity.internalServerError().body(e.getMessage());
+		}
+	}
+
+	@PostMapping("/note")
+	public ResponseEntity<?> postMethodName(@RequestBody int id, int typenote, int note) {
+		try {
+			switch (candidatService.intsertNote(id, typenote, note)) {
+				case 0:
+					return ResponseEntity.status(HttpStatus.ACCEPTED).body("note updated");
+				default:
+					return ResponseEntity.status(HttpStatus.CREATED).body("note created");
+			}
 		} catch (Exception e) {
 			return ResponseEntity.internalServerError().body(e.getMessage());
 		}

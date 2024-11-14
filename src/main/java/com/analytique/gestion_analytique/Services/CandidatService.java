@@ -3,12 +3,14 @@ package com.analytique.gestion_analytique.Services;
 import org.springframework.stereotype.Service;
 
 import com.analytique.gestion_analytique.Models.Candidat;
-import com.analytique.gestion_analytique.Models.Competence;
 import com.analytique.gestion_analytique.Models.CompetencesCandidats;
+import com.analytique.gestion_analytique.Models.NoteCandidat;
+import com.analytique.gestion_analytique.Models.NoteCandidatId;
+import com.analytique.gestion_analytique.Models.TypeNote;
 import com.analytique.gestion_analytique.Repositories.CandidatRepository;
-import com.analytique.gestion_analytique.Repositories.CompetenceRepository;
 import com.analytique.gestion_analytique.Repositories.CompetencesCandidatsRepository;
 import com.analytique.gestion_analytique.Repositories.NoteCandidatRepository;
+import com.analytique.gestion_analytique.Repositories.TypeNoteRepository;
 import com.analytique.gestion_analytique.dto.CompetenceUser;
 import com.analytique.gestion_analytique.dto.NoteUser;
 import com.analytique.gestion_analytique.dto.receive.CandidatRecieve;
@@ -16,6 +18,7 @@ import com.analytique.gestion_analytique.dto.send.CandidatSend;
 
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
+import jakarta.transaction.Transactional;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -29,9 +32,8 @@ public class CandidatService {
 	private CompetencesCandidatsRepository cCandidatsRepository;
 	private NoteCandidatRepository noteCandidatRepository;
 
-	public CandidatService(EntityManager em, CandidatRepository candidatRepository,
-			CompetencesCandidatsRepository cCandidatsRepository, NoteCandidatRepository noteCandidatRepository) {
-		this.em = em;
+	public CandidatService(CandidatRepository candidatRepository, CompetencesCandidatsRepository cCandidatsRepository,
+			NoteCandidatRepository noteCandidatRepository) {
 		this.candidatRepository = candidatRepository;
 		this.cCandidatsRepository = cCandidatsRepository;
 		this.noteCandidatRepository = noteCandidatRepository;
@@ -46,7 +48,7 @@ public class CandidatService {
 	}
 
 	public Candidat saveCandidat(CandidatRecieve cd) {
-		Candidat candidat = cd.extractCandidat(em);
+		Candidat candidat = cd.extractCandidat();
 		candidat = candidatRepository.save(candidat);
 
 		for (CompetencesCandidats competences : cd.extractCCandidat(em)) {
@@ -66,6 +68,23 @@ public class CandidatService {
 		List<NoteUser> notes = noteCandidatRepository.findByCandidat(id).stream().map(nc -> new NoteUser(nc))
 				.collect(Collectors.toList());
 		return new CandidatSend(c, comptences, notes);
+	}
+
+	@Transactional
+	public int intsertNote(int id, int type, int note) {
+		NoteCandidat nc = new NoteCandidat();
+		nc.setNote(note);
+		nc.setTypeNote(em.getReference(TypeNote.class, type));
+		nc.setCandidat(em.getReference(Candidat.class, id));
+
+		int result = 1;
+		if (noteCandidatRepository.existsById(new NoteCandidatId(id, type))) {
+			noteCandidatRepository.deleteById(new NoteCandidatId(id, type));
+			result = 0;
+		}
+
+		noteCandidatRepository.save(nc);
+		return result;
 	}
 
 }

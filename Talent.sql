@@ -106,7 +106,7 @@ BEGIN
     IF moyenne_niveau IS NOT NULL AND moyenne_niveau >= 3 THEN
         UPDATE Candidats SET status = 'Retenu' WHERE id = NEW.candidat_id;
     ELSE
-        UPDATE Candidats SET status = 'Refusé' WHERE id = NEW.candidat_id;
+        UPDATE Candidats SET status = 'Refus' WHERE id = NEW.candidat_id;
     END IF;
 
     RETURN NEW;
