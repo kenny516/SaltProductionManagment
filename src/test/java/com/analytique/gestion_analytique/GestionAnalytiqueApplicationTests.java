@@ -32,11 +32,7 @@ class GestionAnalytiqueApplicationTests {
 
 	@Test
 	void insertionCandidat(){
-		List<CompetenceUser> list = new ArrayList<>();
-		list.add(new CompetenceUser(1, 3));
-		CandidatRecieve cd = new CandidatRecieve("patite", " main", "mailmoi", "002934874", 1,LocalDateTime.now(), list);
-
-		cs.saveCandidat(cd);
+		cs.intsertNote(1, 1, 10);
 
 	}
 
