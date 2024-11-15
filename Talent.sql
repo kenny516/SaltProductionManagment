@@ -76,14 +76,14 @@ CREATE TABLE detailsPoste(
 CREATE TABLE CompetencesEmployes (
     employe_id INT REFERENCES Employes(id) ON DELETE CASCADE,
     competence_id INT REFERENCES Competences(id) ON DELETE CASCADE,
-    niveau INT CHECK (niveau >= 1 AND niveau <= 5),
+    niveau INT CHECK (niveau >= 0 AND niveau <= 5),
     PRIMARY KEY (employe_id, competence_id)
 );
 
 CREATE TABLE CompetencesCandidats (
     candidat_id INT REFERENCES Candidats(id) ON DELETE CASCADE,
     competence_id INT REFERENCES Competences(id) ON DELETE CASCADE,
-    niveau INT CHECK (niveau >= 1 AND niveau <= 5),
+    niveau INT CHECK (niveau >= 0 AND niveau <= 5),
     PRIMARY KEY (candidat_id, competence_id)
 );
 
@@ -106,7 +106,7 @@ BEGIN
     IF moyenne_niveau IS NOT NULL AND moyenne_niveau >= 3 THEN
         UPDATE Candidats SET status = 'Retenu' WHERE id = NEW.candidat_id;
     ELSE
-        UPDATE Candidats SET status = 'Refusé' WHERE id = NEW.candidat_id;
+        UPDATE Candidats SET status = 'Refus' WHERE id = NEW.candidat_id;
     END IF;
 
     RETURN NEW;
@@ -117,3 +117,13 @@ CREATE OR REPLACE TRIGGER trigger_evaluer_statut_candidat
 AFTER INSERT ON CompetencesCandidats
 FOR EACH ROW
 EXECUTE FUNCTION evaluer_statut_candidat();
+
+
+create or replace view candidats_elligibles as SELECT c.*
+FROM Candidats c
+JOIN (
+    SELECT nc.idCandidat
+    FROM noteCandidat nc
+    GROUP BY nc.idCandidat
+    HAVING COUNT(DISTINCT nc.idTypeNote) = (SELECT COUNT(*) FROM typeNote)
+) AS subquery ON c.id = subquery.idCandidat;

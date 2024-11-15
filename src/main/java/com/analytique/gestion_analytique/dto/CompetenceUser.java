@@ -20,7 +20,11 @@ public class CompetenceUser extends Competence {
 		setDescription(c.getDescription());
 		setCandidat_id(candidat_id);
 		setNiveau(niveau);
+	}
 
+	public CompetenceUser(int id,int niveau){
+		setId(id);
+		setNiveau(niveau);
 	}
 
 	public CompetencesCandidats extractCandidat(EntityManager em) {
@@ -34,7 +38,6 @@ public class CompetenceUser extends Competence {
 		CompetencesEmployes ce = new CompetencesEmployes();
 		ce.setCompetence(em.getReference(Competence.class, getId()));
 		ce.setNiveau(getNiveau());
-
 		return ce;
 	}
 

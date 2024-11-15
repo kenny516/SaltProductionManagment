@@ -18,6 +18,12 @@ public class NoteCandidatId implements Serializable {
     public void setTypeNote(Integer typeNote) {
         this.typeNote = typeNote;
     }
+		public NoteCandidatId(Integer candidat, Integer typeNote) {
+			this.candidat = candidat;
+			this.typeNote = typeNote;
+		}
+
+		public NoteCandidatId(){}
 
 }
 

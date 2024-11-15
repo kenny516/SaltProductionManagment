@@ -78,14 +78,16 @@ public class CandidatRecieve {
 		this.competences = competences;
 	}
 
-	public Candidat extractCandidat(EntityManager em) {
+	public Candidat extractCandidat() {
 		Candidat c = new Candidat();
 		c.setNom(nom);
 		c.setPrenom(prenom);
 		c.setDateCandidature(dateCandidature.toLocalDate());
 		c.setEmail(email);
 		c.setTelephone(telephone);
-		c.setPoste(em.getReference(Poste.class, poste_id));
+		Poste p = new Poste();
+		p.setId(getPoste_id());
+		c.setPoste(p);
 		return c;
 	}
 
@@ -96,8 +98,6 @@ public class CandidatRecieve {
 			CompetencesCandidats cc = competences.extractCandidat(em);
 			csc.add(cc);
 		}
-		;
-
 		return csc;
 	}
 
