@@ -56,7 +56,7 @@ public class CandidatController {
 			response.put("id",candidatService.saveCandidat(candidature).getId());
 			return ResponseEntity.ok(response);
 		} catch (Exception e) {
-			response.put("error", "");
+			response.put("error", "500");
 			return ResponseEntity.internalServerError().body(e.getMessage());
 		}
 	}
