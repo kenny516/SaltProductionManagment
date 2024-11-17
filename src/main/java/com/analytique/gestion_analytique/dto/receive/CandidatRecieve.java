@@ -82,12 +82,10 @@ public class CandidatRecieve {
 		Candidat c = new Candidat();
 		c.setNom(nom);
 		c.setPrenom(prenom);
-		c.setDateCandidature(dateCandidature.toLocalDate());
 		c.setEmail(email);
 		c.setTelephone(telephone);
 		Poste p = new Poste();
 		p.setId(getPoste_id());
-		c.setPoste(p);
 		return c;
 	}
 

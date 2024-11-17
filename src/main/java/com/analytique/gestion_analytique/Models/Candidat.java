@@ -32,17 +32,19 @@ public class Candidat {
     @Column(length = 20)
     private String telephone;
 
+    @OneToMany(mappedBy = "candidat", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Formation> formations = new ArrayList<>();
 
-    @Column(name = "status")
-    private String status;
+    @OneToMany(mappedBy = "candidat", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Experience> experiences = new ArrayList<>();
 
-    public String getStatus() {
-        return status;
-    }
-
-    public void setStatus(String status) {
-        this.status = status;
-    }
+    @ManyToMany
+    @JoinTable(
+        name = "Candidatsdiplomes",
+        joinColumns = @JoinColumn(name = "candidat_id"),
+        inverseJoinColumns = @JoinColumn(name = "diplome_id")
+    )
+    private List<Diplome> diplomes = new ArrayList<>();
 
     public Integer getId() {
         return id;
@@ -86,5 +88,37 @@ public class Candidat {
     
     @OneToMany(mappedBy = "candidat")
     private List<NoteCandidat> noteCandidat;
+
+    public List<Formation> getFormations() {
+        return formations;
+    }
+
+    public void setFormations(List<Formation> formations) {
+        this.formations = formations;
+    }
+
+    public List<Experience> getExperiences() {
+        return experiences;
+    }
+
+    public void setExperiences(List<Experience> experiences) {
+        this.experiences = experiences;
+    }
+
+    public List<Diplome> getDiplomes() {
+        return diplomes;
+    }
+
+    public void setDiplomes(List<Diplome> diplomes) {
+        this.diplomes = diplomes;
+    }
+
+    public List<NoteCandidat> getNoteCandidat() {
+        return noteCandidat;
+    }
+
+    public void setNoteCandidat(List<NoteCandidat> noteCandidat) {
+        this.noteCandidat = noteCandidat;
+    }
     
 }
