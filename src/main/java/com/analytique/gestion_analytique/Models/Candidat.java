@@ -123,5 +123,13 @@ public class Candidat {
     public void setNoteCandidat(List<NoteCandidat> noteCandidat) {
         this.noteCandidat = noteCandidat;
     }
+
+    public String getMdp() {
+        return mdp;
+    }
+
+    public void setMdp(String mdp) {
+        this.mdp = mdp;
+    }
     
 }
