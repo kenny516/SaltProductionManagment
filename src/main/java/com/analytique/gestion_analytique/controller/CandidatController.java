@@ -99,6 +99,11 @@ public class CandidatController {
 	public List<Candidat> getMethodName(@PathVariable(required=false) Integer id) {
 		return candidatService.getElligibles(id);
 	}
+
+	@GetMapping("/elligibles")
+	public List<Candidat> getMethodName() {
+		return candidatService.getElligibles(null);
+	}
 	
 
 }
