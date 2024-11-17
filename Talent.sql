@@ -163,7 +163,7 @@ CREATE TABLE experience(
 );
 
 CREATE TABLE formation(
-   id_formation SERIAL,
+   id_formation SERIAL PRIMARY KEY,
    date_debut DATE NOT NULL,
    date_fin DATE,
    description TEXT NOT NULL,
