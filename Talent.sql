@@ -151,3 +151,46 @@ CREATE TABLE Notifications (
     date_heure TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     statut_notification VARCHAR(20) DEFAULT 'non_lu'
 );
+
+--ajout 
+
+CREATE TABLE experience(
+   experience_id SERIAL PRIMARY KEY,
+   date_debut DATE NOT NULL,
+   date_fin DATE,
+   description TEXT NOT NULL,
+   candidat_id INT REFERENCES Candidats(id) ON DELETE CASCADE,
+);
+
+CREATE TABLE formation(
+   id_formation SERIAL,
+   date_debut DATE NOT NULL,
+   date_fin DATE,
+   description TEXT NOT NULL,
+   candidat_id INT REFERENCES Candidats(id) ON DELETE CASCADE,
+);
+
+CREATE TABLE Diplome(
+   id_diplome SERIAL,
+   diplome VARCHAR(255)  NOT NULL,
+   niveau INTEGER NOT NULL,
+   PRIMARY KEY(id_diplome)
+);
+
+CREATE TABLE CandidatsDiplomes (
+    candidat_id INT REFERENCES Candidats(id) ON DELETE CASCADE,
+    diplome_id INT REFERENCES Diplome(id_diplome) ON DELETE CASCADE,
+    PRIMARY KEY (candidat_id, diplome_id)
+);
+
+CREATE TABLE CandidatsFormations (
+    candidat_id INT REFERENCES Candidats(id) ON DELETE CASCADE,
+    formation_id INT REFERENCES formation(id_formation) ON DELETE CASCADE,
+    PRIMARY KEY (candidat_id, formation_id)
+);
+
+CREATE TABLE CandidatsExperiences (
+    candidat_id INT REFERENCES Candidats(id) ON DELETE CASCADE,
+    experience_id INT REFERENCES experience(experience_id) ON DELETE CASCADE,
+    PRIMARY KEY (candidat_id, experience_id)
+);
