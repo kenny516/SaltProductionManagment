@@ -35,10 +35,6 @@ public class Candidat {
     @Column(name = "date_candidature", columnDefinition = "DATE DEFAULT CURRENT_DATE")
     private LocalDate dateCandidature = LocalDate.now();
 
-    @ManyToOne
-    @JoinColumn(name = "poste_id")
-    private Poste poste;
-
     @Column(name = "status")
     private String status;
 
@@ -97,18 +93,8 @@ public class Candidat {
     public void setDateCandidature(LocalDate dateCandidature) {
         this.dateCandidature = dateCandidature;
     }
-
-    public Poste getPoste() {
-        return poste;
-    }
-
-    public void setPoste(Poste poste) {
-        this.poste = poste;
-    }
-    
     
     @OneToMany(mappedBy = "candidat")
     private List<NoteCandidat> noteCandidat;
     
-
 }

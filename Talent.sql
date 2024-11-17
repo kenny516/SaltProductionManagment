@@ -182,15 +182,3 @@ CREATE TABLE CandidatsDiplomes (
     diplome_id INT REFERENCES Diplome(id_diplome) ON DELETE CASCADE,
     PRIMARY KEY (candidat_id, diplome_id)
 );
-
-CREATE TABLE CandidatsFormations (
-    candidat_id INT REFERENCES Candidats(id) ON DELETE CASCADE,
-    formation_id INT REFERENCES formation(id_formation) ON DELETE CASCADE,
-    PRIMARY KEY (candidat_id, formation_id)
-);
-
-CREATE TABLE CandidatsExperiences (
-    candidat_id INT REFERENCES Candidats(id) ON DELETE CASCADE,
-    experience_id INT REFERENCES experience(experience_id) ON DELETE CASCADE,
-    PRIMARY KEY (candidat_id, experience_id)
-);
