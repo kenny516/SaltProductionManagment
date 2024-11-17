@@ -17,9 +17,7 @@ CREATE TABLE Candidats (
     nom VARCHAR(100) NOT NULL,
     prenom VARCHAR(100) NOT NULL,
     email VARCHAR(150) UNIQUE NOT NULL,
-    telephone VARCHAR(20),
-    date_candidature DATE DEFAULT CURRENT_DATE,
-    poste_id INT REFERENCES Postes(id)
+    telephone VARCHAR(20)
 );
 
 CREATE TABLE typeNote(
@@ -87,37 +85,53 @@ CREATE TABLE CompetencesCandidats (
     PRIMARY KEY (candidat_id, competence_id)
 );
 
-ALTER TABLE Candidats ADD COLUMN status VARCHAR(20) DEFAULT 'En attente';
 ALTER TABLE Employes ADD COLUMN poste_id int REFERENCES Postes(id);
 
+-- Créer une table d'association pour les candidatures
+CREATE TABLE Postulations (
+    id SERIAL PRIMARY KEY,
+    candidat_id INT REFERENCES Candidats(id) ON DELETE CASCADE,
+    poste_id INT REFERENCES Postes(id) ON DELETE CASCADE,
+    date_postulation DATE DEFAULT CURRENT_DATE,
+    status VARCHAR(20) DEFAULT 'En attente'
+);
+
+-- Mise à jour de la fonction evaluer_statut_candidat pour utiliser la table Postulations
 CREATE OR REPLACE FUNCTION evaluer_statut_candidat()
 RETURNS TRIGGER AS $$
 DECLARE
     moyenne_niveau FLOAT;
 BEGIN
-    -- Calculer la moyenne des niveaux de compétence pour le candidat et son poste
+    -- Calculer la moyenne des niveaux de compétence pour le candidat et le poste postulé
     SELECT AVG(cc.niveau) INTO moyenne_niveau
     FROM CompetencesCandidats cc
     JOIN detailsPoste dp ON cc.competence_id = dp.idCompetence
     WHERE cc.candidat_id = NEW.candidat_id
-    AND dp.idPoste = (SELECT poste_id FROM Candidats WHERE id = NEW.candidat_id);
+    AND dp.idPoste = NEW.poste_id;
 
-    -- Mettre à jour le statut du candidat en fonction de la moyenne
+    -- Mettre à jour le statut de la candidature en fonction de la moyenne
     IF moyenne_niveau IS NOT NULL AND moyenne_niveau >= 3 THEN
-        UPDATE Candidats SET status = 'Retenu' WHERE id = NEW.candidat_id;
+        -- Vérifier si le statut n'est pas déjà 'Retenu' pour éviter des mises à jour inutiles
+        IF NEW.status != 'Retenu' THEN
+            UPDATE Postulations SET status = 'Retenu' WHERE id = NEW.id;
+        END IF;
     ELSE
-        UPDATE Candidats SET status = 'Refus' WHERE id = NEW.candidat_id;
+        -- Vérifier si le statut n'est pas déjà 'Refus' pour éviter des mises à jour inutiles
+        IF NEW.status != 'Refus' THEN
+            UPDATE Postulations SET status = 'Refus' WHERE id = NEW.id;
+        END IF;
     END IF;
 
     RETURN NEW;
 END;
 $$ LANGUAGE plpgsql;
 
+
+-- Créer un trigger pour évaluer le statut d'une candidature
 CREATE OR REPLACE TRIGGER trigger_evaluer_statut_candidat
-AFTER INSERT ON CompetencesCandidats
+AFTER INSERT OR UPDATE ON Postulations
 FOR EACH ROW
 EXECUTE FUNCTION evaluer_statut_candidat();
-
 
 create or replace view candidats_elligibles as SELECT c.*
 FROM Candidats c
@@ -127,3 +141,42 @@ JOIN (
     GROUP BY nc.idCandidat
     HAVING COUNT(DISTINCT nc.idTypeNote) = (SELECT COUNT(*) FROM typeNote)
 ) AS subquery ON c.id = subquery.idCandidat and c.status = 'Retenu';
+
+CREATE TABLE Notifications (
+    id SERIAL PRIMARY KEY,
+    candidat_id INT REFERENCES Candidats(id) ON DELETE CASCADE,
+    message TEXT NOT NULL,
+    date_heure TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    statut_notification VARCHAR(20) DEFAULT 'non_lu'
+);
+
+--ajout 
+
+CREATE TABLE experience(
+   experience_id SERIAL PRIMARY KEY,
+   date_debut DATE NOT NULL,
+   date_fin DATE,
+   description TEXT NOT NULL,
+   candidat_id INT REFERENCES Candidats(id) ON DELETE CASCADE
+);
+
+CREATE TABLE formation(
+   id_formation SERIAL PRIMARY KEY,
+   date_debut DATE NOT NULL,
+   date_fin DATE,
+   description TEXT NOT NULL,
+   candidat_id INT REFERENCES Candidats(id) ON DELETE CASCADE
+);
+
+CREATE TABLE Diplome(
+   id_diplome SERIAL,
+   diplome VARCHAR(255)  NOT NULL,
+   niveau INTEGER NOT NULL,
+   PRIMARY KEY(id_diplome)
+);
+
+CREATE TABLE CandidatsDiplomes (
+    candidat_id INT REFERENCES Candidats(id) ON DELETE CASCADE,
+    diplome_id INT REFERENCES Diplome(id_diplome) ON DELETE CASCADE,
+    PRIMARY KEY (candidat_id, diplome_id)
+);
