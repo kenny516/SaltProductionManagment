@@ -1,115 +1,97 @@
+-- Insertion des données dans les tables de base
+-- Insérer des types de note
+INSERT INTO typeNote (nomType) VALUES
+('Technique'),
+('Soft Skills'),
+('Tests Pratiques');
+
+-- Insérer des candidats
+INSERT INTO Candidats (nom, prenom, email, telephone) VALUES
+('Dupont', 'Jean', 'jean.dupont@example.com', '0123456789'),
+('Martin', 'Alice', 'alice.martin@example.com', '0987654321'),
+('Durand', 'Pierre', 'pierre.durand@example.com', '0678912345');
+
 -- Insérer des postes
 INSERT INTO Postes (titre, description, departement) VALUES
-('Développeur Java', 'Responsable du développement des applications Java', 'Informatique'),
-('Chef de Projet', 'Gestion des projets informatiques', 'Gestion de projets'),
-('Technicien Support', 'Assistance technique aux utilisateurs', 'Support');
-
--- Insérer des types de contrat
-INSERT INTO TypeContrat (id, nomType, dureeMois) VALUES
-(1, 'ESSAI', 3),
-(2, 'CDI', 12),
-(3, 'CDD', 6);
+('Développeur Java', 'Développement backend', 'Informatique'),
+('Chargé de recrutement', 'Recrutement des candidats', 'Ressources Humaines');
 
 -- Insérer des compétences
 INSERT INTO Competences (nom, description) VALUES
-('Programmation Java', 'Capacité à développer en Java'),
-('Gestion de projet', 'Capacité à gérer des projets informatiques'),
-('Support Technique', 'Capacité à fournir une assistance technique');
+('Java', 'Développement Java'),
+('SQL', 'Gestion des bases de données SQL'),
+('Communication', 'Compétence en communication'),
+('Gestion de projet', 'Gestion des projets');
 
--- Insérer des détails de poste
+-- Insérer des relations compétences-poste
 INSERT INTO detailsPoste (idPoste, idCompetence) VALUES
-(1, 1), -- Développeur Java doit avoir la compétence Programmation Java
-(2, 2), -- Chef de Projet doit avoir la compétence Gestion de projet
-(3, 3); -- Technicien Support doit avoir la compétence Support Technique
+(1, 1),  -- Développeur Java -> Java
+(1, 2),  -- Développeur Java -> SQL
+(2, 3),  -- Chargé de recrutement -> Communication
+(2, 4);  -- Chargé de recrutement -> Gestion de projet
 
--- Insérer des candidats
-INSERT INTO Candidats (nom, prenom, email, telephone, poste_id) VALUES
-('Martin', 'Pierre', 'pierre.martin@example.com', '0601020304', 1),
-('Durand', 'Sophie', 'sophie.durand@example.com', '0611121314', 2),
-('Dupont', 'Jacques', 'jacques.dupont@example.com', '0622233344', 3);
+-- Insérer des candidats dans la table de compétences candidats avec niveaux
+INSERT INTO CompetencesCandidats (candidat_id, competence_id, niveau) VALUES
+(1, 1, 4),  -- Jean -> Java (niveau 4)
+(1, 2, 5),  -- Jean -> SQL (niveau 5)
+(1, 3, 3),  -- Jean -> Communication (niveau 3)
+(2, 1, 2),  -- Alice -> Java (niveau 2)
+(2, 2, 3),  -- Alice -> SQL (niveau 3)
+(2, 4, 4),  -- Alice -> Gestion de projet (niveau 4)
+(3, 1, 3),  -- Pierre -> Java (niveau 3)
+(3, 3, 2);  -- Pierre -> Communication (niveau 2)
+
+-- Insérer des postulants
+INSERT INTO Postulations (candidat_id, poste_id, date_postulation, status) VALUES
+(1, 1, '2024-11-01', 'En attente'),
+(2, 2, '2024-11-02', 'En attente'),
+(3, 1, '2024-11-03', 'En attente');
 
 -- Insérer des notes pour les candidats
-INSERT INTO typeNote (nomType) VALUES
-('Test Technique'),
-('Entretien HR'),
-('Entretien Technique');
-
 INSERT INTO noteCandidat (idCandidat, idTypeNote, note) VALUES
-(1, 1, 4),
-(1, 2, 5),
-(2, 1, 3),
-(2, 2, 2),
-(3, 1, 4),
-(3, 2, 4);
+(1, 1, 8),  -- Jean, Technique (8)
+(1, 2, 6),  -- Jean, Soft Skills (6)
+(1, 3, 7),  -- Jean, Tests Pratiques (7)
+(2, 1, 5),  -- Alice, Technique (5)
+(2, 2, 7),  -- Alice, Soft Skills (7)
+(2, 3, 6),  -- Alice, Tests Pratiques (6)
+(3, 1, 6),  -- Pierre, Technique (6)
+(3, 2, 5),  -- Pierre, Soft Skills (5)
+(3, 3, 4);  -- Pierre, Tests Pratiques (4)
 
--- Insérer des compétences pour les candidats
-INSERT INTO CompetencesCandidats (candidat_id, competence_id, niveau) VALUES
-(1, 1, 4), -- Pierre Martin a un bon niveau en Programmation Java
-(2, 2, 3), -- Sophie Durand a un niveau moyen en Gestion de projet
-(3, 3, 4); -- Jacques Dupont a un bon niveau en Support Technique
+-- Vérification du statut après l'insertion
+-- Le trigger va évaluer automatiquement le statut des candidatures en fonction des niveaux de compétence
+-- Statut attendu :
+-- Jean : Retenu (moyenne des niveaux > 3)
+-- Alice : Refus (moyenne des niveaux < 3)
+-- Pierre : Refus (moyenne des niveaux < 3)
 
--- Insérer des employés
-INSERT INTO Employes (nom, prenom, email, telephone, date_embauche, poste_id) VALUES
-('Leroy', 'Alice', 'alice.leroy@example.com', '0623456789', CURRENT_DATE, 1),
-('Bernard', 'Luc', 'luc.bernard@example.com', '0678901234', CURRENT_DATE, 2),
-('Moreau', 'Emma', 'emma.moreau@example.com', '0609876543', CURRENT_DATE, 3);
+-- Insérer des notifications
+INSERT INTO Notifications (candidat_id, message, statut_notification) VALUES
+(1, 'Votre candidature pour le poste de Développeur Java a été retenue.', 'non_lu'),
+(2, 'Votre candidature pour le poste de Chargé de recrutement a été refusée.', 'non_lu'),
+(3, 'Votre candidature pour le poste de Développeur Java a été refusée.', 'non_lu');
 
--- Assurez-vous que les entrées dans TypeContrat et autres tables ont bien été insérées et correspondent aux IDs utilisés dans vos fonctions et triggers.
+-- Insérer des expériences
+INSERT INTO experience (date_debut, date_fin, description, candidat_id) VALUES
+('2020-01-01', '2022-01-01', 'Développement de logiciels pour une entreprise', 1),
+('2021-03-01', '2023-03-01', 'Recrutement et gestion des entretiens', 2),
+('2019-06-01', '2021-06-01', 'Gestion de projet informatique', 3);
 
+-- Insérer des formations
+INSERT INTO formation (date_debut, date_fin, description, candidat_id) VALUES
+('2017-09-01', '2020-06-01', 'Licence en informatique', 1),
+('2018-09-01', '2021-06-01', 'Master en Ressources Humaines', 2),
+('2016-09-01', '2019-06-01', 'Master en Management', 3);
 
--- Insérer plus de postes
-INSERT INTO Postes (titre, description, departement) VALUES
-('Analyste Business', 'Analyse des processus métier et des besoins', 'Consulting'),
-('Administrateur Système', 'Gestion et maintenance des systèmes informatiques', 'IT Infrastructure');
+-- Insérer des diplômes
+INSERT INTO Diplome (diplome, niveau) VALUES
+('Licence en Informatique', 3),
+('Master en Ressources Humaines', 5),
+('Master en Management', 5);
 
--- Insérer plus de types de contrat
-INSERT INTO TypeContrat (id, nomType, dureeMois) VALUES
-(4, 'Stage', 2),
-(5, 'Freelance', 6);
-
--- Insérer plus de compétences
-INSERT INTO Competences (nom, description) VALUES
-('Analyse de données', 'Capacité à analyser et interpréter des données complexes'),
-('Administration Réseau', 'Compétence en gestion des réseaux informatiques'),
-('Communication', 'Capacité à communiquer efficacement dans un environnement professionnel');
-
--- Insérer plus de détails de poste
-INSERT INTO detailsPoste (idPoste, idCompetence) VALUES
-(4, 1), -- L'Analyste Business doit avoir la compétence Programmation Java
-(4, 3), -- L'Analyste Business doit aussi avoir la compétence Communication
-(5, 2), -- L'Administrateur Système doit avoir la compétence Administration Réseau
-(5, 3); -- L'Administrateur Système doit avoir la compétence Communication
-
--- Insérer plus de candidats
-INSERT INTO Candidats (nom, prenom, email, telephone, poste_id) VALUES
-('Roux', 'Hélène', 'helene.roux@example.com', '0633344556', 4),
-('Lambert', 'Julien', 'julien.lambert@example.com', '0644455566', 5);
-
--- Insérer des notes pour les nouveaux candidats
-INSERT INTO noteCandidat (idCandidat, idTypeNote, note) VALUES
-(4, 1, 4),
-(4, 2, 5),
-(5, 1, 3),
-(5, 2, 4);
-
--- Insérer des compétences pour les nouveaux candidats
-INSERT INTO CompetencesCandidats (candidat_id, competence_id, niveau) VALUES
-(4, 1, 4), -- Hélène Roux a un bon niveau en Programmation Java
-(4, 3, 5), -- Hélène Roux a un excellent niveau en Communication
-(5, 2, 3), -- Julien Lambert a un niveau moyen en Administration Réseau
-(5, 3, 4); -- Julien Lambert a un bon niveau en Communication
-
--- Insérer des employés supplémentaires
-INSERT INTO Employes (nom, prenom, email, telephone, date_embauche, poste_id) VALUES
-('Durant', 'Paul', 'paul.durant@example.com', '0625556677', CURRENT_DATE - INTERVAL '6 months', 4),
-('Leclerc', 'Marie', 'marie.leclerc@example.com', '0655566778', CURRENT_DATE - INTERVAL '1 year', 5);
-
--- Insérer des compétences pour les employés
-INSERT INTO CompetencesEmployes (employe_id, competence_id, niveau) VALUES
-(1, 1, 5), -- Alice Leroy a un excellent niveau en Programmation Java
-(2, 2, 4), -- Luc Bernard a un bon niveau en Gestion de projet
-(3, 3, 5), -- Emma Moreau a un excellent niveau en Support Technique
-(4, 1, 4), -- Paul Durant a un bon niveau en Programmation Java
-(4, 3, 5), -- Paul Durant a un excellent niveau en Communication
-(5, 2, 4), -- Marie Leclerc a un bon niveau en Administration Réseau
-(5, 3, 4); -- Marie Leclerc a un bon niveau en Communication
+-- Insérer des relations candidats-diplômes
+INSERT INTO CandidatsDiplomes (candidat_id, diplome_id) VALUES
+(1, 1),  -- Jean -> Licence en Informatique
+(2, 2),  -- Alice -> Master en Ressources Humaines
+(3, 3);  -- Pierre -> Master en Management
