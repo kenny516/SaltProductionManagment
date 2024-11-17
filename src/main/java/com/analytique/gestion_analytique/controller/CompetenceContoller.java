@@ -3,7 +3,6 @@ package com.analytique.gestion_analytique.controller;
 import org.springframework.web.bind.annotation.*;
 
 import com.analytique.gestion_analytique.Models.Competence;
-import com.analytique.gestion_analytique.Repositories.CompetenceRepository;
 import com.analytique.gestion_analytique.Services.CompetenceService;
 
 import java.util.List;
