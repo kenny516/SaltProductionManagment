@@ -32,8 +32,6 @@ public class Candidat {
     @Column(length = 20)
     private String telephone;
 
-    @Column(name = "date_candidature", columnDefinition = "DATE DEFAULT CURRENT_DATE")
-    private LocalDate dateCandidature = LocalDate.now();
 
     @Column(name = "status")
     private String status;
@@ -84,14 +82,6 @@ public class Candidat {
 
     public void setTelephone(String telephone) {
         this.telephone = telephone;
-    }
-
-    public LocalDate getDateCandidature() {
-        return dateCandidature;
-    }
-
-    public void setDateCandidature(LocalDate dateCandidature) {
-        this.dateCandidature = dateCandidature;
     }
     
     @OneToMany(mappedBy = "candidat")

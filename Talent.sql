@@ -17,8 +17,7 @@ CREATE TABLE Candidats (
     nom VARCHAR(100) NOT NULL,
     prenom VARCHAR(100) NOT NULL,
     email VARCHAR(150) UNIQUE NOT NULL,
-    telephone VARCHAR(20),
-    date_candidature DATE DEFAULT CURRENT_DATE
+    telephone VARCHAR(20)
 );
 
 CREATE TABLE typeNote(
@@ -86,7 +85,6 @@ CREATE TABLE CompetencesCandidats (
     PRIMARY KEY (candidat_id, competence_id)
 );
 
-ALTER TABLE Candidats ADD COLUMN status VARCHAR(20) DEFAULT 'En attente';
 ALTER TABLE Employes ADD COLUMN poste_id int REFERENCES Postes(id);
 
 -- Créer une table d'association pour les candidatures
