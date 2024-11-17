@@ -8,3 +8,11 @@ AND p.candidat_id IN (
     GROUP BY nc.idCandidat
     HAVING COUNT(DISTINCT nc.idTypeNote) = (SELECT COUNT(*) FROM typeNote)
 );
+
+create or replace view candidats_postules as
+SELECT c.*
+FROM Candidats c
+WHERE c.id IN (
+    SELECT DISTINCT p.candidat_id
+    FROM Postulations p
+);

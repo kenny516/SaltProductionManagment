@@ -43,7 +43,7 @@ public class CandidatService {
 	}
 
 	public List<Candidat> findAll() {
-		List<Candidat> candidats = candidatRepository.findAll();
+		List<Candidat> candidats = candidatRepository.findAllPostule();
 		candidats.forEach(c -> c.nullCandidat());
 		return candidats;
 	}
@@ -59,7 +59,6 @@ public class CandidatService {
 		for (Postulation postulation : postulationsRetenues) {
 			candidatsRetenus.add(postulation.getCandidat());
 		}
-
 		// Retourner la liste des candidats retenus
 		return candidatsRetenus;
 	}
