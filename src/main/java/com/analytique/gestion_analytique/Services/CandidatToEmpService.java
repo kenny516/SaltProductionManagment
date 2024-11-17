@@ -59,7 +59,8 @@ public class CandidatToEmpService {
 
             competencesEmployesRepository.save(competenceEmploye);
         }
-
+				candidat.setStatus("Embauché");
+				candidatRepository.save(candidat);
         return employe;
     }
 }
