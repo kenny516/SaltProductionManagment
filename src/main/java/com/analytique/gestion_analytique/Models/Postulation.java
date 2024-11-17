@@ -1,12 +1,11 @@
 package com.analytique.gestion_analytique.Models;
 
-import jakarta.persistence.Entity;
-
 import java.time.LocalDate;
 
 import jakarta.persistence.*;
 
 @Entity
+@Table(name = "Postulations")
 public class Postulation {
 
     @Id

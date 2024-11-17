@@ -6,10 +6,12 @@ import com.analytique.gestion_analytique.Models.Candidat;
 import com.analytique.gestion_analytique.Models.CompetencesCandidats;
 import com.analytique.gestion_analytique.Models.NoteCandidat;
 import com.analytique.gestion_analytique.Models.NoteCandidatId;
+import com.analytique.gestion_analytique.Models.Postulation;
 import com.analytique.gestion_analytique.Models.TypeNote;
 import com.analytique.gestion_analytique.Repositories.CandidatRepository;
 import com.analytique.gestion_analytique.Repositories.CompetencesCandidatsRepository;
 import com.analytique.gestion_analytique.Repositories.NoteCandidatRepository;
+import com.analytique.gestion_analytique.Repositories.PostulationRepository;
 import com.analytique.gestion_analytique.dto.CompetenceUser;
 import com.analytique.gestion_analytique.dto.NoteUser;
 import com.analytique.gestion_analytique.dto.receive.CandidatRecieve;
@@ -19,6 +21,7 @@ import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import jakarta.transaction.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -28,6 +31,7 @@ public class CandidatService {
 	private EntityManager em;
 
 	private CandidatRepository candidatRepository;
+	private PostulationRepository postulationRepository;
 	private CompetencesCandidatsRepository cCandidatsRepository;
 	private NoteCandidatRepository noteCandidatRepository;
 
@@ -42,9 +46,21 @@ public class CandidatService {
 		return candidatRepository.findAll();
 	}
 
-	public List<Candidat> getCandidatsRetenus(Integer posteId) {
-		return candidatRepository.findByPosteIdAndStatus(posteId, "Retenu");
-	}
+    public List<Candidat> getCandidatsRetenus(Integer posteId) {
+        // Récupérer toutes les postulations retenues pour un poste donné
+        List<Postulation> postulationsRetenues = postulationRepository.findByPosteIdAndStatus(posteId, "Retenu");
+
+        // Créer une liste pour stocker les candidats
+        List<Candidat> candidatsRetenus = new ArrayList<>();
+
+        // Ajouter les candidats associés aux postulations retenues
+        for (Postulation postulation : postulationsRetenues) {
+            candidatsRetenus.add(postulation.getCandidat());
+        }
+
+        // Retourner la liste des candidats retenus
+        return candidatsRetenus;
+    }
 
 	public Candidat saveCandidat(CandidatRecieve cd) {
 		Candidat candidat = cd.extractCandidat();

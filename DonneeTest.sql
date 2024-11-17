@@ -6,10 +6,13 @@ INSERT INTO typeNote (nomType) VALUES
 ('Tests Pratiques');
 
 -- Insérer des candidats
-INSERT INTO Candidats (nom, prenom, email, telephone) VALUES
-('Dupont', 'Jean', 'jean.dupont@example.com', '0123456789'),
-('Martin', 'Alice', 'alice.martin@example.com', '0987654321'),
-('Durand', 'Pierre', 'pierre.durand@example.com', '0678912345');
+INSERT INTO Candidats (nom, prenom, email, telephone, mot_de_passe)
+VALUES 
+    ('Dupont', 'Jean', 'jean.dupont@example.com', '0123456789', 'motdepasse123'),
+    ('Martin', 'Marie', 'marie.martin@example.com', '0987654321', 'mdpsecure456'),
+    ('Durand', 'Pierre', 'pierre.durand@example.com', '0147258369', 'password789'),
+    ('Lemoine', 'Claire', 'claire.lemoine@example.com', '0712345678', 'mypassword101'),
+    ('Benoit', 'Lucie', 'lucie.benoit@example.com', '0685743920', 'securepass202');
 
 -- Insérer des postes
 INSERT INTO Postes (titre, description, departement) VALUES

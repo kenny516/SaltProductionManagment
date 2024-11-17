@@ -18,11 +18,8 @@ public class CandidatSend extends Candidat {
 		setId(c.getId());
 		setNom(c.getNom());
 		setPrenom(c.getPrenom());
-		setDateCandidature(c.getDateCandidature());
 		setEmail(c.getEmail());
 		setTelephone(c.getTelephone());
-		setPoste(c.getPoste());
-		setStatus(c.getStatus());
 		setCompetences(competences);
 		setNotes(notes);
 	}
