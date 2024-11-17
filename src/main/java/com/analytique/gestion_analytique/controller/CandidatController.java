@@ -10,11 +10,13 @@ import org.springframework.web.bind.annotation.*;
 
 import com.analytique.gestion_analytique.Services.CandidatService;
 import com.analytique.gestion_analytique.Models.Candidat;
+import com.analytique.gestion_analytique.Models.Notification;
 import com.analytique.gestion_analytique.Models.Postulation;
 import com.analytique.gestion_analytique.Repositories.CompetenceRepository;
 import com.analytique.gestion_analytique.Repositories.PosteRepository;
 import com.analytique.gestion_analytique.Repositories.TypeNoteRepository;
 import com.analytique.gestion_analytique.Services.CandidatToEmpService;
+import com.analytique.gestion_analytique.Services.NotificationService;
 import com.analytique.gestion_analytique.dto.receive.CandidatRecieve;
 
 
@@ -28,6 +30,7 @@ public class CandidatController {
 	PosteRepository pRepo;
 	CompetenceRepository cRepo;
 	TypeNoteRepository tnRepo;
+	NotificationService notificationService;
 
 	Map<String, Object> response = new HashMap<>();
 
@@ -35,13 +38,14 @@ public class CandidatController {
 		response.clear();
 	}
 
-	public CandidatController(CandidatService candidatService, CandidatToEmpService candidatToEmpService,
+	public CandidatController(CandidatService candidatService, CandidatToEmpService candidatToEmpService, NotificationService notificationService,
 			PosteRepository pRepo, CompetenceRepository cRepo, TypeNoteRepository tnRepo) {
 		this.candidatService = candidatService;
 		this.candidatToEmpService = candidatToEmpService;
 		this.pRepo = pRepo;
 		this.cRepo = cRepo;
 		this.tnRepo = tnRepo;
+		this.notificationService = notificationService;
 	}
 
 	@GetMapping("")
@@ -106,5 +110,16 @@ public class CandidatController {
 		return candidatService.getElligibles(null);
 	}
 	
+	@GetMapping("/{id}/notification/read")
+	public List<Notification> getRead(@PathVariable Integer id) {
+		List<Notification> read = notificationService.getRead(id);
+		return read;
+	}
+
+	@GetMapping("/{id}/notification/non-read")
+	public List<Notification> getNonRead(@PathVariable Integer id) {
+		List<Notification> nonRead = notificationService.getNonRead(id);
+		return nonRead;
+	}
 
 }

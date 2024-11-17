@@ -71,9 +71,9 @@ INSERT INTO noteCandidat (idCandidat, idTypeNote, note) VALUES
 
 -- Insérer des notifications
 INSERT INTO Notifications (candidat_id, message, statut_notification) VALUES
-(1, 'Votre candidature pour le poste de Développeur Java a été retenue.', 'non_lu'),
-(2, 'Votre candidature pour le poste de Chargé de recrutement a été refusée.', 'non_lu'),
-(3, 'Votre candidature pour le poste de Développeur Java a été refusée.', 'non_lu');
+(1, 'Votre candidature pour le poste de Développeur Java a été retenue.', 'lu'),
+(1, 'Votre candidature pour le poste de Chargé de recrutement a été refusée.', 'non_lu'),
+(1, 'Votre candidature pour le poste de Développeur Java a été refusée.', 'non_lu');
 
 -- Insérer des expériences
 INSERT INTO experience (date_debut, date_fin, description, candidat_id) VALUES
