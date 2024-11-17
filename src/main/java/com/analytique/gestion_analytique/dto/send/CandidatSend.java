@@ -57,7 +57,7 @@ public class CandidatSend extends Candidat {
 	}
 
 	public void setCurrentStep(int currentStep) {
-		this.currentStep = currentStep+1;
+		this.currentStep = currentStep;
 	}
 
 	public double getProgress() {
