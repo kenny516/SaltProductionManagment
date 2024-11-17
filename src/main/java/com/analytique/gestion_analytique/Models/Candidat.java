@@ -32,6 +32,9 @@ public class Candidat {
     @Column(length = 20)
     private String telephone;
 
+    @Column(name = "mot_de_passe")
+    private String mdp;
+
     @OneToMany(mappedBy = "candidat", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Formation> formations = new ArrayList<>();
 
