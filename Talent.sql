@@ -126,4 +126,4 @@ JOIN (
     FROM noteCandidat nc
     GROUP BY nc.idCandidat
     HAVING COUNT(DISTINCT nc.idTypeNote) = (SELECT COUNT(*) FROM typeNote)
-) AS subquery ON c.id = subquery.idCandidat;
+) AS subquery ON c.id = subquery.idCandidat and c.status = 'Retenu';
