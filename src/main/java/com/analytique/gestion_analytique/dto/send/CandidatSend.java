@@ -3,6 +3,7 @@ package com.analytique.gestion_analytique.dto.send;
 import java.util.List;
 
 import com.analytique.gestion_analytique.Models.Candidat;
+import com.analytique.gestion_analytique.constants.RecrutementConst;
 import com.analytique.gestion_analytique.dto.CompetenceUser;
 import com.analytique.gestion_analytique.dto.NoteUser;
 
@@ -51,12 +52,12 @@ public class CandidatSend extends Candidat {
 	}
 
 	public void setCurrentStep() {
-		currentStep = getNotes().size() + 1;
+		currentStep = getNotes().size();
 		setProgress();
 	}
 
 	public void setCurrentStep(int currentStep) {
-		this.currentStep = currentStep;
+		this.currentStep = currentStep+1;
 	}
 
 	public double getProgress() {
@@ -64,7 +65,7 @@ public class CandidatSend extends Candidat {
 	}
 
 	public void setProgress() {
-		progress = notes.size() * 100 / getCurrentStep();
+		progress = notes.size() * 100 / RecrutementConst.nombreEpreuve;
 	}
 
 }
