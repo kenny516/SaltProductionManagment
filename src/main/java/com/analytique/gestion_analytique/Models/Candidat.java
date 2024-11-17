@@ -10,9 +10,9 @@ import java.util.*;
 // candidatRepository.candidatReussiTest("TEST");
 
 @NamedQuery(name = "Candidat.candidatReussiTest", query = "SELECT c FROM Candidat c " +
-		"JOIN c.noteCandidat nc " +
-		"JOIN nc.typeNote tn " +
-		"WHERE nc.note >= 6 AND tn.nomType = :nomType")
+        "JOIN c.notes nc " +
+        "JOIN nc.typeNote tn " +
+        "WHERE nc.note >= 6 AND tn.nomType = :nomType")
 public class Candidat {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -41,7 +41,7 @@ public class Candidat {
 	private List<Diplome> diplomes = new ArrayList<>();
 
 	@OneToMany(mappedBy = "candidat")
-	private List<NoteCandidat> noteCandidat;
+	private List<NoteCandidat> notes;
 
 	public Integer getId() {
 		return id;
@@ -88,6 +88,7 @@ public class Candidat {
 	}
 
 	public void setFormations(List<Formation> formations) {
+		formations.forEach(f -> f.setCandidat(null));
 		this.formations = formations;
 	}
 
@@ -96,7 +97,9 @@ public class Candidat {
 	}
 
 	public void setExperiences(List<Experience> experiences) {
+		experiences.forEach(e -> e.setCandidat(null));
 		this.experiences = experiences;
+
 	}
 
 	public List<Diplome> getDiplomes() {
@@ -104,15 +107,17 @@ public class Candidat {
 	}
 
 	public void setDiplomes(List<Diplome> diplomes) {
+		diplomes.forEach(d -> d.setCandidats(null));
 		this.diplomes = diplomes;
 	}
 
-	public List<NoteCandidat> getNoteCandidat() {
-		return noteCandidat;
+	public List<NoteCandidat> getNotes() {
+		return notes;
 	}
 
-	public void setNoteCandidat(List<NoteCandidat> noteCandidat) {
-		this.noteCandidat = noteCandidat;
+	public void setNotes(List<NoteCandidat> noteCandidat) {
+		noteCandidat.forEach(n -> n.setCandidat(null));
+		this.notes = noteCandidat;
 	}
 
 }

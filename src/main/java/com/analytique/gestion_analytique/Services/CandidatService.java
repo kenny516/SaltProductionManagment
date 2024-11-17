@@ -80,9 +80,7 @@ public class CandidatService {
 		List<CompetenceUser> comptences = cc.stream()
 				.map(comp -> new CompetenceUser(comp.getCompetence(), comp.getCandidat().getId(), comp.getNiveau()))
 				.collect(Collectors.toList());
-		List<NoteUser> notes = noteCandidatRepository.findByCandidat(id).stream().map(nc -> new NoteUser(nc))
-				.collect(Collectors.toList());
-		return new CandidatSend(c, comptences, notes);
+		return new CandidatSend(c, comptences);
 	}
 
 	@Transactional
