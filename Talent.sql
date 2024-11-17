@@ -159,7 +159,7 @@ CREATE TABLE experience(
    date_debut DATE NOT NULL,
    date_fin DATE,
    description TEXT NOT NULL,
-   candidat_id INT REFERENCES Candidats(id) ON DELETE CASCADE,
+   candidat_id INT REFERENCES Candidats(id) ON DELETE CASCADE
 );
 
 CREATE TABLE formation(
@@ -167,7 +167,7 @@ CREATE TABLE formation(
    date_debut DATE NOT NULL,
    date_fin DATE,
    description TEXT NOT NULL,
-   candidat_id INT REFERENCES Candidats(id) ON DELETE CASCADE,
+   candidat_id INT REFERENCES Candidats(id) ON DELETE CASCADE
 );
 
 CREATE TABLE Diplome(
