@@ -120,4 +120,11 @@ public class Candidat {
 		this.notes = noteCandidat;
 	}
 
+	public void nullCandidat() {
+		formations.forEach(f -> f.setCandidat(null));
+		experiences.forEach(e -> e.setCandidat(null));
+		diplomes.forEach(d -> d.setCandidats(null));
+		notes.forEach(n -> n.setCandidat(null));
+	}
+
 }

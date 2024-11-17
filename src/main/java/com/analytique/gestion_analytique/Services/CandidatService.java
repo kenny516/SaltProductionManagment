@@ -13,7 +13,6 @@ import com.analytique.gestion_analytique.Repositories.CompetencesCandidatsReposi
 import com.analytique.gestion_analytique.Repositories.NoteCandidatRepository;
 import com.analytique.gestion_analytique.Repositories.PostulationRepository;
 import com.analytique.gestion_analytique.dto.CompetenceUser;
-import com.analytique.gestion_analytique.dto.NoteUser;
 import com.analytique.gestion_analytique.dto.receive.CandidatRecieve;
 import com.analytique.gestion_analytique.dto.send.CandidatSend;
 
@@ -43,24 +42,26 @@ public class CandidatService {
 	}
 
 	public List<Candidat> findAll() {
-		return candidatRepository.findAll();
+		List<Candidat> candidats= candidatRepository.findAll();
+		candidats.forEach(c -> c.nullCandidat()); 
+		return candidats;
 	}
 
-    public List<Candidat> getCandidatsRetenus(Integer posteId) {
-        // Récupérer toutes les postulations retenues pour un poste donné
-        List<Postulation> postulationsRetenues = postulationRepository.findByPosteIdAndStatus(posteId, "Retenu");
+	public List<Candidat> getCandidatsRetenus(Integer posteId) {
+		// Récupérer toutes les postulations retenues pour un poste donné
+		List<Postulation> postulationsRetenues = postulationRepository.findByPosteIdAndStatus(posteId, "Retenu");
 
-        // Créer une liste pour stocker les candidats
-        List<Candidat> candidatsRetenus = new ArrayList<>();
+		// Créer une liste pour stocker les candidats
+		List<Candidat> candidatsRetenus = new ArrayList<>();
 
-        // Ajouter les candidats associés aux postulations retenues
-        for (Postulation postulation : postulationsRetenues) {
-            candidatsRetenus.add(postulation.getCandidat());
-        }
+		// Ajouter les candidats associés aux postulations retenues
+		for (Postulation postulation : postulationsRetenues) {
+			candidatsRetenus.add(postulation.getCandidat());
+		}
 
-        // Retourner la liste des candidats retenus
-        return candidatsRetenus;
-    }
+		// Retourner la liste des candidats retenus
+		return candidatsRetenus;
+	}
 
 	public Candidat saveCandidat(CandidatRecieve cd) {
 		Candidat candidat = cd.extractCandidat();
