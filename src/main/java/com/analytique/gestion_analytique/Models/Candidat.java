@@ -27,22 +27,21 @@ public class Candidat {
 	@Column(nullable = false, length = 150, unique = true)
 	private String email;
 
-    @Column(length = 20)
-    private String telephone;
+	@Column(length = 20)
+	private String telephone;
 
-    @OneToMany(mappedBy = "candidat", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Formation> formations = new ArrayList<>();
+	@OneToMany(mappedBy = "candidat", cascade = CascadeType.ALL, orphanRemoval = true)
+	private List<Formation> formations = new ArrayList<>();
 
-    @OneToMany(mappedBy = "candidat", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Experience> experiences = new ArrayList<>();
+	@OneToMany(mappedBy = "candidat", cascade = CascadeType.ALL, orphanRemoval = true)
+	private List<Experience> experiences = new ArrayList<>();
 
-    @ManyToMany
-    @JoinTable(
-        name = "Candidatsdiplomes",
-        joinColumns = @JoinColumn(name = "candidat_id"),
-        inverseJoinColumns = @JoinColumn(name = "diplome_id")
-    )
-    private List<Diplome> diplomes = new ArrayList<>();
+	@ManyToMany
+	@JoinTable(name = "Candidatsdiplomes", joinColumns = @JoinColumn(name = "candidat_id"), inverseJoinColumns = @JoinColumn(name = "diplome_id"))
+	private List<Diplome> diplomes = new ArrayList<>();
+
+	@OneToMany(mappedBy = "candidat")
+	private List<NoteCandidat> noteCandidat;
 
 	public Integer getId() {
 		return id;
@@ -80,43 +79,40 @@ public class Candidat {
 		return telephone;
 	}
 
-    public void setTelephone(String telephone) {
-        this.telephone = telephone;
-    }
-    
-    @OneToMany(mappedBy = "candidat")
-    private List<NoteCandidat> noteCandidat;
+	public void setTelephone(String telephone) {
+		this.telephone = telephone;
+	}
 
-    public List<Formation> getFormations() {
-        return formations;
-    }
+	public List<Formation> getFormations() {
+		return formations;
+	}
 
-    public void setFormations(List<Formation> formations) {
-        this.formations = formations;
-    }
+	public void setFormations(List<Formation> formations) {
+		this.formations = formations;
+	}
 
-    public List<Experience> getExperiences() {
-        return experiences;
-    }
+	public List<Experience> getExperiences() {
+		return experiences;
+	}
 
-    public void setExperiences(List<Experience> experiences) {
-        this.experiences = experiences;
-    }
+	public void setExperiences(List<Experience> experiences) {
+		this.experiences = experiences;
+	}
 
-    public List<Diplome> getDiplomes() {
-        return diplomes;
-    }
+	public List<Diplome> getDiplomes() {
+		return diplomes;
+	}
 
-    public void setDiplomes(List<Diplome> diplomes) {
-        this.diplomes = diplomes;
-    }
+	public void setDiplomes(List<Diplome> diplomes) {
+		this.diplomes = diplomes;
+	}
 
-    public List<NoteCandidat> getNoteCandidat() {
-        return noteCandidat;
-    }
+	public List<NoteCandidat> getNoteCandidat() {
+		return noteCandidat;
+	}
 
-    public void setNoteCandidat(List<NoteCandidat> noteCandidat) {
-        this.noteCandidat = noteCandidat;
-    }
-    
+	public void setNoteCandidat(List<NoteCandidat> noteCandidat) {
+		this.noteCandidat = noteCandidat;
+	}
+
 }
