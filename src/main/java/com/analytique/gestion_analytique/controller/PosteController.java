@@ -4,6 +4,8 @@ import org.springframework.web.bind.annotation.*;
 
 import com.analytique.gestion_analytique.Models.Poste;
 import com.analytique.gestion_analytique.Repositories.PosteRepository;
+import com.analytique.gestion_analytique.Services.PosteService;
+import com.analytique.gestion_analytique.dto.receive.PosteRecieve;
 
 import java.util.List;
 
@@ -12,15 +14,23 @@ import java.util.List;
 @CrossOrigin(origins = "http://localhost:3000")
 public class PosteController {
 
-	PosteRepository pRepo;
+	PosteService pService;
 
-	public PosteController(PosteRepository pRepo) {
-		this.pRepo = pRepo;
+	
+
+	public PosteController(PosteService pService) {
+		this.pService = pService;
 	}
 
 	@GetMapping("")
 	public List<Poste> getAll() {
-		return pRepo.findAll();
+		return pService.getAll();
 	}
+
+	@PostMapping("")
+	public Poste savePoste(@RequestBody PosteRecieve poste) {
+		return pService.savePoste(poste);
+	}
+	
 
 }
