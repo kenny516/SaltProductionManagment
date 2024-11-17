@@ -34,16 +34,17 @@ public class CandidatService {
 	private CompetencesCandidatsRepository cCandidatsRepository;
 	private NoteCandidatRepository noteCandidatRepository;
 
-	public CandidatService(CandidatRepository candidatRepository, CompetencesCandidatsRepository cCandidatsRepository,
-			NoteCandidatRepository noteCandidatRepository) {
+	public CandidatService(CandidatRepository candidatRepository, PostulationRepository postulationRepository,
+			CompetencesCandidatsRepository cCandidatsRepository, NoteCandidatRepository noteCandidatRepository) {
 		this.candidatRepository = candidatRepository;
+		this.postulationRepository = postulationRepository;
 		this.cCandidatsRepository = cCandidatsRepository;
 		this.noteCandidatRepository = noteCandidatRepository;
 	}
 
 	public List<Candidat> findAll() {
-		List<Candidat> candidats= candidatRepository.findAll();
-		candidats.forEach(c -> c.nullCandidat()); 
+		List<Candidat> candidats = candidatRepository.findAll();
+		candidats.forEach(c -> c.nullCandidat());
 		return candidats;
 	}
 
@@ -101,11 +102,14 @@ public class CandidatService {
 		return result;
 	}
 
-	public List<Candidat> getElligibles(Integer posteId) {
-		if (posteId == null) {
-			return candidatRepository.findElligibles();
-		}
-		return candidatRepository.findElligiblesByPoste(posteId);
+	public List<Postulation> getElligibles(Integer posteId) {
+
+		List<Postulation> posts = posteId == null ? postulationRepository.findElligibles()
+				: postulationRepository.findElligiblesByPoste(posteId);
+
+		posts.forEach(p -> p.setCandidat(p.getCandidat().duplicateSimple()));
+
+		return posts;
 	}
 
 }
