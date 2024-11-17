@@ -30,8 +30,11 @@ public class Candidat {
 	@Column(length = 20)
 	private String telephone;
 
-	@OneToMany(mappedBy = "candidat", cascade = CascadeType.ALL, orphanRemoval = true)
-	private List<Formation> formations = new ArrayList<>();
+    @Column(name = "mot_de_passe")
+    private String mdp;
+
+    @OneToMany(mappedBy = "candidat", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Formation> formations = new ArrayList<>();
 
 	@OneToMany(mappedBy = "candidat", cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<Experience> experiences = new ArrayList<>();
