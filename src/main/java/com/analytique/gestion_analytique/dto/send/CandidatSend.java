@@ -3,7 +3,7 @@ package com.analytique.gestion_analytique.dto.send;
 import java.util.List;
 
 import com.analytique.gestion_analytique.Models.Candidat;
-import com.analytique.gestion_analytique.Models.Competence;
+import com.analytique.gestion_analytique.constants.RecrutementConst;
 import com.analytique.gestion_analytique.dto.CompetenceUser;
 import com.analytique.gestion_analytique.dto.NoteUser;
 
@@ -11,8 +11,10 @@ public class CandidatSend extends Candidat {
 	List<CompetenceUser> competences;
 	List<NoteUser> notes;
 
+	int currentStep;
+	double progress;
 
-	public CandidatSend(Candidat c,List<CompetenceUser> competences,List<NoteUser> notes) {
+	public CandidatSend(Candidat c, List<CompetenceUser> competences, List<NoteUser> notes) {
 		setId(c.getId());
 		setNom(c.getNom());
 		setPrenom(c.getPrenom());
@@ -25,7 +27,8 @@ public class CandidatSend extends Candidat {
 		setNotes(notes);
 	}
 
-	public CandidatSend(){}
+	public CandidatSend() {
+	}
 
 	public List<NoteUser> getNotes() {
 		return notes;
@@ -33,6 +36,7 @@ public class CandidatSend extends Candidat {
 
 	public void setNotes(List<NoteUser> notes) {
 		this.notes = notes;
+		setCurrentStep();
 	}
 
 	public List<CompetenceUser> getCompetences() {
@@ -43,7 +47,25 @@ public class CandidatSend extends Candidat {
 		this.competences = competences;
 	}
 
-	
+	public int getCurrentStep() {
+		return currentStep;
+	}
 
-	
+	public void setCurrentStep() {
+		currentStep = getNotes().size() + 1;
+		setProgress();
+	}
+
+	public void setCurrentStep(int currentStep) {
+		this.currentStep = currentStep;
+	}
+
+	public double getProgress() {
+		return progress;
+	}
+
+	public void setProgress() {
+		progress = notes.size() * 100 / getCurrentStep();
+	}
+
 }

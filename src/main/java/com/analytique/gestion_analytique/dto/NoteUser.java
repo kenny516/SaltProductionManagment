@@ -30,4 +30,6 @@ public class NoteUser {
 		this.typeNote = nc.getTypeNote();
 		this.note = nc.getNote();
 	}
+
+	
 }
