@@ -144,7 +144,7 @@ public class Candidat {
 	
 	public Candidat duplicateSimple(){
 		Candidat c = new Candidat();
-		c.setId(null);
+		c.setId(getId());
 		c.setNom(this.nom);
 		c.setPrenom(this.prenom);
 		c.setEmail(this.email);

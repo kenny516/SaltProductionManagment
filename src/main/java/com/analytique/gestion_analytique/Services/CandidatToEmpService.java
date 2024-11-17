@@ -5,7 +5,6 @@ import com.analytique.gestion_analytique.Models.Employe;
 import com.analytique.gestion_analytique.Models.Postulation;
 import com.analytique.gestion_analytique.Models.CompetencesCandidats;
 import com.analytique.gestion_analytique.Models.CompetencesEmployes;
-import com.analytique.gestion_analytique.Repositories.CandidatRepository;
 import com.analytique.gestion_analytique.Repositories.EmployeRepository;
 import com.analytique.gestion_analytique.Repositories.PostulationRepository;
 import com.analytique.gestion_analytique.Repositories.CompetencesCandidatsRepository;
