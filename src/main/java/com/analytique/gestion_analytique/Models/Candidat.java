@@ -43,6 +43,9 @@ public class Candidat {
 	@OneToMany(mappedBy = "candidat")
 	private List<NoteCandidat> notes;
 
+	@OneToMany(mappedBy = "candidat")
+	private List<Postulation> postulations;
+
 	public Integer getId() {
 		return id;
 	}
@@ -125,6 +128,18 @@ public class Candidat {
 		experiences.forEach(e -> e.setCandidat(null));
 		diplomes.forEach(d -> d.setCandidats(null));
 		notes.forEach(n -> n.setCandidat(null));
+		postulations.forEach(p -> p.setCandidat(null));
 	}
+
+	public List<Postulation> getPostulations() {
+		return postulations;
+	}
+
+	public void setPostulations(List<Postulation> postulations) {
+		postulations.forEach(p -> p.setCandidat(null));
+		this.postulations = postulations;
+	}
+
+	
 
 }

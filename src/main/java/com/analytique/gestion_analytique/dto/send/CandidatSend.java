@@ -25,6 +25,7 @@ public class CandidatSend extends Candidat {
 		setExperiences(c.getExperiences());
 		setFormations(c.getFormations());
 		setDiplomes(c.getDiplomes());
+		setPostulations(c.getPostulations());
 
 	}
 
