@@ -63,18 +63,7 @@ public class CandidatService {
 		return candidatsRetenus;
 	}
 
-	public Candidat saveCandidat(CandidatRecieve cd) {
-		Candidat candidat = cd.extractCandidat();
-		candidat = candidatRepository.save(candidat);
-
-		for (CompetencesCandidats competences : cd.extractCCandidat(em)) {
-			competences.setCandidat(candidat);
-			cCandidatsRepository.save(competences);
-		}
-
-		return candidat;
-	}
-
+	
 	public CandidatSend getById(Integer id) {
 		Candidat c = candidatRepository.findById(id).get();
 		List<CompetencesCandidats> cc = cCandidatsRepository.findByCandidatId(id);
@@ -111,4 +100,19 @@ public class CandidatService {
 		return posts;
 	}
 
+	public Candidat saveCandidat(CandidatRecieve cd) {
+		Candidat candidat = cd.extractCandidat();
+		candidat = candidatRepository.save(candidat);
+	
+		for (CompetencesCandidats competences : cd.extractCCandidat(em)) {
+			competences.setCandidat(candidat);
+			cCandidatsRepository.save(competences);
+		}
+	
+		return candidat;
+	}
+
+	public int findByEmail(String email){
+		return candidatRepository.findByEmail(email).getId();
+	}
 }

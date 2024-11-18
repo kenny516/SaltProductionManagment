@@ -6,14 +6,12 @@ import java.util.List;
 
 import com.analytique.gestion_analytique.Models.Candidat;
 import com.analytique.gestion_analytique.Models.CompetencesCandidats;
-import com.analytique.gestion_analytique.Models.Poste;
 import com.analytique.gestion_analytique.dto.CompetenceUser;
 
 import jakarta.persistence.EntityManager;
 
 public class CandidatRecieve {
 	String nom, prenom, email, telephone;
-	int poste_id;
 	LocalDateTime dateCandidature;
 	List<CompetenceUser> competences;
 
@@ -49,14 +47,6 @@ public class CandidatRecieve {
 		this.telephone = telephone;
 	}
 
-	public int getPoste_id() {
-		return poste_id;
-	}
-
-	public void setPoste_id(int poste_id) {
-		this.poste_id = poste_id;
-	}
-
 	public LocalDateTime getDateCandidature() {
 		return dateCandidature;
 	}
@@ -73,7 +63,6 @@ public class CandidatRecieve {
 		this.prenom = prenom;
 		this.email = email;
 		this.telephone = telephone;
-		this.poste_id = poste_id;
 		this.dateCandidature = candidaturTime;
 		this.competences = competences;
 	}
@@ -84,8 +73,6 @@ public class CandidatRecieve {
 		c.setPrenom(prenom);
 		c.setEmail(email);
 		c.setTelephone(telephone);
-		Poste p = new Poste();
-		p.setId(getPoste_id());
 		return c;
 	}
 

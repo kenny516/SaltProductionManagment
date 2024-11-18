@@ -16,6 +16,9 @@ import com.analytique.gestion_analytique.Repositories.PosteRepository;
 import com.analytique.gestion_analytique.Repositories.TypeNoteRepository;
 import com.analytique.gestion_analytique.Services.CandidatToEmpService;
 import com.analytique.gestion_analytique.dto.receive.CandidatRecieve;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+
 
 
 @RestController
@@ -60,6 +63,19 @@ public class CandidatController {
 			return ResponseEntity.internalServerError().body(e.getMessage());
 		}
 	}
+
+	@PostMapping("/login")
+	public ResponseEntity<?> postMethodName(@RequestBody String email) {
+		clearResponse();
+		try {
+			response.put("id",candidatService.findByEmail(email));
+			return ResponseEntity.ok(response);
+		} catch (Exception e) {
+			response.put("error", "500");
+			return ResponseEntity.internalServerError().body(e.getMessage());
+		}
+	}
+	
 
 	@PostMapping("/embaucher/{candidat}")
 	public ResponseEntity<?> embaucher(@PathVariable Integer candidat) {
