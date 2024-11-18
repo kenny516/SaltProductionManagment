@@ -30,11 +30,11 @@ public class Candidat {
 	@Column(length = 20)
 	private String telephone;
 
-    @Column(name = "mot_de_passe")
-    private String mdp;
+	@Column(name = "mot_de_passe")
+	private String motDePasse;
 
-    @OneToMany(mappedBy = "candidat", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Formation> formations = new ArrayList<>();
+	@OneToMany(mappedBy = "candidat", cascade = CascadeType.ALL, orphanRemoval = true)
+	private List<Formation> formations = new ArrayList<>();
 
 	@OneToMany(mappedBy = "candidat", cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<Experience> experiences = new ArrayList<>();
@@ -113,7 +113,6 @@ public class Candidat {
 	}
 
 	public void setDiplomes(List<Diplome> diplomes) {
-		diplomes.forEach(d -> d.setCandidats(null));
 		this.diplomes = diplomes;
 	}
 
@@ -129,9 +128,9 @@ public class Candidat {
 	public void nullCandidat() {
 		formations.forEach(f -> f.setCandidat(null));
 		experiences.forEach(e -> e.setCandidat(null));
-		diplomes.forEach(d -> d.setCandidats(null));
 		notes.forEach(n -> n.setCandidat(null));
 		postulations.forEach(p -> p.setCandidat(null));
+		setMotDePasse(null);
 	}
 
 	public List<Postulation> getPostulations() {
@@ -143,15 +142,23 @@ public class Candidat {
 		this.postulations = postulations;
 	}
 
-	
-	
 	public Candidat duplicateSimple(){
 		Candidat c = new Candidat();
-		c.setId(null);
+		c.setId(getId());
 		c.setNom(this.nom);
 		c.setPrenom(this.prenom);
 		c.setEmail(this.email);
 		c.setTelephone(this.telephone);
 		return c;
 	}
+
+	public String getMotDePasse() {
+		return motDePasse;
+	}
+
+	public void setMotDePasse(String motDePasse) {
+		this.motDePasse = motDePasse;
+	}
+
+	
 }

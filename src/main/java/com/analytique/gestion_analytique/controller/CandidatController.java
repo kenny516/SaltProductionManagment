@@ -18,7 +18,7 @@ import com.analytique.gestion_analytique.Repositories.TypeNoteRepository;
 import com.analytique.gestion_analytique.Services.CandidatToEmpService;
 import com.analytique.gestion_analytique.Services.NotificationService;
 import com.analytique.gestion_analytique.dto.receive.CandidatRecieve;
-
+import com.analytique.gestion_analytique.dto.receive.PostulationRecieve;
 
 @RestController
 @RequestMapping("/api/candidat")
@@ -34,7 +34,7 @@ public class CandidatController {
 
 	Map<String, Object> response = new HashMap<>();
 
-	void clearResponse(){
+	void clearResponse() {
 		response.clear();
 	}
 
@@ -53,14 +53,27 @@ public class CandidatController {
 		return candidatService.findAll();
 	}
 
-	@PostMapping("")
-	public ResponseEntity<?> saveCandidat(@RequestBody CandidatRecieve candidature) {
+	@PostMapping("/postuler")
+	public ResponseEntity<?> PostulerPosteCandidat(@RequestBody PostulationRecieve candidature) {
 		clearResponse();
 		try {
-			response.put("id",candidatService.saveCandidat(candidature).getId());
+			Postulation postulation = candidatService.PostulerPosteCandidat(candidature);
+			response.put("id", postulation.getId()); // Récupère l'ID de la postulation
 			return ResponseEntity.ok(response);
 		} catch (Exception e) {
-			response.put("error", "");
+			response.put("error", "500");
+			return ResponseEntity.internalServerError().body(e.getMessage());
+		}
+	}
+
+	@PostMapping("/login")
+	public ResponseEntity<?> postMethodName(@RequestBody HashMap<String, String> params) {
+		clearResponse();
+		try {
+			response.put("id", candidatService.login(params.get("email"), params.get("password")));
+			return ResponseEntity.ok(response);
+		} catch (Exception e) {
+			response.put("error", "500");
 			return ResponseEntity.internalServerError().body(e.getMessage());
 		}
 	}
@@ -84,7 +97,7 @@ public class CandidatController {
 	}
 
 	@PostMapping("/note")
-	public ResponseEntity<?> insertNote(@RequestBody Map<String,Integer> body) {
+	public ResponseEntity<?> insertNote(@RequestBody Map<String, Integer> body) {
 		int id = body.get("idCandidat");
 		int typenote = body.get("idTypeNote");
 		int note = body.get("note");
@@ -101,12 +114,12 @@ public class CandidatController {
 	}
 
 	@GetMapping("/elligibles/{id}")
-	public List<Postulation> getMethodName(@PathVariable Integer id) {
+	public List<Candidat> getMethodName(@PathVariable Integer id) {
 		return candidatService.getElligibles(id);
 	}
 
 	@GetMapping("/elligibles")
-	public List<Postulation> getMethodName() {
+	public List<Candidat> getMethodName() {
 		return candidatService.getElligibles(null);
 	}
 	
@@ -120,6 +133,15 @@ public class CandidatController {
 	public List<Notification> getNonRead(@PathVariable Integer id) {
 		List<Notification> nonRead = notificationService.getNonRead(id);
 		return nonRead;
+	}
+
+	@PostMapping("")
+	public ResponseEntity<?> register(@RequestBody CandidatRecieve c) {
+		try {
+			return ResponseEntity.ok(candidatService.saveCandidat(c));
+		} catch (Exception e) {
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
+		}
 	}
 
 }
