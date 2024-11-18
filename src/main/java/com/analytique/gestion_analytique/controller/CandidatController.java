@@ -123,13 +123,13 @@ public class CandidatController {
 		return candidatService.getElligibles(null);
 	}
 	
-	@GetMapping("/{id}/notification/read/{id}")
+	@GetMapping("/{id}/notification/read")
 	public List<Notification> getRead(@PathVariable Integer id) {
 		List<Notification> read = notificationService.getRead(id);
 		return read;
 	}
 
-	@GetMapping("/{id}/notification/non-read/{id}")
+	@GetMapping("/{id}/notification/non-read")
 	public List<Notification> getNonRead(@PathVariable Integer id) {
 		List<Notification> nonRead = notificationService.getNonRead(id);
 		return nonRead;
