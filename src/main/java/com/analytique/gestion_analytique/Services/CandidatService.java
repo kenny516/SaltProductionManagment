@@ -6,14 +6,16 @@ import com.analytique.gestion_analytique.Models.Candidat;
 import com.analytique.gestion_analytique.Models.CompetencesCandidats;
 import com.analytique.gestion_analytique.Models.NoteCandidat;
 import com.analytique.gestion_analytique.Models.NoteCandidatId;
+import com.analytique.gestion_analytique.Models.Poste;
 import com.analytique.gestion_analytique.Models.Postulation;
 import com.analytique.gestion_analytique.Models.TypeNote;
 import com.analytique.gestion_analytique.Repositories.CandidatRepository;
 import com.analytique.gestion_analytique.Repositories.CompetencesCandidatsRepository;
 import com.analytique.gestion_analytique.Repositories.NoteCandidatRepository;
+import com.analytique.gestion_analytique.Repositories.PosteRepository;
 import com.analytique.gestion_analytique.Repositories.PostulationRepository;
 import com.analytique.gestion_analytique.dto.CompetenceUser;
-import com.analytique.gestion_analytique.dto.receive.CandidatRecieve;
+import com.analytique.gestion_analytique.dto.receive.PosatulationRecieve;
 import com.analytique.gestion_analytique.dto.send.CandidatSend;
 
 import jakarta.persistence.EntityManager;
@@ -31,12 +33,15 @@ public class CandidatService {
 
 	private CandidatRepository candidatRepository;
 	private PostulationRepository postulationRepository;
+	private PosteRepository posteRepository;
 	private CompetencesCandidatsRepository cCandidatsRepository;
 	private NoteCandidatRepository noteCandidatRepository;
 
 	public CandidatService(CandidatRepository candidatRepository, PostulationRepository postulationRepository,
-			CompetencesCandidatsRepository cCandidatsRepository, NoteCandidatRepository noteCandidatRepository) {
+			CompetencesCandidatsRepository cCandidatsRepository, NoteCandidatRepository noteCandidatRepository,
+			PosteRepository posteRepository) {
 		this.candidatRepository = candidatRepository;
+		this.posteRepository = posteRepository;
 		this.postulationRepository = postulationRepository;
 		this.cCandidatsRepository = cCandidatsRepository;
 		this.noteCandidatRepository = noteCandidatRepository;
@@ -100,16 +105,20 @@ public class CandidatService {
 		return posts;
 	}
 
-	public Candidat saveCandidat(CandidatRecieve cd) {
-		Candidat candidat = cd.extractCandidat();
-		candidat = candidatRepository.save(candidat);
+	@Transactional
+	public Postulation PostulerPosteCandidat(PosatulationRecieve cd) {
+		Candidat candidat = cd.extractCandidat(candidatRepository);
+		Poste poste = cd.extractPoste(posteRepository);
 	
+		// Sauvegarde des compétences du candidat
 		for (CompetencesCandidats competences : cd.extractCCandidat(em)) {
 			competences.setCandidat(candidat);
 			cCandidatsRepository.save(competences);
 		}
 	
-		return candidat;
+		// Création et sauvegarde de la postulation
+		Postulation postulation = new Postulation(candidat, poste, cd.getCandidatureTime());
+		return postulationRepository.save(postulation);
 	}
 
 	public int login(String email,String mdp){

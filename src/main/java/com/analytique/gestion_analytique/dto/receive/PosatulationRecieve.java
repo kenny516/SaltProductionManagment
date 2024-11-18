@@ -1,28 +1,32 @@
 package com.analytique.gestion_analytique.dto.receive;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
 import com.analytique.gestion_analytique.Models.Candidat;
 import com.analytique.gestion_analytique.Models.CompetencesCandidats;
+import com.analytique.gestion_analytique.Models.Poste;
+import com.analytique.gestion_analytique.Repositories.CandidatRepository;
+import com.analytique.gestion_analytique.Repositories.PosteRepository;
 import com.analytique.gestion_analytique.dto.CompetenceUser;
 
 import jakarta.persistence.EntityManager;
 
-public class CandidatRecieve {
+public class PosatulationRecieve {
 	int idCandidat,idPoste;	
+	LocalDate candidatureTime;
 	List<CompetenceUser> competences;
 
-	
-
-	public Candidat extractCandidat() {
-		Candidat c = new Candidat();
-		c.setNom(nom);
-		c.setPrenom(prenom);
-		c.setEmail(email);
-		c.setTelephone(telephone);
+	public Candidat extractCandidat(CandidatRepository cR) {
+		Candidat c = cR.findById(idCandidat).get();
 		return c;
+	}
+
+	public Poste extractPoste(PosteRepository cP) {
+		Poste p = cP.findById(idPoste).get();
+		return p;
 	}
 
 	public List<CompetencesCandidats> extractCCandidat(EntityManager em) {
@@ -32,6 +36,7 @@ public class CandidatRecieve {
 			CompetencesCandidats cc = competences.extractCandidat(em);
 			csc.add(cc);
 		}
+
 		return csc;
 	}
 
@@ -57,6 +62,14 @@ public class CandidatRecieve {
 
 	public void setIdPoste(int idPoste) {
 		this.idPoste = idPoste;
+	}
+
+	public LocalDate getCandidatureTime() {
+		return candidatureTime;
+	}
+
+	public void setCandidatureTime(LocalDate candidatureTime) {
+		this.candidatureTime = candidatureTime;
 	}
 
 }
