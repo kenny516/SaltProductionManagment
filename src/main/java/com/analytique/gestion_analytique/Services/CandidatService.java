@@ -72,6 +72,18 @@ public class CandidatService {
 		return candidats;
 	}
 
+	public List<Candidat> findCandidatNonRefus(){
+		List<Candidat> candidats = candidatRepository.findAllNonRefus();
+		candidats.forEach(c -> {
+			try {
+				c = c.duplicateSimple();
+			} catch (Exception e) {
+				System.out.println(e);
+			}
+		});
+		return candidats; 
+	}
+
 	public List<Candidat> getCandidatsRetenus(Integer posteId) {
 		// Récupérer toutes les postulations retenues pour un poste donné
 		List<Postulation> postulationsRetenues = postulationRepository.findByPosteIdAndStatus(posteId, "Retenu");
