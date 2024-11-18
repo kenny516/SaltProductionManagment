@@ -14,17 +14,17 @@ import com.analytique.gestion_analytique.dto.CompetenceUser;
 import jakarta.persistence.EntityManager;
 
 public class PostulationRecieve {
-	int idCandidat,idPoste;	
+	int candidat_id,poste_id;	
 	LocalDate candidatureTime;
 	List<CompetenceUser> competences;
 
 	public Candidat extractCandidat(CandidatRepository cR) {
-		Candidat c = cR.findById(idCandidat).get();
+		Candidat c = cR.findById(candidat_id).get();
 		return c;
 	}
 
 	public Poste extractPoste(PosteRepository cP) {
-		Poste p = cP.findById(idPoste).get();
+		Poste p = cP.findById(poste_id).get();
 		return p;
 	}
 
@@ -47,20 +47,20 @@ public class PostulationRecieve {
 		this.competences = competences;
 	}
 
-	public int getIdCandidat() {
-		return idCandidat;
+	public int getCandidat_id() {
+		return candidat_id;
 	}
 
-	public void setIdCandidat(int idCandidat) {
-		this.idCandidat = idCandidat;
+	public void setCandidat_id(int idCandidat) {
+		this.candidat_id = idCandidat;
 	}
 
-	public int getIdPoste() {
-		return idPoste;
+	public int getPoste_id() {
+		return poste_id;
 	}
 
-	public void setIdPoste(int idPoste) {
-		this.idPoste = idPoste;
+	public void setPoste_id(int idPoste) {
+		this.poste_id = idPoste;
 	}
 
 	public LocalDate getCandidatureTime() {
