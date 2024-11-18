@@ -18,6 +18,7 @@ public class V_detailsCandidatService {
             );
         }
     }
+    
     public static void trierParNiveauEtExperience(List<V_DetailsCandidat> candidats) {
         if (candidats != null) {
             candidats.sort(Comparator
