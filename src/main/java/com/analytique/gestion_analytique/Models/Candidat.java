@@ -49,17 +49,6 @@ public class Candidat {
 	@OneToMany(mappedBy = "candidat")
 	private List<Postulation> postulations;
 
-	@OneToMany(mappedBy = "candidat")
-	private List<Notification> notifications;
-
-	public List<Notification> getNotifications() {
-		return notifications;
-	}
-
-	public void setNotifications(List<Notification> notifications) {
-		this.notifications = notifications;
-	}
-
 	public Integer getId() {
 		return id;
 	}
