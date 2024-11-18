@@ -34,6 +34,7 @@ import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class CandidatService {
@@ -85,6 +86,15 @@ public class CandidatService {
 		// Retourner la liste des candidats retenus
 		return candidatsRetenus;
 	}
+
+	public boolean isCandidatRetenu(Integer candidatId, Integer posteId) {
+		// Rechercher une postulation correspondant au candidat et au poste avec le statut "Retenu"
+		Optional<Postulation> postulation = postulationRepository.findByCandidatIdAndPosteIdAndStatus(candidatId, posteId, "Retenu");
+	
+		// Retourner vrai si une telle postulation existe, sinon faux
+		return postulation.isPresent();
+	}
+	
 
 	public CandidatSend getById(Integer id) {
 		Candidat c = candidatRepository.findById(id).get();
@@ -162,10 +172,17 @@ public class CandidatService {
 		Postulation postulation = new Postulation(candidat, poste, cd.getCandidatureTime());
 		postulation = postulationRepository.save(postulation);
 
-		String notifMessage = "Votre candidature est en attente de traitement";
-		Notification notification = new Notification(candidat, notifMessage, Timestamp.valueOf(LocalDateTime.now()), "non_lu");
-		
-		notificationRepository.save(notification);
+		if (isCandidatRetenu(candidat.getId(), poste.getId())) {
+			String notifMessage = "Votre candidature a ete retenu";
+			Notification notification = new Notification(candidat, notifMessage, Timestamp.valueOf(LocalDateTime.now()), "non_lu");
+			
+			notificationRepository.save(notification);
+		}else{
+			String notifMessage = "Votre candidature a ete refuse";
+			Notification notification = new Notification(candidat, notifMessage, Timestamp.valueOf(LocalDateTime.now()), "non_lu");
+			
+			notificationRepository.save(notification);
+		}
 
 		return postulation;
 	}

@@ -13,4 +13,6 @@ public interface PostulationRepository extends JpaRepository<Postulation, Long> 
 	// Méthode pour trouver les postulations retenues pour un poste donné
 	List<Postulation> findByPosteIdAndStatus(Integer posteId, String status);
 
+	Optional<Postulation> findByCandidatIdAndPosteIdAndStatus(Integer candidatId, Integer posteId, String status);
+
 }
