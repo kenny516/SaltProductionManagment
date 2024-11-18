@@ -8,9 +8,6 @@ import com.analytique.gestion_analytique.Models.CandidatsDiplomes;
 import com.analytique.gestion_analytique.Models.Diplome;
 import com.analytique.gestion_analytique.Models.Experience;
 import com.analytique.gestion_analytique.Models.Formation;
-import com.analytique.gestion_analytique.Repositories.DiplomesRepo;
-
-import jakarta.persistence.EntityManager;
 
 public class CandidatRecieve {
 	String nom, prenom, email, telepohne, motDePasse;

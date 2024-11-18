@@ -21,6 +21,7 @@ import com.analytique.gestion_analytique.Repositories.NoteCandidatRepository;
 import com.analytique.gestion_analytique.Repositories.PosteRepository;
 import com.analytique.gestion_analytique.Repositories.PostulationRepository;
 import com.analytique.gestion_analytique.dto.receive.CandidatRecieve;
+import com.analytique.gestion_analytique.dto.receive.PostulationRecieve;
 import com.analytique.gestion_analytique.dto.send.CandidatSend;
 
 import jakarta.persistence.EntityManager;
@@ -45,11 +46,12 @@ public class CandidatService {
 	private CandidatsDiplomeRepo candidatsDiplomeRepo;
 
 	public CandidatService(CandidatRepository candidatRepository, PostulationRepository postulationRepository,
-			CompetencesCandidatsRepository cCandidatsRepository, NoteCandidatRepository noteCandidatRepository,
-			FormationRepo formationRepo, ExperienceRepo experienceRepo, CandidatsDiplomeRepo candidatsDiplomeRepo) {
+			PosteRepository posteRepository, CompetencesCandidatsRepository cCandidatsRepository,
+			NoteCandidatRepository noteCandidatRepository, FormationRepo formationRepo, ExperienceRepo experienceRepo,
+			CandidatsDiplomeRepo candidatsDiplomeRepo) {
 		this.candidatRepository = candidatRepository;
-		this.posteRepository = posteRepository;
 		this.postulationRepository = postulationRepository;
+		this.posteRepository = posteRepository;
 		this.cCandidatsRepository = cCandidatsRepository;
 		this.noteCandidatRepository = noteCandidatRepository;
 		this.formationRepo = formationRepo;
@@ -133,17 +135,17 @@ public class CandidatService {
 
 		return newCandidat;
 	}
-	
-	public Postulation PostulerPosteCandidat(PosatulationRecieve cd) {
+
+	public Postulation PostulerPosteCandidat(PostulationRecieve cd) {
 		Candidat candidat = cd.extractCandidat(candidatRepository);
 		Poste poste = cd.extractPoste(posteRepository);
-	
+
 		// Sauvegarde des compétences du candidat
 		for (CompetencesCandidats competences : cd.extractCCandidat(em)) {
 			competences.setCandidat(candidat);
 			cCandidatsRepository.save(competences);
 		}
-	
+
 		// Création et sauvegarde de la postulation
 		Postulation postulation = new Postulation(candidat, poste, cd.getCandidatureTime());
 		return postulationRepository.save(postulation);

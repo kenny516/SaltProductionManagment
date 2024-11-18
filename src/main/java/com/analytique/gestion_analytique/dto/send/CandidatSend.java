@@ -3,7 +3,6 @@ package com.analytique.gestion_analytique.dto.send;
 import java.util.List;
 
 import com.analytique.gestion_analytique.Models.Candidat;
-import com.analytique.gestion_analytique.Models.Competence;
 import com.analytique.gestion_analytique.Models.CompetencesCandidats;
 import com.analytique.gestion_analytique.Models.NoteCandidat;
 import com.analytique.gestion_analytique.constants.RecrutementConst;

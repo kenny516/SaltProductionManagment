@@ -15,7 +15,7 @@ import com.analytique.gestion_analytique.Repositories.CompetenceRepository;
 import com.analytique.gestion_analytique.Repositories.PosteRepository;
 import com.analytique.gestion_analytique.Repositories.TypeNoteRepository;
 import com.analytique.gestion_analytique.Services.CandidatToEmpService;
-import com.analytique.gestion_analytique.dto.receive.PosatulationRecieve;
+import com.analytique.gestion_analytique.dto.receive.PostulationRecieve;
 
 
 
@@ -51,7 +51,7 @@ public class CandidatController {
 	}
 
 	@PostMapping("/postuler")
-	public ResponseEntity<?> PostulerPosteCandidat(@RequestBody PosatulationRecieve candidature) {
+	public ResponseEntity<?> PostulerPosteCandidat(@RequestBody PostulationRecieve candidature) {
 	    clearResponse();
 	    try {
 	        Postulation postulation = candidatService.PostulerPosteCandidat(candidature);
