@@ -3,32 +3,33 @@ package com.analytique.gestion_analytique.dto.send;
 import java.util.List;
 
 import com.analytique.gestion_analytique.Models.Candidat;
+import com.analytique.gestion_analytique.Models.NoteCandidat;
+import com.analytique.gestion_analytique.constants.RecrutementConst;
 import com.analytique.gestion_analytique.dto.CompetenceUser;
-import com.analytique.gestion_analytique.dto.NoteUser;
 
 public class CandidatSend extends Candidat {
 	List<CompetenceUser> competences;
-	List<NoteUser> notes;
 
+	int currentStep;
+	double progress;
 
-	public CandidatSend(Candidat c,List<CompetenceUser> competences,List<NoteUser> notes) {
+	public CandidatSend(Candidat c, List<CompetenceUser> competences) {
 		setId(c.getId());
 		setNom(c.getNom());
 		setPrenom(c.getPrenom());
 		setEmail(c.getEmail());
 		setTelephone(c.getTelephone());
 		setCompetences(competences);
-		setNotes(notes);
+		
+		setNotes(c.getNotes());
+		setExperiences(c.getExperiences());
+		setFormations(c.getFormations());
+		setDiplomes(c.getDiplomes());
+		setPostulations(c.getPostulations());
+
 	}
 
-	public CandidatSend(){}
-
-	public List<NoteUser> getNotes() {
-		return notes;
-	}
-
-	public void setNotes(List<NoteUser> notes) {
-		this.notes = notes;
+	public CandidatSend() {
 	}
 
 	public List<CompetenceUser> getCompetences() {
@@ -39,7 +40,31 @@ public class CandidatSend extends Candidat {
 		this.competences = competences;
 	}
 
-	
+	public int getCurrentStep() {
+		return currentStep;
+	}
 
-	
+	@Override
+	public void setNotes(List<NoteCandidat> noteCandidat) {
+		super.setNotes(noteCandidat);
+		setCurrentStep();
+	}
+
+	public void setCurrentStep() {
+		currentStep = getNotes().size();
+		setProgress();
+	}
+
+	public void setCurrentStep(int currentStep) {
+		this.currentStep = currentStep;
+	}
+
+	public double getProgress() {
+		return progress;
+	}
+
+	public void setProgress() {
+		progress = getNotes().size() * 100 / RecrutementConst.nombreEpreuve;
+	}
+
 }

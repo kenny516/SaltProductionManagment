@@ -15,6 +15,9 @@ import com.analytique.gestion_analytique.Repositories.PosteRepository;
 import com.analytique.gestion_analytique.Repositories.TypeNoteRepository;
 import com.analytique.gestion_analytique.Services.CandidatToEmpService;
 import com.analytique.gestion_analytique.dto.receive.CandidatRecieve;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+
 
 
 @RestController
@@ -55,10 +58,23 @@ public class CandidatController {
 			response.put("id",candidatService.saveCandidat(candidature).getId());
 			return ResponseEntity.ok(response);
 		} catch (Exception e) {
-			response.put("error", "");
+			response.put("error", "500");
 			return ResponseEntity.internalServerError().body(e.getMessage());
 		}
 	}
+
+	@PostMapping("/login")
+	public ResponseEntity<?> postMethodName(@RequestBody String email) {
+		clearResponse();
+		try {
+			response.put("id",candidatService.findByEmail(email));
+			return ResponseEntity.ok(response);
+		} catch (Exception e) {
+			response.put("error", "500");
+			return ResponseEntity.internalServerError().body(e.getMessage());
+		}
+	}
+	
 
 	@PostMapping("/embaucher/{candidat}")
 	public ResponseEntity<?> embaucher(@PathVariable Integer candidat) {
@@ -96,8 +112,13 @@ public class CandidatController {
 	}
 
 	@GetMapping("/elligibles/{id}")
-	public List<Candidat> getMethodName(@PathVariable(required=false) Integer id) {
+	public List<Candidat> getMethodName(@PathVariable Integer id) {
 		return candidatService.getElligibles(id);
+	}
+
+	@GetMapping("/elligibles")
+	public List<Candidat> getMethodName() {
+		return candidatService.getElligibles(null);
 	}
 	
 

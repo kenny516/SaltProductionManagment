@@ -3,7 +3,6 @@ package com.analytique.gestion_analytique.controller;
 import org.springframework.web.bind.annotation.*;
 
 import com.analytique.gestion_analytique.Models.Poste;
-import com.analytique.gestion_analytique.Repositories.PosteRepository;
 import com.analytique.gestion_analytique.Services.PosteService;
 import com.analytique.gestion_analytique.dto.receive.PosteRecieve;
 
@@ -15,8 +14,6 @@ import java.util.List;
 public class PosteController {
 
 	PosteService pService;
-
-	
 
 	public PosteController(PosteService pService) {
 		this.pService = pService;

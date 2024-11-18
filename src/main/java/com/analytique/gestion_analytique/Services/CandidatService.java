@@ -13,7 +13,6 @@ import com.analytique.gestion_analytique.Repositories.CompetencesCandidatsReposi
 import com.analytique.gestion_analytique.Repositories.NoteCandidatRepository;
 import com.analytique.gestion_analytique.Repositories.PostulationRepository;
 import com.analytique.gestion_analytique.dto.CompetenceUser;
-import com.analytique.gestion_analytique.dto.NoteUser;
 import com.analytique.gestion_analytique.dto.receive.CandidatRecieve;
 import com.analytique.gestion_analytique.dto.send.CandidatSend;
 
@@ -35,54 +34,43 @@ public class CandidatService {
 	private CompetencesCandidatsRepository cCandidatsRepository;
 	private NoteCandidatRepository noteCandidatRepository;
 
-	public CandidatService(CandidatRepository candidatRepository, CompetencesCandidatsRepository cCandidatsRepository,
-			NoteCandidatRepository noteCandidatRepository) {
+	public CandidatService(CandidatRepository candidatRepository, PostulationRepository postulationRepository,
+			CompetencesCandidatsRepository cCandidatsRepository, NoteCandidatRepository noteCandidatRepository) {
 		this.candidatRepository = candidatRepository;
+		this.postulationRepository = postulationRepository;
 		this.cCandidatsRepository = cCandidatsRepository;
 		this.noteCandidatRepository = noteCandidatRepository;
 	}
 
 	public List<Candidat> findAll() {
-		return candidatRepository.findAll();
+		List<Candidat> candidats = candidatRepository.findAllPostule();
+		candidats.forEach(c -> c.nullCandidat());
+		return candidats;
 	}
 
-    public List<Candidat> getCandidatsRetenus(Integer posteId) {
-        // Récupérer toutes les postulations retenues pour un poste donné
-        List<Postulation> postulationsRetenues = postulationRepository.findByPosteIdAndStatus(posteId, "Retenu");
+	public List<Candidat> getCandidatsRetenus(Integer posteId) {
+		// Récupérer toutes les postulations retenues pour un poste donné
+		List<Postulation> postulationsRetenues = postulationRepository.findByPosteIdAndStatus(posteId, "Retenu");
 
-        // Créer une liste pour stocker les candidats
-        List<Candidat> candidatsRetenus = new ArrayList<>();
+		// Créer une liste pour stocker les candidats
+		List<Candidat> candidatsRetenus = new ArrayList<>();
 
-        // Ajouter les candidats associés aux postulations retenues
-        for (Postulation postulation : postulationsRetenues) {
-            candidatsRetenus.add(postulation.getCandidat());
-        }
-
-        // Retourner la liste des candidats retenus
-        return candidatsRetenus;
-    }
-
-	public Candidat saveCandidat(CandidatRecieve cd) {
-		Candidat candidat = cd.extractCandidat();
-		candidat = candidatRepository.save(candidat);
-
-		for (CompetencesCandidats competences : cd.extractCCandidat(em)) {
-			competences.setCandidat(candidat);
-			cCandidatsRepository.save(competences);
+		// Ajouter les candidats associés aux postulations retenues
+		for (Postulation postulation : postulationsRetenues) {
+			candidatsRetenus.add(postulation.getCandidat());
 		}
-
-		return candidat;
+		// Retourner la liste des candidats retenus
+		return candidatsRetenus;
 	}
 
+	
 	public CandidatSend getById(Integer id) {
 		Candidat c = candidatRepository.findById(id).get();
 		List<CompetencesCandidats> cc = cCandidatsRepository.findByCandidatId(id);
 		List<CompetenceUser> comptences = cc.stream()
 				.map(comp -> new CompetenceUser(comp.getCompetence(), comp.getCandidat().getId(), comp.getNiveau()))
 				.collect(Collectors.toList());
-		List<NoteUser> notes = noteCandidatRepository.findByCandidat(id).stream().map(nc -> new NoteUser(nc))
-				.collect(Collectors.toList());
-		return new CandidatSend(c, comptences, notes);
+		return new CandidatSend(c, comptences);
 	}
 
 	@Transactional
@@ -103,10 +91,28 @@ public class CandidatService {
 	}
 
 	public List<Candidat> getElligibles(Integer posteId) {
-		if (posteId == null) {
-			return candidatRepository.findElligibles();
-		}
-		return candidatRepository.findElligiblesByPoste(posteId);
+
+		List<Candidat> posts = posteId == null ? candidatRepository.findElligibles()
+				: candidatRepository.findElligiblesByPoste(posteId);
+
+		posts.forEach(p -> p.nullCandidat());
+
+		return posts;
 	}
 
+	public Candidat saveCandidat(CandidatRecieve cd) {
+		Candidat candidat = cd.extractCandidat();
+		candidat = candidatRepository.save(candidat);
+	
+		for (CompetencesCandidats competences : cd.extractCCandidat(em)) {
+			competences.setCandidat(candidat);
+			cCandidatsRepository.save(competences);
+		}
+	
+		return candidat;
+	}
+
+	public int findByEmail(String email){
+		return candidatRepository.findByEmail(email).getId();
+	}
 }

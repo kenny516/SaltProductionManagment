@@ -1,10 +1,7 @@
 package com.analytique.gestion_analytique.dto;
 
-import com.analytique.gestion_analytique.Models.Candidat;
 import com.analytique.gestion_analytique.Models.NoteCandidat;
 import com.analytique.gestion_analytique.Models.TypeNote;
-
-import jakarta.persistence.EntityManager;
 
 public class NoteUser {
 	TypeNote typeNote;
@@ -30,4 +27,6 @@ public class NoteUser {
 		this.typeNote = nc.getTypeNote();
 		this.note = nc.getNote();
 	}
+
+
 }
