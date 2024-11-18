@@ -18,5 +18,9 @@ public interface CandidatRepository extends JpaRepository<Candidat, Integer> {
 
 	public Candidat findByEmail(String email);
 
-	
+	@Query(value = "select * from candidats_elligibles where poste_id = :posteId", nativeQuery = true)
+	public List<Candidat> findElligiblesByPoste(@Param("posteId") Integer posteId);
+
+	@Query(value = "select * from candidats_elligibles", nativeQuery = true)
+	public List<Candidat> findElligibles();
 }

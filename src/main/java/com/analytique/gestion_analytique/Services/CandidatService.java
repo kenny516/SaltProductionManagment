@@ -90,12 +90,12 @@ public class CandidatService {
 		return result;
 	}
 
-	public List<Postulation> getElligibles(Integer posteId) {
+	public List<Candidat> getElligibles(Integer posteId) {
 
-		List<Postulation> posts = posteId == null ? postulationRepository.findElligibles()
-				: postulationRepository.findElligiblesByPoste(posteId);
+		List<Candidat> posts = posteId == null ? candidatRepository.findElligibles()
+				: candidatRepository.findElligiblesByPoste(posteId);
 
-		posts.forEach(p -> p.setCandidat(p.getCandidat().duplicateSimple()));
+		posts.forEach(p -> p.nullCandidat());
 
 		return posts;
 	}

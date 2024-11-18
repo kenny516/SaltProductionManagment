@@ -1,6 +1,7 @@
 create or replace view candidats_elligibles as
-SELECT p.*
+SELECT c.*
 FROM Postulations p
+join candidats c on p.candidat_id = c.id
 WHERE p.status = 'Retenu'
 AND p.candidat_id IN (
     SELECT nc.idCandidat

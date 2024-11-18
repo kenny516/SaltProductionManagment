@@ -15,10 +15,6 @@ public interface PostulationRepository extends JpaRepository<Postulation, Long> 
 	// Méthode pour trouver les postulations retenues pour un poste donné
 	List<Postulation> findByPosteIdAndStatus(Integer posteId, String status);
 
-	@Query(value = "select * from candidats_elligibles where poste_id = :posteId", nativeQuery = true)
-	public List<Postulation> findElligiblesByPoste(@Param("posteId") Integer posteId);
-
-	@Query(value = "select * from candidats_elligibles", nativeQuery = true)
-	public List<Postulation> findElligibles();
+	
 
 }

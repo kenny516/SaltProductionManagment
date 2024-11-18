@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.*;
 
 import com.analytique.gestion_analytique.Services.CandidatService;
 import com.analytique.gestion_analytique.Models.Candidat;
-import com.analytique.gestion_analytique.Models.Postulation;
 import com.analytique.gestion_analytique.Repositories.CompetenceRepository;
 import com.analytique.gestion_analytique.Repositories.PosteRepository;
 import com.analytique.gestion_analytique.Repositories.TypeNoteRepository;
@@ -113,12 +112,12 @@ public class CandidatController {
 	}
 
 	@GetMapping("/elligibles/{id}")
-	public List<Postulation> getMethodName(@PathVariable Integer id) {
+	public List<Candidat> getMethodName(@PathVariable Integer id) {
 		return candidatService.getElligibles(id);
 	}
 
 	@GetMapping("/elligibles")
-	public List<Postulation> getMethodName() {
+	public List<Candidat> getMethodName() {
 		return candidatService.getElligibles(null);
 	}
 	
