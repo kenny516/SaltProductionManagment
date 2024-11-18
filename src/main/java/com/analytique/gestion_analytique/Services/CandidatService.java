@@ -35,6 +35,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class CandidatService {
@@ -73,14 +74,10 @@ public class CandidatService {
 	}
 
 	public List<Candidat> findCandidatNonRefus(){
-		List<Candidat> candidats = candidatRepository.findAllNonRefus();
-		candidats.forEach(c -> {
-			try {
-				c = c.duplicateSimple();
-			} catch (Exception e) {
-				System.out.println(e);
-			}
-		});
+		List<Candidat> candidats = new ArrayList<>(candidatRepository.findAllNonRefus().stream()
+				.map(c -> c.duplicateSimple())
+				.collect(Collectors.toList()));
+		
 		return candidats; 
 	}
 
