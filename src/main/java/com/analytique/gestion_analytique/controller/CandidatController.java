@@ -64,10 +64,10 @@ public class CandidatController {
 	}
 
 	@PostMapping("/login")
-	public ResponseEntity<?> postMethodName(@RequestBody String email) {
+	public ResponseEntity<?> postMethodName(@RequestBody HashMap<String,String> params) {
 		clearResponse();
 		try {
-			response.put("id",candidatService.findByEmail(email));
+			response.put("id",candidatService.login(params.get("email"), params.get("password")));
 			return ResponseEntity.ok(response);
 		} catch (Exception e) {
 			response.put("error", "500");

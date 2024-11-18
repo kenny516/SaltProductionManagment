@@ -112,7 +112,7 @@ public class CandidatService {
 		return candidat;
 	}
 
-	public int findByEmail(String email){
-		return candidatRepository.findByEmail(email).getId();
+	public int login(String email,String mdp){
+		return candidatRepository.candidatExists(email,mdp);
 	}
 }

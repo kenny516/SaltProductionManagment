@@ -16,7 +16,8 @@ public interface CandidatRepository extends JpaRepository<Candidat, Integer> {
 	@Query(value = "select * from candidats_postules", nativeQuery = true)
 	List<Candidat> findAllPostule();
 
-	public Candidat findByEmail(String email);
+	@Query(value = "select id from candidats where email = :email and mot_de_passe = :mdp",nativeQuery = true)
+	public int candidatExists(@Param("email") String email,@Param("mdp") String motDePasse);
 
 	@Query(value = "select * from candidats_elligibles where poste_id = :posteId", nativeQuery = true)
 	public List<Candidat> findElligiblesByPoste(@Param("posteId") Integer posteId);
