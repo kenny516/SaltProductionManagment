@@ -68,8 +68,7 @@ public class CandidatToEmpService {
 			competencesEmployesRepository.save(competenceEmploye);
 		}
 
-		postulation.setStatus("employe");
-		postulationRepository.save(postulation);
+		postulationRepository.updateStatus(postulation.getId(),"employe");
 
 		String notifMessage = "Vous avez été retenu pour le poste de " + postulation.getPoste().getTitre();
 		Notification notification = new Notification(candidat, notifMessage, Timestamp.valueOf(LocalDateTime.now()), "non_lu");

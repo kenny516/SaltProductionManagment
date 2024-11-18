@@ -130,7 +130,7 @@ $$ LANGUAGE plpgsql;
 
 -- Créer un trigger pour évaluer le statut d'une candidature
 CREATE OR REPLACE TRIGGER trigger_evaluer_statut_candidat
-AFTER INSERT OR UPDATE ON Postulations
+AFTER INSERT ON Postulations
 FOR EACH ROW
 EXECUTE FUNCTION evaluer_statut_candidat();
 
