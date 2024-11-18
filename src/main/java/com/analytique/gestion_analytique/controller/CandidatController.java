@@ -10,13 +10,12 @@ import org.springframework.web.bind.annotation.*;
 
 import com.analytique.gestion_analytique.Services.CandidatService;
 import com.analytique.gestion_analytique.Models.Candidat;
+import com.analytique.gestion_analytique.Models.Postulation;
 import com.analytique.gestion_analytique.Repositories.CompetenceRepository;
 import com.analytique.gestion_analytique.Repositories.PosteRepository;
 import com.analytique.gestion_analytique.Repositories.TypeNoteRepository;
 import com.analytique.gestion_analytique.Services.CandidatToEmpService;
-import com.analytique.gestion_analytique.dto.receive.CandidatRecieve;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
+import com.analytique.gestion_analytique.dto.receive.PosatulationRecieve;
 
 
 
@@ -51,17 +50,19 @@ public class CandidatController {
 		return candidatService.findAll();
 	}
 
-	@PostMapping("")
-	public ResponseEntity<?> saveCandidat(@RequestBody CandidatRecieve candidature) {
-		clearResponse();
-		try {
-			response.put("id",candidatService.saveCandidat(candidature).getId());
-			return ResponseEntity.ok(response);
-		} catch (Exception e) {
-			response.put("error", "500");
-			return ResponseEntity.internalServerError().body(e.getMessage());
-		}
+	@PostMapping("/postuler")
+	public ResponseEntity<?> PostulerPosteCandidat(@RequestBody PosatulationRecieve candidature) {
+	    clearResponse();
+	    try {
+	        Postulation postulation = candidatService.PostulerPosteCandidat(candidature);
+	        response.put("id", postulation.getId()); // Récupère l'ID de la postulation
+	        return ResponseEntity.ok(response);
+	    } catch (Exception e) {
+	        response.put("error", "500");
+	        return ResponseEntity.internalServerError().body(e.getMessage());
+	    }
 	}
+
 
 	@PostMapping("/login")
 	public ResponseEntity<?> postMethodName(@RequestBody HashMap<String,String> params) {

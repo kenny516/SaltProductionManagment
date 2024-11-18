@@ -24,6 +24,12 @@ public class Postulation {
 
     private LocalDate datePostulation = LocalDate.now();
 
+    public Postulation(Candidat candidat, Poste poste, LocalDate datePostulation) {
+        this.candidat = candidat;
+        this.poste = poste;
+        this.datePostulation = datePostulation;
+    }
+
     public Integer getId() {
         return id;
     }

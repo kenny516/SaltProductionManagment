@@ -9,6 +9,7 @@ import com.analytique.gestion_analytique.Models.Experience;
 import com.analytique.gestion_analytique.Models.Formation;
 import com.analytique.gestion_analytique.Models.NoteCandidat;
 import com.analytique.gestion_analytique.Models.NoteCandidatId;
+import com.analytique.gestion_analytique.Models.Poste;
 import com.analytique.gestion_analytique.Models.Postulation;
 import com.analytique.gestion_analytique.Models.TypeNote;
 import com.analytique.gestion_analytique.Repositories.CandidatRepository;
@@ -17,6 +18,7 @@ import com.analytique.gestion_analytique.Repositories.CompetencesCandidatsReposi
 import com.analytique.gestion_analytique.Repositories.ExperienceRepo;
 import com.analytique.gestion_analytique.Repositories.FormationRepo;
 import com.analytique.gestion_analytique.Repositories.NoteCandidatRepository;
+import com.analytique.gestion_analytique.Repositories.PosteRepository;
 import com.analytique.gestion_analytique.Repositories.PostulationRepository;
 import com.analytique.gestion_analytique.dto.receive.CandidatRecieve;
 import com.analytique.gestion_analytique.dto.send.CandidatSend;
@@ -35,6 +37,7 @@ public class CandidatService {
 
 	private CandidatRepository candidatRepository;
 	private PostulationRepository postulationRepository;
+	private PosteRepository posteRepository;
 	private CompetencesCandidatsRepository cCandidatsRepository;
 	private NoteCandidatRepository noteCandidatRepository;
 	private FormationRepo formationRepo;
@@ -45,6 +48,7 @@ public class CandidatService {
 			CompetencesCandidatsRepository cCandidatsRepository, NoteCandidatRepository noteCandidatRepository,
 			FormationRepo formationRepo, ExperienceRepo experienceRepo, CandidatsDiplomeRepo candidatsDiplomeRepo) {
 		this.candidatRepository = candidatRepository;
+		this.posteRepository = posteRepository;
 		this.postulationRepository = postulationRepository;
 		this.cCandidatsRepository = cCandidatsRepository;
 		this.noteCandidatRepository = noteCandidatRepository;
@@ -128,6 +132,21 @@ public class CandidatService {
 		candidatsDiplomeRepo.saveAll(diplomes);
 
 		return newCandidat;
+	}
+	
+	public Postulation PostulerPosteCandidat(PosatulationRecieve cd) {
+		Candidat candidat = cd.extractCandidat(candidatRepository);
+		Poste poste = cd.extractPoste(posteRepository);
+	
+		// Sauvegarde des compétences du candidat
+		for (CompetencesCandidats competences : cd.extractCCandidat(em)) {
+			competences.setCandidat(candidat);
+			cCandidatsRepository.save(competences);
+		}
+	
+		// Création et sauvegarde de la postulation
+		Postulation postulation = new Postulation(candidat, poste, cd.getCandidatureTime());
+		return postulationRepository.save(postulation);
 	}
 
 	public int login(String email, String mdp) {

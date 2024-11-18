@@ -14,6 +14,12 @@ public class CompetenceUser extends Competence {
 	public CompetenceUser() {
 	}
 
+	public CompetenceUser(Competence c, int candidat_id,int niveau) {
+		setId(c.getId());
+		setNom(c.getNom());
+		setDescription(c.getDescription());
+		setNiveau(niveau);
+	}
 
 	public CompetenceUser(int id,int niveau){
 		setId(id);
@@ -22,14 +28,14 @@ public class CompetenceUser extends Competence {
 
 	public CompetencesCandidats extractCandidat(EntityManager em) {
 		CompetencesCandidats cc = new CompetencesCandidats();
-		cc.setCompetence(em.getReference(Competence.class, getId()));
+		cc.setCompetence(em.getReference(Competence.class, getIdCompetence()));
 		cc.setNiveau(getNiveau());
 		return cc;
 	}
 
 	public CompetencesEmployes extractEmployes(EntityManager em) {
 		CompetencesEmployes ce = new CompetencesEmployes();
-		ce.setCompetence(em.getReference(Competence.class, getId()));
+		ce.setCompetence(em.getReference(Competence.class, getIdCompetence()));
 		ce.setNiveau(getNiveau());
 		return ce;
 	}
