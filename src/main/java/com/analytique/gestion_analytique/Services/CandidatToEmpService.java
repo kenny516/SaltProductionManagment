@@ -2,17 +2,21 @@ package com.analytique.gestion_analytique.Services;
 
 import com.analytique.gestion_analytique.Models.Candidat;
 import com.analytique.gestion_analytique.Models.Employe;
+import com.analytique.gestion_analytique.Models.Notification;
 import com.analytique.gestion_analytique.Models.Postulation;
 import com.analytique.gestion_analytique.Models.CompetencesCandidats;
 import com.analytique.gestion_analytique.Models.CompetencesEmployes;
 import com.analytique.gestion_analytique.Repositories.EmployeRepository;
+import com.analytique.gestion_analytique.Repositories.NotificationRepository;
 import com.analytique.gestion_analytique.Repositories.PostulationRepository;
 import com.analytique.gestion_analytique.Repositories.CompetencesCandidatsRepository;
 import com.analytique.gestion_analytique.Repositories.CompetencesEmployesRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.sql.Timestamp;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -21,14 +25,17 @@ public class CandidatToEmpService {
 	private EmployeRepository employeRepository;
 	private CompetencesCandidatsRepository competencesCandidatsRepository;
 	private CompetencesEmployesRepository competencesEmployesRepository;
+	private NotificationRepository notificationRepository;
 
 	public CandidatToEmpService(PostulationRepository postulationRepository, EmployeRepository employeRepository,
 			CompetencesCandidatsRepository competencesCandidatsRepository,
-			CompetencesEmployesRepository competencesEmployesRepository) {
+			CompetencesEmployesRepository competencesEmployesRepository,
+			NotificationRepository notificationRepository) {
 		this.postulationRepository = postulationRepository;
 		this.employeRepository = employeRepository;
 		this.competencesCandidatsRepository = competencesCandidatsRepository;
 		this.competencesEmployesRepository = competencesEmployesRepository;
+		this.notificationRepository = notificationRepository;
 	}
 
 	@Transactional
@@ -63,6 +70,11 @@ public class CandidatToEmpService {
 
 		postulation.setStatus("employe");
 		postulationRepository.save(postulation);
+
+		String notifMessage = "Vous avez été retenu pour le poste de " + postulation.getPoste().getTitre();
+		Notification notification = new Notification(candidat, notifMessage, Timestamp.valueOf(LocalDateTime.now()), "non_lu");
+		
+		notificationRepository.save(notification);
 
 		return employe;
 	}

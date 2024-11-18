@@ -9,6 +9,7 @@ import com.analytique.gestion_analytique.Models.Experience;
 import com.analytique.gestion_analytique.Models.Formation;
 import com.analytique.gestion_analytique.Models.NoteCandidat;
 import com.analytique.gestion_analytique.Models.NoteCandidatId;
+import com.analytique.gestion_analytique.Models.Notification;
 import com.analytique.gestion_analytique.Models.Poste;
 import com.analytique.gestion_analytique.Models.Postulation;
 import com.analytique.gestion_analytique.Models.TypeNote;
@@ -18,6 +19,7 @@ import com.analytique.gestion_analytique.Repositories.CompetencesCandidatsReposi
 import com.analytique.gestion_analytique.Repositories.ExperienceRepo;
 import com.analytique.gestion_analytique.Repositories.FormationRepo;
 import com.analytique.gestion_analytique.Repositories.NoteCandidatRepository;
+import com.analytique.gestion_analytique.Repositories.NotificationRepository;
 import com.analytique.gestion_analytique.Repositories.PosteRepository;
 import com.analytique.gestion_analytique.Repositories.PostulationRepository;
 import com.analytique.gestion_analytique.dto.receive.CandidatRecieve;
@@ -28,6 +30,8 @@ import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import jakarta.transaction.Transactional;
 
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -44,11 +48,12 @@ public class CandidatService {
 	private FormationRepo formationRepo;
 	private ExperienceRepo experienceRepo;
 	private CandidatsDiplomeRepo candidatsDiplomeRepo;
+	private NotificationRepository notificationRepository;
 
 	public CandidatService(CandidatRepository candidatRepository, PostulationRepository postulationRepository,
 			PosteRepository posteRepository, CompetencesCandidatsRepository cCandidatsRepository,
 			NoteCandidatRepository noteCandidatRepository, FormationRepo formationRepo, ExperienceRepo experienceRepo,
-			CandidatsDiplomeRepo candidatsDiplomeRepo) {
+			CandidatsDiplomeRepo candidatsDiplomeRepo, NotificationRepository notificationRepository) {
 		this.candidatRepository = candidatRepository;
 		this.postulationRepository = postulationRepository;
 		this.posteRepository = posteRepository;
@@ -57,6 +62,7 @@ public class CandidatService {
 		this.formationRepo = formationRepo;
 		this.experienceRepo = experienceRepo;
 		this.candidatsDiplomeRepo = candidatsDiplomeRepo;
+		this.notificationRepository = notificationRepository;
 	}
 
 	public List<Candidat> findAll() {
@@ -102,6 +108,12 @@ public class CandidatService {
 		}
 
 		noteCandidatRepository.save(nc);
+
+		String notifMessage = "Vous avez reçu une note de " + nc.getNote() + " à votre test";
+		Notification notification = new Notification(em.getReference(Candidat.class, id), notifMessage, Timestamp.valueOf(LocalDateTime.now()), "non_lu");
+		
+		notificationRepository.save(notification);
+
 		return result;
 	}
 
@@ -148,7 +160,14 @@ public class CandidatService {
 
 		// Création et sauvegarde de la postulation
 		Postulation postulation = new Postulation(candidat, poste, cd.getCandidatureTime());
-		return postulationRepository.save(postulation);
+		postulation = postulationRepository.save(postulation);
+
+		String notifMessage = "Votre candidature est en attente de traitement";
+		Notification notification = new Notification(candidat, notifMessage, Timestamp.valueOf(LocalDateTime.now()), "non_lu");
+		
+		notificationRepository.save(notification);
+
+		return postulation;
 	}
 
 	public int login(String email, String mdp) {

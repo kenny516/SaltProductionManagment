@@ -23,6 +23,24 @@ public class Notification {
     @Column(name = "statut_notification")
     private String statut;
 
+    public Notification(Candidat candidat, String message, Timestamp dateHeure, String statut) {
+        this.candidat = candidat;
+        this.message = message;
+        this.dateHeure = dateHeure;
+        this.statut = statut;
+    }
+
+    public Notification() {
+    }
+
+    public Notification(Integer id, Candidat candidat, String message, Timestamp dateHeure, String statut) {
+        this.id = id;
+        this.candidat = candidat;
+        this.message = message;
+        this.dateHeure = dateHeure;
+        this.statut = statut;
+    }
+
     public Integer getId() {
         return id;
     }
