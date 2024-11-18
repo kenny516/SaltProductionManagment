@@ -10,9 +10,14 @@ AND p.candidat_id IN (
     HAVING COUNT(DISTINCT nc.idTypeNote) = (SELECT COUNT(*) FROM typeNote)
 );
 
+create or replace view candidats_valides as 
+select c.* from candidats c where c.id not in (
+	select distinct candidat_id from postulations p where p.status <> 'employe'
+);
+
 create or replace view candidats_postules as
 SELECT c.*
-FROM Candidats c
+FROM candidats_valides c
 WHERE c.id IN (
     SELECT DISTINCT p.candidat_id
     FROM Postulations p
