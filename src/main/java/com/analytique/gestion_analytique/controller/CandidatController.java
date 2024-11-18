@@ -120,6 +120,11 @@ public class CandidatController {
 	public List<Candidat> getMethodName() {
 		return candidatService.getElligibles(null);
 	}
+
+	@PostMapping("")
+	public int register(@RequestBody Candidat c){
+		return 0;
+	}
 	
 
 }

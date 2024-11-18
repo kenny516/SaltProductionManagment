@@ -14,13 +14,6 @@ public class CompetenceUser extends Competence {
 	public CompetenceUser() {
 	}
 
-	public CompetenceUser(Competence c, int candidat_id,int niveau) {
-		setId(c.getId());
-		setNom(c.getNom());
-		setDescription(c.getDescription());
-		setCandidat_id(candidat_id);
-		setNiveau(niveau);
-	}
 
 	public CompetenceUser(int id,int niveau){
 		setId(id);

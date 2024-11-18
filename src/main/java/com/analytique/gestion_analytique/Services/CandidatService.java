@@ -3,16 +3,21 @@ package com.analytique.gestion_analytique.Services;
 import org.springframework.stereotype.Service;
 
 import com.analytique.gestion_analytique.Models.Candidat;
+import com.analytique.gestion_analytique.Models.CandidatsDiplomes;
 import com.analytique.gestion_analytique.Models.CompetencesCandidats;
+import com.analytique.gestion_analytique.Models.Experience;
+import com.analytique.gestion_analytique.Models.Formation;
 import com.analytique.gestion_analytique.Models.NoteCandidat;
 import com.analytique.gestion_analytique.Models.NoteCandidatId;
 import com.analytique.gestion_analytique.Models.Postulation;
 import com.analytique.gestion_analytique.Models.TypeNote;
 import com.analytique.gestion_analytique.Repositories.CandidatRepository;
+import com.analytique.gestion_analytique.Repositories.CandidatsDiplomeRepo;
 import com.analytique.gestion_analytique.Repositories.CompetencesCandidatsRepository;
+import com.analytique.gestion_analytique.Repositories.ExperienceRepo;
+import com.analytique.gestion_analytique.Repositories.FormationRepo;
 import com.analytique.gestion_analytique.Repositories.NoteCandidatRepository;
 import com.analytique.gestion_analytique.Repositories.PostulationRepository;
-import com.analytique.gestion_analytique.dto.CompetenceUser;
 import com.analytique.gestion_analytique.dto.receive.CandidatRecieve;
 import com.analytique.gestion_analytique.dto.send.CandidatSend;
 
@@ -22,7 +27,6 @@ import jakarta.transaction.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 public class CandidatService {
@@ -33,13 +37,20 @@ public class CandidatService {
 	private PostulationRepository postulationRepository;
 	private CompetencesCandidatsRepository cCandidatsRepository;
 	private NoteCandidatRepository noteCandidatRepository;
+	private FormationRepo formationRepo;
+	private ExperienceRepo experienceRepo;
+	private CandidatsDiplomeRepo candidatsDiplomeRepo;
 
 	public CandidatService(CandidatRepository candidatRepository, PostulationRepository postulationRepository,
-			CompetencesCandidatsRepository cCandidatsRepository, NoteCandidatRepository noteCandidatRepository) {
+			CompetencesCandidatsRepository cCandidatsRepository, NoteCandidatRepository noteCandidatRepository,
+			FormationRepo formationRepo, ExperienceRepo experienceRepo, CandidatsDiplomeRepo candidatsDiplomeRepo) {
 		this.candidatRepository = candidatRepository;
 		this.postulationRepository = postulationRepository;
 		this.cCandidatsRepository = cCandidatsRepository;
 		this.noteCandidatRepository = noteCandidatRepository;
+		this.formationRepo = formationRepo;
+		this.experienceRepo = experienceRepo;
+		this.candidatsDiplomeRepo = candidatsDiplomeRepo;
 	}
 
 	public List<Candidat> findAll() {
@@ -63,14 +74,12 @@ public class CandidatService {
 		return candidatsRetenus;
 	}
 
-	
 	public CandidatSend getById(Integer id) {
 		Candidat c = candidatRepository.findById(id).get();
 		List<CompetencesCandidats> cc = cCandidatsRepository.findByCandidatId(id);
-		List<CompetenceUser> comptences = cc.stream()
-				.map(comp -> new CompetenceUser(comp.getCompetence(), comp.getCandidat().getId(), comp.getNiveau()))
-				.collect(Collectors.toList());
-		return new CandidatSend(c, comptences);
+		cc.forEach(com -> com.setCandidat(null));
+
+		return new CandidatSend(c, cc);
 	}
 
 	@Transactional
@@ -100,19 +109,28 @@ public class CandidatService {
 		return posts;
 	}
 
+	@Transactional
 	public Candidat saveCandidat(CandidatRecieve cd) {
-		Candidat candidat = cd.extractCandidat();
-		candidat = candidatRepository.save(candidat);
-	
-		for (CompetencesCandidats competences : cd.extractCCandidat(em)) {
-			competences.setCandidat(candidat);
-			cCandidatsRepository.save(competences);
-		}
-	
-		return candidat;
+		Candidat newCandidat = candidatRepository.save(cd.extractCandidat());
+		Candidat candidat = new Candidat();
+		candidat.setId(newCandidat.getId());
+
+		List<Formation> formations = cd.getFormations();
+		List<Experience> experiences = cd.getExperiences();
+		List<CandidatsDiplomes> diplomes = cd.extractDiplomes();
+
+		formations.forEach(exp -> exp.setCandidat(candidat));
+		experiences.forEach(formation -> formation.setCandidat(candidat));
+		diplomes.forEach(formation -> formation.setCandidat(candidat));
+
+		formationRepo.saveAll(formations);
+		experienceRepo.saveAll(experiences);
+		candidatsDiplomeRepo.saveAll(diplomes);
+
+		return newCandidat;
 	}
 
-	public int login(String email,String mdp){
-		return candidatRepository.candidatExists(email,mdp);
+	public int login(String email, String mdp) {
+		return candidatRepository.candidatExists(email, mdp);
 	}
 }

@@ -113,7 +113,6 @@ public class Candidat {
 	}
 
 	public void setDiplomes(List<Diplome> diplomes) {
-		diplomes.forEach(d -> d.setCandidats(null));
 		this.diplomes = diplomes;
 	}
 
@@ -129,7 +128,6 @@ public class Candidat {
 	public void nullCandidat() {
 		formations.forEach(f -> f.setCandidat(null));
 		experiences.forEach(e -> e.setCandidat(null));
-		diplomes.forEach(d -> d.setCandidats(null));
 		notes.forEach(n -> n.setCandidat(null));
 		postulations.forEach(p -> p.setCandidat(null));
 		setMotDePasse(null);
