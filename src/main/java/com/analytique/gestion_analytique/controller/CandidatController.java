@@ -15,6 +15,7 @@ import com.analytique.gestion_analytique.Repositories.CompetenceRepository;
 import com.analytique.gestion_analytique.Repositories.PosteRepository;
 import com.analytique.gestion_analytique.Repositories.TypeNoteRepository;
 import com.analytique.gestion_analytique.Services.CandidatToEmpService;
+import com.analytique.gestion_analytique.dto.receive.CandidatRecieve;
 import com.analytique.gestion_analytique.dto.receive.PostulationRecieve;
 
 
@@ -123,9 +124,8 @@ public class CandidatController {
 	}
 
 	@PostMapping("")
-	public int register(@RequestBody Candidat c){
-		return 0;
+	public int register(@RequestBody CandidatRecieve c){
+		candidatService.saveCandidat(c).getId();
 	}
-	
 
 }
