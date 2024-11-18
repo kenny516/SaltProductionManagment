@@ -47,6 +47,7 @@ public class CandidatToEmpService {
 				LocalDate.now(), // Remplacez par la date actuelle
 				postulation.getPoste() // Récupération du poste depuis la postulation
 		);
+		employe.setDateEmbauche(LocalDate.now());
 
 		employe = employeRepository.save(employe);
 
