@@ -7,7 +7,6 @@ import com.analytique.gestion_analytique.Models.CompetencesEmployes;
 import jakarta.persistence.EntityManager;
 
 public class CompetenceUser extends Competence {
-	int idCompetence;
 	int niveau;
 
 	
@@ -28,14 +27,14 @@ public class CompetenceUser extends Competence {
 
 	public CompetencesCandidats extractCandidat(EntityManager em) {
 		CompetencesCandidats cc = new CompetencesCandidats();
-		cc.setCompetence(em.getReference(Competence.class, getIdCompetence()));
+		cc.setCompetence(em.getReference(Competence.class, getId()));
 		cc.setNiveau(getNiveau());
 		return cc;
 	}
 
 	public CompetencesEmployes extractEmployes(EntityManager em) {
 		CompetencesEmployes ce = new CompetencesEmployes();
-		ce.setCompetence(em.getReference(Competence.class, getIdCompetence()));
+		ce.setCompetence(em.getReference(Competence.class, getId()));
 		ce.setNiveau(getNiveau());
 		return ce;
 	}
@@ -47,14 +46,5 @@ public class CompetenceUser extends Competence {
 	public void setNiveau(int niveau) {
 		this.niveau = niveau;
 	}
-
-	public int getIdCompetence() {
-		return idCompetence;
-	}
-
-	public void setIdCompetence(int idCompetence) {
-		this.idCompetence = idCompetence;
-	}
-
 	
 }
