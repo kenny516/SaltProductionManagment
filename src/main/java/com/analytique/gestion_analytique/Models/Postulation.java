@@ -70,5 +70,10 @@ public class Postulation {
         this.datePostulation = datePostulation;
     }
 
+		public Postulation() {
+		}
+
+		
+
 }
 
