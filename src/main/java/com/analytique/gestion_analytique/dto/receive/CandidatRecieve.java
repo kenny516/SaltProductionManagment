@@ -10,7 +10,7 @@ import com.analytique.gestion_analytique.Models.Experience;
 import com.analytique.gestion_analytique.Models.Formation;
 
 public class CandidatRecieve {
-	String nom, prenom, email, telepohne, motDePasse;
+	String nom, prenom, email, telephone, motDePasse;
 	List<Formation> formations;
 	List<Experience> experiences;
 	List<Integer> diplomes;
@@ -39,12 +39,12 @@ public class CandidatRecieve {
 		this.email = email;
 	}
 
-	public String getTelepohne() {
-		return telepohne;
+	public String getTelephone() {
+		return telephone;
 	}
 
-	public void setTelepohne(String telepohne) {
-		this.telepohne = telepohne;
+	public void setTelephone(String telepohne) {
+		this.telephone = telepohne;
 	}
 
 	public String getMotDePasse() {
@@ -84,7 +84,7 @@ public class CandidatRecieve {
 		c.setNom(nom);
 		c.setPrenom(prenom);
 		c.setEmail(email);
-		c.setTelephone(telepohne);
+		c.setTelephone(telephone);
 		c.setMotDePasse(motDePasse);
 		return c;
 	}
