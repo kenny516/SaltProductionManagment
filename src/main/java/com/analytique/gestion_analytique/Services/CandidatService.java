@@ -132,10 +132,10 @@ public class CandidatService {
 		formationRepo.saveAll(formations);
 		experienceRepo.saveAll(experiences);
 		candidatsDiplomeRepo.saveAll(diplomes);
-
 		return newCandidat;
 	}
 
+	@Transactional
 	public Postulation PostulerPosteCandidat(PostulationRecieve cd) {
 		Candidat candidat = cd.extractCandidat(candidatRepository);
 		Poste poste = cd.extractPoste(posteRepository);

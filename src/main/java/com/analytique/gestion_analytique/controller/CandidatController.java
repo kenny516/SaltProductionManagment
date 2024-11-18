@@ -18,8 +18,6 @@ import com.analytique.gestion_analytique.Services.CandidatToEmpService;
 import com.analytique.gestion_analytique.dto.receive.CandidatRecieve;
 import com.analytique.gestion_analytique.dto.receive.PostulationRecieve;
 
-
-
 @RestController
 @RequestMapping("/api/candidat")
 @CrossOrigin(origins = "http://localhost:3000")
@@ -33,7 +31,7 @@ public class CandidatController {
 
 	Map<String, Object> response = new HashMap<>();
 
-	void clearResponse(){
+	void clearResponse() {
 		response.clear();
 	}
 
@@ -53,30 +51,28 @@ public class CandidatController {
 
 	@PostMapping("/postuler")
 	public ResponseEntity<?> PostulerPosteCandidat(@RequestBody PostulationRecieve candidature) {
-	    clearResponse();
-	    try {
-	        Postulation postulation = candidatService.PostulerPosteCandidat(candidature);
-	        response.put("id", postulation.getId()); // Récupère l'ID de la postulation
-	        return ResponseEntity.ok(response);
-	    } catch (Exception e) {
-	        response.put("error", "500");
-	        return ResponseEntity.internalServerError().body(e.getMessage());
-	    }
-	}
-
-
-	@PostMapping("/login")
-	public ResponseEntity<?> postMethodName(@RequestBody HashMap<String,String> params) {
 		clearResponse();
 		try {
-			response.put("id",candidatService.login(params.get("email"), params.get("password")));
+			Postulation postulation = candidatService.PostulerPosteCandidat(candidature);
+			response.put("id", postulation.getId()); // Récupère l'ID de la postulation
 			return ResponseEntity.ok(response);
 		} catch (Exception e) {
 			response.put("error", "500");
 			return ResponseEntity.internalServerError().body(e.getMessage());
 		}
 	}
-	
+
+	@PostMapping("/login")
+	public ResponseEntity<?> postMethodName(@RequestBody HashMap<String, String> params) {
+		clearResponse();
+		try {
+			response.put("id", candidatService.login(params.get("email"), params.get("password")));
+			return ResponseEntity.ok(response);
+		} catch (Exception e) {
+			response.put("error", "500");
+			return ResponseEntity.internalServerError().body(e.getMessage());
+		}
+	}
 
 	@PostMapping("/embaucher/{candidat}")
 	public ResponseEntity<?> embaucher(@PathVariable Integer candidat) {
@@ -97,7 +93,7 @@ public class CandidatController {
 	}
 
 	@PostMapping("/note")
-	public ResponseEntity<?> insertNote(@RequestBody Map<String,Integer> body) {
+	public ResponseEntity<?> insertNote(@RequestBody Map<String, Integer> body) {
 		int id = body.get("idCandidat");
 		int typenote = body.get("idTypeNote");
 		int note = body.get("note");
@@ -124,8 +120,12 @@ public class CandidatController {
 	}
 
 	@PostMapping("")
-	public int register(@RequestBody CandidatRecieve c){
-		candidatService.saveCandidat(c).getId();
+	public ResponseEntity<?> register(@RequestBody CandidatRecieve c) {
+		try {
+			return ResponseEntity.ok(candidatService.saveCandidat(c));
+		} catch (Exception e) {
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
+		}
 	}
 
 }
