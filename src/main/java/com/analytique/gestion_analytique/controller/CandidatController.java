@@ -126,12 +126,15 @@ public class CandidatController {
 	@GetMapping("/{id}/notification/read")
 	public List<Notification> getRead(@PathVariable Integer id) {
 		List<Notification> read = notificationService.getRead(id);
+		read.forEach(nr -> nr.setCandidat(null));
 		return read;
 	}
 
 	@GetMapping("/{id}/notification/non-read")
 	public List<Notification> getNonRead(@PathVariable Integer id) {
 		List<Notification> nonRead = notificationService.getNonRead(id);
+		nonRead.forEach(nr -> notificationService.markAsRead(nr.getId()));
+		nonRead.forEach(nr -> nr.setCandidat(null));
 		return nonRead;
 	}
 
