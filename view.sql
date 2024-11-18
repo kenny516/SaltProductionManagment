@@ -1,7 +1,7 @@
 create or replace view candidats_elligibles as
 SELECT c.*
 FROM Postulations p
-join candidats c on p.candidat_id = c.id
+join candidats_postules c on p.candidat_id = c.id
 WHERE p.status = 'Retenu'
 AND p.candidat_id IN (
     SELECT nc.idCandidat
@@ -11,7 +11,7 @@ AND p.candidat_id IN (
 );
 
 create or replace view candidats_valides as 
-select c.* from candidats c where c.id not in (
+select c.* from candidats c where c.id in (
 	select distinct candidat_id from postulations p where p.status <> 'employe'
 );
 
