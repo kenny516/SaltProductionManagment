@@ -6,15 +6,15 @@ import java.util.List;
 
 import com.analytique.gestion_analytique.Models.Candidat;
 import com.analytique.gestion_analytique.Models.CompetencesCandidats;
-import com.analytique.gestion_analytique.Models.Poste;
+import com.analytique.gestion_analytique.Models.OffreEmploi;
 import com.analytique.gestion_analytique.Repositories.CandidatRepository;
-import com.analytique.gestion_analytique.Repositories.PosteRepository;
+import com.analytique.gestion_analytique.Repositories.OffreEmploiRepository;
 import com.analytique.gestion_analytique.dto.CompetenceUser;
 
 import jakarta.persistence.EntityManager;
 
 public class PostulationRecieve {
-	int candidat_id,poste_id;	
+	int candidat_id,postulation_id;	
 	LocalDate candidatureTime;
 	List<CompetenceUser> competences;
 
@@ -23,8 +23,8 @@ public class PostulationRecieve {
 		return c;
 	}
 
-	public Poste extractPoste(PosteRepository cP) {
-		Poste p = cP.findById(poste_id).get();
+	public OffreEmploi extractOffreEmploi(OffreEmploiRepository cP) {
+		OffreEmploi p = cP.findById(postulation_id).get();
 		return p;
 	}
 
@@ -56,11 +56,11 @@ public class PostulationRecieve {
 	}
 
 	public int getPoste_id() {
-		return poste_id;
+		return postulation_id;
 	}
 
 	public void setPoste_id(int idPoste) {
-		this.poste_id = idPoste;
+		this.postulation_id = idPoste;
 	}
 
 	public LocalDate getCandidatureTime() {

@@ -52,7 +52,7 @@ public class CandidatToEmpService {
 				candidat.getEmail(),
 				candidat.getTelephone(),
 				LocalDate.now(), // Remplacez par la date actuelle
-				postulation.getPoste() // Récupération du poste depuis la postulation
+				postulation.getOffreEmploi().getPoste() // Récupération du poste depuis la postulation
 		);
 
 		employe = employeRepository.save(employe);
@@ -70,7 +70,7 @@ public class CandidatToEmpService {
 
 		postulationRepository.updateStatus(postulation.getId(),"employe");
 
-		String notifMessage = "Vous avez été retenu pour le poste de " + postulation.getPoste().getTitre();
+		String notifMessage = "Vous avez été retenu pour le poste de " + postulation.getOffreEmploi().getPoste().getTitre();
 		Notification notification = new Notification(candidat, notifMessage, Timestamp.valueOf(LocalDateTime.now()), "non_lu");
 		
 		notificationRepository.save(notification);

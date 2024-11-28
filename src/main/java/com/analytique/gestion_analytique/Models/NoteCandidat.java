@@ -8,8 +8,8 @@ import jakarta.persistence.*;
 public class NoteCandidat {
 	@Id
 	@ManyToOne
-	@JoinColumn(name = "idcandidat")
-	private Candidat candidat;
+	@JoinColumn(name = "idpostulation")
+	private Postulation postulation;
 
 	@Id
 	@ManyToOne
@@ -18,12 +18,12 @@ public class NoteCandidat {
 
 	private Integer note;
 
-	public Candidat getCandidat() {
-		return candidat;
+	public Postulation getPostulation() {
+		return postulation;
 	}
 
-	public void setCandidat(Candidat candidat) {
-		this.candidat = candidat;
+	public void setPostulation(Postulation postulation) {
+		this.postulation = postulation;
 	}
 
 	public TypeNote getTypeNote() {

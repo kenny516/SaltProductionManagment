@@ -121,14 +121,14 @@ public class Candidat {
 	}
 
 	public void setNotes(List<NoteCandidat> noteCandidat) {
-		noteCandidat.forEach(n -> n.setCandidat(null));
+		noteCandidat.forEach(n -> n.setPostulation(null));
 		this.notes = noteCandidat;
 	}
 
 	public void nullCandidat() {
 		formations.forEach(f -> f.setCandidat(null));
 		experiences.forEach(e -> e.setCandidat(null));
-		notes.forEach(n -> n.setCandidat(null));
+		notes.forEach(n -> n.setPostulation(null));
 		postulations.forEach(p -> p.setCandidat(null));
 		setMotDePasse(null);
 	}

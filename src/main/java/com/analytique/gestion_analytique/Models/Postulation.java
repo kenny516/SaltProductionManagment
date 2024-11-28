@@ -18,15 +18,15 @@ public class Postulation {
 
     @ManyToOne
     @JoinColumn(name = "poste_id", nullable = false)
-    private Poste poste;
+    private OffreEmploi offre;
 
     private String status = "En attente";
 
     private LocalDate datePostulation = LocalDate.now();
 
-    public Postulation(Candidat candidat, Poste poste, LocalDate datePostulation) {
+    public Postulation(Candidat candidat, OffreEmploi offre, LocalDate datePostulation) {
         this.candidat = candidat;
-        this.poste = poste;
+        this.offre = offre;
         this.datePostulation = datePostulation;
     }
 
@@ -46,12 +46,12 @@ public class Postulation {
         this.candidat = candidat;
     }
 
-    public Poste getPoste() {
-        return poste;
+    public OffreEmploi getOffreEmploi() {
+        return offre;
     }
 
-    public void setPoste(Poste poste) {
-        this.poste = poste;
+    public void setOffreEmploi(OffreEmploi poste) {
+        this.offre = poste;
     }
 
     public String getStatus() {

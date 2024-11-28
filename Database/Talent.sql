@@ -21,13 +21,32 @@ CREATE TABLE Candidats (
     mot_de_passe VARCHAR(255) NOT NULL
 );
 
+-- Créer une table d'association pour les candidatures
+CREATE TABLE Postulations (
+    id SERIAL PRIMARY KEY,
+    candidat_id INT REFERENCES Candidats(id) ON DELETE CASCADE,
+    Offre_emploi_id INT REFERENCES Offre_emploi(id) ON DELETE CASCADE,
+    date_postulation DATE DEFAULT CURRENT_DATE,
+    status VARCHAR(20) DEFAULT 'En attente'
+);
+
+-- Créer une table d'association pour les candidatures
+CREATE TABLE Offre_emploi (
+    id SERIAL PRIMARY KEY,
+    description TEXT,
+    status BOOLEAN,
+    Date_publication DATE DEFAULT CURRENT_DATE,
+    poste_id INT REFERENCES Postes(id) ON DELETE CASCADE,
+    nbr_candidat_dm INT
+);
+
 CREATE TABLE typeNote(
     id SERIAL PRIMARY KEY,
     nomType VARCHAR(50) NOT NULL
 );
 
 CREATE TABLE noteCandidat(
-    idCandidat INT REFERENCES Candidats(id),
+    id_postulation INT REFERENCES Postulations(id),
     idTypeNote int REFERENCES TypeNote(id),
     note int ,
     PRIMARY KEY (idCandidat, idTypeNote) 
@@ -39,7 +58,8 @@ CREATE TABLE Employes (
     prenom VARCHAR(100) NOT NULL,
     email VARCHAR(150) UNIQUE NOT NULL,
     telephone VARCHAR(20),
-    date_embauche DATE DEFAULT CURRENT_DATE
+    date_embauche DATE DEFAULT CURRENT_DATE,
+    poste_id int REFERENCES Postes(id);
 );
 
 CREATE TABLE PostEmploye(
@@ -80,24 +100,11 @@ CREATE TABLE CompetencesEmployes (
 );
 
 CREATE TABLE CompetencesCandidats (
-    candidat_id INT REFERENCES Candidats(id) ON DELETE CASCADE,
+    id_postulation INT REFERENCES Postulations(id) ON DELETE CASCADE,
     competence_id INT REFERENCES Competences(id) ON DELETE CASCADE,
     niveau INT CHECK (niveau >= 0 AND niveau <= 5),
     PRIMARY KEY (candidat_id, competence_id)
 );
-
-ALTER TABLE Employes ADD COLUMN poste_id int REFERENCES Postes(id);
-
--- Créer une table d'association pour les candidatures
-CREATE TABLE Postulations (
-    id SERIAL PRIMARY KEY,
-    candidat_id INT REFERENCES Candidats(id) ON DELETE CASCADE,
-    poste_id INT REFERENCES Postes(id) ON DELETE CASCADE,
-    date_postulation DATE DEFAULT CURRENT_DATE,
-    status VARCHAR(20) DEFAULT 'En attente'
-);
-
---ajout 
 
 CREATE TABLE experience(
    experience_id SERIAL PRIMARY KEY,
