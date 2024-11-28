@@ -3,14 +3,14 @@ package com.analytique.gestion_analytique.Models;
 import java.io.Serializable;
 
 public class CompetencesCandidatsId implements Serializable {
-    private Integer postulation;
+    private Integer candidat;
     private Integer competence;
 
-    public Integer getPostulation() {
-        return postulation;
+    public Integer getCandidat() {
+        return candidat;
     }
-    public void setPostulation(Integer postulation) {
-        this.postulation = postulation;
+    public void setCandidat(Integer candidat) {
+        this.candidat = candidat;
     }
     public Integer getCompetence() {
         return competence;

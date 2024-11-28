@@ -27,7 +27,7 @@ public class OffreEmploi {
     @Column(name = "nbr_candidat_dm")
     private Integer nbrCandidatDm;
 
-    // Getters and Setters
+    // Getters and Settersz
 
     public Long getId() {
         return id;

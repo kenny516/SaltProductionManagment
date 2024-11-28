@@ -22,15 +22,6 @@ CREATE TABLE Candidats (
 );
 
 -- Créer une table d'association pour les candidatures
-CREATE TABLE Postulations (
-    id SERIAL PRIMARY KEY,
-    candidat_id INT REFERENCES Candidats(id) ON DELETE CASCADE,
-    Offre_emploi_id INT REFERENCES Offre_emploi(id) ON DELETE CASCADE,
-    date_postulation DATE DEFAULT CURRENT_DATE,
-    status VARCHAR(20) DEFAULT 'En attente'
-);
-
--- Créer une table d'association pour les candidatures
 CREATE TABLE Offre_emploi (
     id SERIAL PRIMARY KEY,
     description TEXT,
@@ -38,6 +29,15 @@ CREATE TABLE Offre_emploi (
     Date_publication DATE DEFAULT CURRENT_DATE,
     poste_id INT REFERENCES Postes(id) ON DELETE CASCADE,
     nbr_candidat_dm INT
+);
+
+-- Créer une table d'association pour les candidatures
+CREATE TABLE Postulations (
+    id SERIAL PRIMARY KEY,
+    candidat_id INT REFERENCES Candidats(id) ON DELETE CASCADE,
+    Offre_emploi_id INT REFERENCES Offre_emploi(id) ON DELETE CASCADE,
+    date_postulation DATE DEFAULT CURRENT_DATE,
+    status VARCHAR(20) DEFAULT 'En attente'
 );
 
 CREATE TABLE typeNote(
@@ -49,7 +49,7 @@ CREATE TABLE noteCandidat(
     id_postulation INT REFERENCES Postulations(id),
     idTypeNote int REFERENCES TypeNote(id),
     note int ,
-    PRIMARY KEY (idCandidat, idTypeNote) 
+    PRIMARY KEY (id_postulation, idTypeNote) 
 );
 
 CREATE TABLE Employes (
@@ -59,7 +59,7 @@ CREATE TABLE Employes (
     email VARCHAR(150) UNIQUE NOT NULL,
     telephone VARCHAR(20),
     date_embauche DATE DEFAULT CURRENT_DATE,
-    poste_id int REFERENCES Postes(id);
+    poste_id int REFERENCES Postes(id)
 );
 
 CREATE TABLE PostEmploye(
@@ -103,7 +103,7 @@ CREATE TABLE CompetencesCandidats (
     id_postulation INT REFERENCES Postulations(id) ON DELETE CASCADE,
     competence_id INT REFERENCES Competences(id) ON DELETE CASCADE,
     niveau INT CHECK (niveau >= 0 AND niveau <= 5),
-    PRIMARY KEY (candidat_id, competence_id)
+    PRIMARY KEY (id_postulation, competence_id)
 );
 
 CREATE TABLE experience(
