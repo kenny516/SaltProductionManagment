@@ -1,15 +1,17 @@
 package com.analytique.gestion_analytique.Models;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Column;
 import jakarta.persistence.Table;
 
 @Entity
-@Table(name = "V_detailscandidat") 
+@Table(name = "V_detailscandidat")  // Assurez-vous que le nom de la table est correct dans la base de données
 public class V_DetailsCandidat {
 
     @Id
-    private Integer candidatId; 
+    @Column(name = "candidat_id")
+    private Integer candidatId; // id du candidat
 
     @Column(name = "nom")
     private String nom;
@@ -23,11 +25,11 @@ public class V_DetailsCandidat {
     @Column(name = "telephone")
     private String telephone;
 
-    @Column(name = "duree_experience_mois", columnDefinition = "integer")
-    private Integer dureeExperienceMois;
+    @Column(name = "duree_experience_mois")
+    private Integer dureeExperienceMois;  // Durée d'expérience en mois
 
-    @Column(name = "plus_haut_niveau_diplome", columnDefinition = "integer")
-    private Integer plusHautNiveauDiplome;
+    @Column(name = "plus_haut_niveau_diplome")
+    private Integer plusHautNiveauDiplome; // Plus haut niveau de diplôme
 
     // Getters et Setters
 
@@ -89,7 +91,7 @@ public class V_DetailsCandidat {
 
     @Override
     public String toString() {
-        return "VDetailsCandidat{" +
+        return "V_DetailsCandidat{" +
                 "candidatId=" + candidatId +
                 ", nom='" + nom + '\'' +
                 ", prenom='" + prenom + '\'' +
