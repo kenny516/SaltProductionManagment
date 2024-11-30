@@ -6,10 +6,13 @@ INSERT INTO typeNote (nomType) VALUES
 ('Tests Pratiques');
 
 -- Insérer des candidats
-INSERT INTO Candidats (nom, prenom, email, telephone) VALUES
-('Dupont', 'Jean', 'jean.dupont@example.com', '0123456789'),
-('Martin', 'Alice', 'alice.martin@example.com', '0987654321'),
-('Durand', 'Pierre', 'pierre.durand@example.com', '0678912345');
+INSERT INTO Candidats (nom, prenom, email, telephone, mot_de_passe)
+VALUES 
+    ('Dupont', 'Jean', 'jean.dupont@example.com', '0123456789', 'motdepasse123'),
+    ('Martin', 'Marie', 'marie.martin@example.com', '0987654321', 'mdpsecure456'),
+    ('Durand', 'Pierre', 'pierre.durand@example.com', '0147258369', 'password789'),
+    ('Lemoine', 'Claire', 'claire.lemoine@example.com', '0712345678', 'mypassword101'),
+    ('Benoit', 'Lucie', 'lucie.benoit@example.com', '0685743920', 'securepass202');
 
 -- Insérer des postes
 INSERT INTO Postes (titre, description, departement) VALUES
@@ -68,9 +71,9 @@ INSERT INTO noteCandidat (idCandidat, idTypeNote, note) VALUES
 
 -- Insérer des notifications
 INSERT INTO Notifications (candidat_id, message, statut_notification) VALUES
-(1, 'Votre candidature pour le poste de Développeur Java a été retenue.', 'non_lu'),
-(2, 'Votre candidature pour le poste de Chargé de recrutement a été refusée.', 'non_lu'),
-(3, 'Votre candidature pour le poste de Développeur Java a été refusée.', 'non_lu');
+(1, 'Votre candidature pour le poste de Développeur Java a été retenue.', 'lu'),
+(1, 'Votre candidature pour le poste de Chargé de recrutement a été refusée.', 'non_lu'),
+(1, 'Votre candidature pour le poste de Développeur Java a été refusée.', 'non_lu');
 
 -- Insérer des expériences
 INSERT INTO experience (date_debut, date_fin, description, candidat_id) VALUES
@@ -95,3 +98,8 @@ INSERT INTO CandidatsDiplomes (candidat_id, diplome_id) VALUES
 (1, 1),  -- Jean -> Licence en Informatique
 (2, 2),  -- Alice -> Master en Ressources Humaines
 (3, 3);  -- Pierre -> Master en Management
+
+INSERT INTO TypeContrat (id, nomType, dureeMois) VALUES (1, 'CDD', 6);
+INSERT INTO TypeContrat (id, nomType, dureeMois) VALUES (2, 'ESSAI', 3);
+INSERT INTO TypeContrat (id, nomType, dureeMois) VALUES (3, 'CDI', 0);
+

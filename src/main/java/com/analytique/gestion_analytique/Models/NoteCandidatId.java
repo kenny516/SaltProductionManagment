@@ -3,14 +3,14 @@ package com.analytique.gestion_analytique.Models;
 import java.io.Serializable;
 
 public class NoteCandidatId implements Serializable {
-    private Integer candidat;
+    private Integer postulation;
     private Integer typeNote;
     
-    public Integer getCandidat() {
-        return candidat;
+    public Integer getpostulation() {
+        return postulation;
     }
-    public void setCandidat(Integer candidat) {
-        this.candidat = candidat;
+    public void setpostulation(Integer postulation) {
+        this.postulation = postulation;
     }
     public Integer getTypeNote() {
         return typeNote;
@@ -18,10 +18,11 @@ public class NoteCandidatId implements Serializable {
     public void setTypeNote(Integer typeNote) {
         this.typeNote = typeNote;
     }
-		public NoteCandidatId(Integer candidat, Integer typeNote) {
-			this.candidat = candidat;
-			this.typeNote = typeNote;
-		}
+
+	public NoteCandidatId(Integer postulation, Integer typeNote) {
+		this.postulation = postulation;
+		this.typeNote = typeNote;
+	}
 
 		public NoteCandidatId(){}
 
