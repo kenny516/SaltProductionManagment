@@ -1,11 +1,13 @@
-create or replace view candidats_elligibles as SELECT c.*
+CREATE OR REPLACE VIEW candidats_elligibles AS 
+SELECT c.*
 FROM Candidats c
 JOIN (
-    SELECT nc.idCandidat
+    SELECT nc.id_postulation
     FROM noteCandidat nc
-    GROUP BY nc.idCandidat
+    GROUP BY nc.id_postulation
     HAVING COUNT(DISTINCT nc.idTypeNote) = (SELECT COUNT(*) FROM typeNote)
-) AS subquery ON c.id = subquery.idCandidat;
+) AS subquery ON c.id = subquery.id_postulation;
+
 
 ---Pour le filtre
 CREATE OR REPLACE VIEW V_detailsCandidat AS

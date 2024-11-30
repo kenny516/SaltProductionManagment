@@ -9,9 +9,9 @@ import jakarta.persistence.*;
 public class HeuresSup {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Integer id;
 
-    private Long idEmploye;
+    private Integer idEmploye;
 
     private LocalDateTime dateDebut;
 
@@ -23,7 +23,7 @@ public class HeuresSup {
 
     private Double montant;
 
-    public HeuresSup(Long idEmploye, LocalDateTime dateDebut, LocalDateTime dateFin, Double totalHeuresSup,
+    public HeuresSup(Integer idEmploye, LocalDateTime dateDebut, LocalDateTime dateFin, Double totalHeuresSup,
             Double tauxHoraire, Double montant) {
         this.idEmploye = idEmploye;
         this.dateDebut = dateDebut;
@@ -36,19 +36,19 @@ public class HeuresSup {
     public HeuresSup() {
     }
 
-    public Long getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
-    public Long getIdEmploye() {
+    public Integer getIdEmploye() {
         return idEmploye;
     }
 
-    public void setIdEmploye(Long idEmploye) {
+    public void setIdEmploye(Integer idEmploye) {
         this.idEmploye = idEmploye;
     }
 

@@ -19,7 +19,7 @@ public class Postulation {
     private Candidat candidat;
 
     @ManyToOne
-    @JoinColumn(name = "poste_id", nullable = false)
+    @JoinColumn(name = "Offre_emploi_id", nullable = false)
     private OffreEmploi offre;
 
     private String status = "En attente";

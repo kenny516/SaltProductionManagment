@@ -8,7 +8,7 @@ import jakarta.persistence.*;
 public class CompetencesCandidats {
 	@Id
 	@ManyToOne
-	@JoinColumn(name = "idpostulation")
+	@JoinColumn(name = "idPostulation")
 	private Postulation postulation;
 
     @Id
