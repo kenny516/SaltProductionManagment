@@ -6,10 +6,10 @@ import jakarta.persistence.*;
 @Table(name = "Competencescandidats")
 @IdClass(CompetencesCandidatsId.class)
 public class CompetencesCandidats {
-    @Id
-    @ManyToOne
-    @JoinColumn(name = "candidat_id")
-    private Candidat candidat;
+	@Id
+	@ManyToOne
+	@JoinColumn(name = "idpostulation")
+	private Postulation postulation;
 
     @Id
     @ManyToOne
@@ -19,13 +19,6 @@ public class CompetencesCandidats {
     @Column(nullable = false)
     private Integer niveau;
 
-    public Candidat getCandidat() {
-        return candidat;
-    }
-
-    public void setCandidat(Candidat candidat) {
-        this.candidat = candidat;
-    }
 
     public Competence getCompetence() {
         return competence;
@@ -41,6 +34,14 @@ public class CompetencesCandidats {
 
     public void setNiveau(Integer niveau) {
         this.niveau = niveau;
+    }
+
+    public Postulation getPostulation() {
+        return postulation;
+    }
+
+    public void setPostulation(Postulation postulation) {
+        this.postulation = postulation;
     }
 
 }

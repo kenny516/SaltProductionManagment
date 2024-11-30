@@ -29,6 +29,9 @@ public class Postulation {
     @OneToMany(mappedBy = "postulation", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<NoteCandidat> notes = new ArrayList<>();
 
+    @OneToMany(mappedBy = "postulation", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<CompetencesCandidats> competencesCandidats;
+
     public Postulation(Candidat candidat, OffreEmploi offre, LocalDate datePostulation) {
         this.candidat = candidat;
         this.offre = offre;
