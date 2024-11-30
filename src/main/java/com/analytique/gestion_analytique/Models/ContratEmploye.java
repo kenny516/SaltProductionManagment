@@ -20,6 +20,10 @@ public class ContratEmploye {
 	private Employe employe;
 
 	@ManyToOne
+	@JoinColumn(name = "id_poste")
+	private Poste poste;
+
+	@ManyToOne
 	@JoinColumn(name = "id_type_contrat")
 	private TypeContrat contrat;
 
@@ -93,5 +97,13 @@ public class ContratEmploye {
 
 	public void setTauxHoraire(BigDecimal tauxHoraire) {
 		this.tauxHoraire = tauxHoraire;
+	}
+
+	public Poste getPoste() {
+		return poste;
+	}
+
+	public void setPoste(Poste poste) {
+		this.poste = poste;
 	}
 }
