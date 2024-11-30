@@ -25,7 +25,7 @@ public class ContratEmploye {
 
 	@ManyToOne
 	@JoinColumn(name = "id_type_contrat")
-	private TypeContrat contrat;
+	private TypeContrat typeContrat;
 
 	@Column(name = "date_debut")
 	private LocalDate dateDebut;
@@ -48,12 +48,12 @@ public class ContratEmploye {
 		this.employe = employe;
 	}
 
-	public TypeContrat getContrat() {
-		return contrat;
+	public TypeContrat getTypeContrat() {
+		return typeContrat;
 	}
 
-	public void setContrat(TypeContrat contrat) {
-		this.contrat = contrat;
+	public void setTypeContrat(TypeContrat contrat) {
+		this.typeContrat = contrat;
 	}
 
 	public LocalDate getDateDebut() {
