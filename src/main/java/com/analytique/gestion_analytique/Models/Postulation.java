@@ -1,12 +1,11 @@
 package com.analytique.gestion_analytique.Models;
 
-import jakarta.persistence.Entity;
-
 import java.time.LocalDate;
 
 import jakarta.persistence.*;
 
 @Entity
+@Table(name = "Postulations")
 public class Postulation {
 
     @Id
@@ -24,6 +23,12 @@ public class Postulation {
     private String status = "En attente";
 
     private LocalDate datePostulation = LocalDate.now();
+
+    public Postulation(Candidat candidat, Poste poste, LocalDate datePostulation) {
+        this.candidat = candidat;
+        this.poste = poste;
+        this.datePostulation = datePostulation;
+    }
 
     public Integer getId() {
         return id;
@@ -64,6 +69,11 @@ public class Postulation {
     public void setDatePostulation(LocalDate datePostulation) {
         this.datePostulation = datePostulation;
     }
+
+		public Postulation() {
+		}
+
+		
 
 }
 

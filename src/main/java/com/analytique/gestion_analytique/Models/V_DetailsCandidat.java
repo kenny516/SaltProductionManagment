@@ -5,11 +5,11 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Table;
 
 @Entity
-@Table(name = "V_detailsCandidat") 
+@Table(name = "V_detailscandidat") 
 public class V_DetailsCandidat {
 
     @Id
-    private Long candidatId; 
+    private Integer candidatId; 
 
     @Column(name = "nom")
     private String nom;
@@ -23,19 +23,19 @@ public class V_DetailsCandidat {
     @Column(name = "telephone")
     private String telephone;
 
-    @Column(name = "duree_experience_mois")
+    @Column(name = "duree_experience_mois", columnDefinition = "integer")
     private Integer dureeExperienceMois;
 
-    @Column(name = "plus_haut_niveau_diplome")
+    @Column(name = "plus_haut_niveau_diplome", columnDefinition = "integer")
     private Integer plusHautNiveauDiplome;
 
     // Getters et Setters
 
-    public Long getCandidatId() {
+    public Integer getCandidatId() {
         return candidatId;
     }
 
-    public void setCandidatId(Long candidatId) {
+    public void setCandidatId(Integer candidatId) {
         this.candidatId = candidatId;
     }
 

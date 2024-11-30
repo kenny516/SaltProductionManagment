@@ -10,12 +10,15 @@ import org.springframework.web.bind.annotation.*;
 
 import com.analytique.gestion_analytique.Services.CandidatService;
 import com.analytique.gestion_analytique.Models.Candidat;
+import com.analytique.gestion_analytique.Models.Notification;
+import com.analytique.gestion_analytique.Models.Postulation;
 import com.analytique.gestion_analytique.Repositories.CompetenceRepository;
 import com.analytique.gestion_analytique.Repositories.PosteRepository;
 import com.analytique.gestion_analytique.Repositories.TypeNoteRepository;
 import com.analytique.gestion_analytique.Services.CandidatToEmpService;
+import com.analytique.gestion_analytique.Services.NotificationService;
 import com.analytique.gestion_analytique.dto.receive.CandidatRecieve;
-
+import com.analytique.gestion_analytique.dto.receive.PostulationRecieve;
 
 @RestController
 @RequestMapping("/api/candidat")
@@ -27,20 +30,22 @@ public class CandidatController {
 	PosteRepository pRepo;
 	CompetenceRepository cRepo;
 	TypeNoteRepository tnRepo;
+	NotificationService notificationService;
 
 	Map<String, Object> response = new HashMap<>();
 
-	void clearResponse(){
+	void clearResponse() {
 		response.clear();
 	}
 
-	public CandidatController(CandidatService candidatService, CandidatToEmpService candidatToEmpService,
+	public CandidatController(CandidatService candidatService, CandidatToEmpService candidatToEmpService, NotificationService notificationService,
 			PosteRepository pRepo, CompetenceRepository cRepo, TypeNoteRepository tnRepo) {
 		this.candidatService = candidatService;
 		this.candidatToEmpService = candidatToEmpService;
 		this.pRepo = pRepo;
 		this.cRepo = cRepo;
 		this.tnRepo = tnRepo;
+		this.notificationService = notificationService;
 	}
 
 	@GetMapping("")
@@ -48,14 +53,31 @@ public class CandidatController {
 		return candidatService.findAll();
 	}
 
-	@PostMapping("")
-	public ResponseEntity<?> saveCandidat(@RequestBody CandidatRecieve candidature) {
+	@PostMapping("/postuler")
+	public ResponseEntity<?> PostulerPosteCandidat(@RequestBody PostulationRecieve candidature) {
 		clearResponse();
 		try {
-			response.put("id",candidatService.saveCandidat(candidature).getId());
+			Postulation postulation = candidatService.PostulerPosteCandidat(candidature);
+			response.put("id", postulation.getId()); // Récupère l'ID de la postulation
 			return ResponseEntity.ok(response);
 		} catch (Exception e) {
-			response.put("error", "");
+			System.out.println(e);
+
+			response.put("error", "500");
+			return ResponseEntity.internalServerError().body(e.getMessage());
+		}
+	}
+
+	@PostMapping("/login")
+	public ResponseEntity<?> postMethodName(@RequestBody HashMap<String, String> params) {
+		clearResponse();
+		try {
+			response.put("id", candidatService.login(params.get("email"), params.get("password")));
+			return ResponseEntity.ok(response);
+		} catch (Exception e) {
+			System.out.println(e);
+
+			response.put("error", "500");
 			return ResponseEntity.internalServerError().body(e.getMessage());
 		}
 	}
@@ -65,6 +87,8 @@ public class CandidatController {
 		try {
 			return ResponseEntity.status(HttpStatus.CREATED).body(candidatToEmpService.embaucherCandidat(candidat));
 		} catch (Exception e) {
+			System.out.println(e);
+
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
 		}
 	}
@@ -74,12 +98,14 @@ public class CandidatController {
 		try {
 			return ResponseEntity.ok(candidatService.getById(id));
 		} catch (Exception e) {
+			System.out.println(e);
+
 			return ResponseEntity.internalServerError().body(e.getMessage());
 		}
 	}
 
 	@PostMapping("/note")
-	public ResponseEntity<?> insertNote(@RequestBody Map<String,Integer> body) {
+	public ResponseEntity<?> insertNote(@RequestBody Map<String, Integer> body) {
 		int id = body.get("idCandidat");
 		int typenote = body.get("idTypeNote");
 		int note = body.get("note");
@@ -91,14 +117,49 @@ public class CandidatController {
 					return ResponseEntity.status(HttpStatus.CREATED).body("note created");
 			}
 		} catch (Exception e) {
+			System.out.println(e);
 			return ResponseEntity.internalServerError().body(e.getMessage());
 		}
 	}
 
 	@GetMapping("/elligibles/{id}")
-	public List<Candidat> getMethodName(@PathVariable(required=false) Integer id) {
+	public List<Candidat> getMethodName(@PathVariable Integer id) {
 		return candidatService.getElligibles(id);
 	}
+
+	@GetMapping("/elligibles")
+	public List<Candidat> getMethodName() {
+		return candidatService.getElligibles(null);
+	}
 	
+	@GetMapping("/{id}/notification/read")
+	public List<Notification> getRead(@PathVariable Integer id) {
+		List<Notification> read = notificationService.getRead(id);
+		read.forEach(nr -> nr.setCandidat(null));
+		return read;
+	}
+
+	@GetMapping("/{id}/notification/non-read")
+	public List<Notification> getNonRead(@PathVariable Integer id) {
+		List<Notification> nonRead = notificationService.getNonRead(id);
+		nonRead.forEach(nr -> notificationService.markAsRead(nr.getId()));
+		nonRead.forEach(nr -> nr.setCandidat(null));
+		return nonRead;
+	}
+
+	@PostMapping("")
+	public ResponseEntity<?> register(@RequestBody CandidatRecieve c) {
+		try {
+			return ResponseEntity.ok(candidatService.saveCandidat(c));
+		} catch (Exception e) {
+			System.out.println(e);
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
+		}
+	}
+
+	@GetMapping("/non_refus")
+	public List<Candidat> getNonRefus(){
+		return candidatService.findCandidatNonRefus();
+	}
 
 }
