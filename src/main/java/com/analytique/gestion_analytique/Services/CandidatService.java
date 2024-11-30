@@ -108,7 +108,7 @@ public class CandidatService {
 	public CandidatSend getById(Integer id) {
 		Candidat c = candidatRepository.findById(id).get();
 		List<CompetencesCandidats> cc = cCandidatsRepository.findByCandidatId(id);
-		cc.forEach(com -> com.setCandidat(null));
+		cc.forEach(com -> com.setPostulation(null));
 
 		return new CandidatSend(c, cc);
 	}
@@ -173,7 +173,7 @@ public class CandidatService {
 
 		// Sauvegarde des compétences du candidat
 		for (CompetencesCandidats competences : cd.extractCCandidat(em)) {
-			competences.setCandidat(candidat);
+			competences.setPostulation(postulationRepository.findByCandidatIdAndOffreId(candidat.getId(), offre.getId()));
 			cCandidatsRepository.save(competences);
 		}
 

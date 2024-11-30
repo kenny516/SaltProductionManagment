@@ -22,4 +22,7 @@ public interface PostulationRepository extends JpaRepository<Postulation, Long> 
 	@Query(value = "UPDATE postulations SET status = :status WHERE id = :id", nativeQuery = true)
 	public void updateStatus(@Param("id") Integer id, @Param("status") String status);
 
+	// Méthode pour trouver une postulation par candidat et offre d'emploi
+    Postulation findByCandidatIdAndOffreId(Integer candidatId, Integer offreId);
+
 }
