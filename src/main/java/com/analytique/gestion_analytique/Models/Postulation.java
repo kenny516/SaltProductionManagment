@@ -1,6 +1,8 @@
 package com.analytique.gestion_analytique.Models;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 import jakarta.persistence.*;
 
@@ -23,6 +25,9 @@ public class Postulation {
     private String status = "En attente";
 
     private LocalDate datePostulation = LocalDate.now();
+
+    @OneToMany(mappedBy = "postulation", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<NoteCandidat> notes = new ArrayList<>();
 
     public Postulation(Candidat candidat, OffreEmploi offre, LocalDate datePostulation) {
         this.candidat = candidat;
@@ -72,6 +77,22 @@ public class Postulation {
 
 		public Postulation() {
 		}
+
+        public OffreEmploi getOffre() {
+            return offre;
+        }
+
+        public void setOffre(OffreEmploi offre) {
+            this.offre = offre;
+        }
+
+        public List<NoteCandidat> getNotes() {
+            return notes;
+        }
+
+        public void setNotes(List<NoteCandidat> notes) {
+            this.notes = notes;
+        }
 
 		
 

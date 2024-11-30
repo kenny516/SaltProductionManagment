@@ -21,7 +21,6 @@ CREATE TABLE Candidats (
     mot_de_passe VARCHAR(255) NOT NULL
 );
 
--- Créer une table d'association pour les candidatures
 CREATE TABLE Offre_emploi (
     id SERIAL PRIMARY KEY,
     description TEXT,
@@ -113,16 +112,17 @@ CREATE TABLE Notifications (
     date_heure TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     statut_notification VARCHAR(20) DEFAULT 'non_lu'
 );
-CREATE TABLE experience(
-   experience_id SERIAL PRIMARY KEY,
+
+CREATE TABLE formation(
+   id_formation SERIAL PRIMARY KEY,
    date_debut DATE NOT NULL,
    date_fin DATE,
    description TEXT NOT NULL,
    candidat_id INT REFERENCES Candidats(id) ON DELETE CASCADE
 );
 
-CREATE TABLE formation(
-   id_formation SERIAL PRIMARY KEY,
+CREATE TABLE experience(
+   experience_id SERIAL PRIMARY KEY,
    date_debut DATE NOT NULL,
    date_fin DATE,
    description TEXT NOT NULL,
