@@ -94,7 +94,4 @@ public class ContratEmploye {
 	public void setTauxHoraire(BigDecimal tauxHoraire) {
 		this.tauxHoraire = tauxHoraire;
 	}
-
-	
-
 }
