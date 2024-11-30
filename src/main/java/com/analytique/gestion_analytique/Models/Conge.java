@@ -12,16 +12,14 @@ import java.time.LocalDate;
 @Table(name = "conge")
 public class Conge {
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "conge_id_gen")
-    @SequenceGenerator(name = "conge_id_gen", sequenceName = "conge_id_seq", allocationSize = 1)
-    @Column(name = "id", nullable = false)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @ManyToOne
     @JoinColumn(name = "id_employe", nullable = false)
     private Employe Employe;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @ManyToOne
     @JoinColumn(name = "id_type_conge", nullable = false)
     private TypeConge idTypeConge;
 

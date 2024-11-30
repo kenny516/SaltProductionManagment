@@ -4,7 +4,9 @@ import jakarta.persistence.*;
 import lombok.Data;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.LinkedHashSet;
+import java.util.List;
 import java.util.Set;
 
 @Data
@@ -12,9 +14,7 @@ import java.util.Set;
 @Table(name = "typeconge")
 public class TypeConge {
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "typeconge_id_gen")
-    @SequenceGenerator(name = "typeconge_id_gen", sequenceName = "typeconge_id_seq", allocationSize = 1)
-    @Column(name = "id", nullable = false)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
     @Column(name = "nom", nullable = false, length = 20)
@@ -26,10 +26,6 @@ public class TypeConge {
     @Column(name = "duree_max", precision = 4, scale = 2)
     private BigDecimal dureeMax;
 
-    @OneToMany(mappedBy = "idTypeConge")
-    private Set<Conge> conges = new LinkedHashSet<>();
 
-    @OneToMany(mappedBy = "idTypeConge")
-    private Set<SoldeConge> soldeconges = new LinkedHashSet<>();
 
 }

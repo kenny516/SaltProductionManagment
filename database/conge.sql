@@ -28,7 +28,7 @@ CREATE TABLE Conge
     id_type_conge INTEGER NOT NULL,
     date_debut    DATE    NOT NULL,
     date_fin      DATE    NOT NULL,
-    duree         NUMERIC(5, 2) GENERATED ALWAYS AS (date_fin - date_debut + 1) STORED,
+    duree         NUMERIC(5, 2),
     status        VARCHAR(20) DEFAULT 'En attente',
     PRIMARY KEY (id),
     FOREIGN KEY (id_employe) REFERENCES Employes (id),

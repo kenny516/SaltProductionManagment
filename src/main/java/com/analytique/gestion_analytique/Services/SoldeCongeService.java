@@ -29,4 +29,9 @@ public class SoldeCongeService {
     public void deleteSoldeConge(Integer id) {
         repository.deleteById(id);
     }
+
+    // utils
+    public double congePossible(Integer idEmploye, Integer anneeDebut, Integer anneeFin) {
+        return repository.congePossible(idEmploye, anneeDebut, anneeFin);
+    }
 }

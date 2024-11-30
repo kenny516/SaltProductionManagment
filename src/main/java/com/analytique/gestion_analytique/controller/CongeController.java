@@ -19,7 +19,7 @@ public class CongeController {
 
     @GetMapping("/")
     public List<Conge> getAllConges() {
-        return congeService.getAllConges();
+        return congeService.getCongeValide();
     }
 
     @GetMapping("/{id}")
@@ -46,4 +46,10 @@ public class CongeController {
         congeService.deleteConge(id);
         return ResponseEntity.noContent().build();
     }
+
+    @GetMapping("/totalCongeByEmploye/{idEmploye}/{anne}")
+    public double totalCongeByEmploye(@PathVariable("idEmploye") Integer idEmploye, @PathVariable("anne") Integer anne) {
+        return congeService.totalCongeByEmploye(idEmploye, 0,anne);
+    }
+
 }

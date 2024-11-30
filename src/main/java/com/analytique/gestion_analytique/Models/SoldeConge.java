@@ -8,9 +8,7 @@ import lombok.Data;
 @Table(name = "soldeconge")
 public class SoldeConge {
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "soldeconge_id_gen")
-    @SequenceGenerator(name = "soldeconge_id_gen", sequenceName = "soldeconge_id_seq", allocationSize = 1)
-    @Column(name = "id", nullable = false)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
     @ManyToOne

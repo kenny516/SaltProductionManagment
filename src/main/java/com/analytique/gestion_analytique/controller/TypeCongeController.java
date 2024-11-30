@@ -16,7 +16,7 @@ public class TypeCongeController {
         this.service = service;
     }
 
-    @GetMapping
+    @GetMapping("")
     public List<TypeConge> getAllTypeConges() {
         return service.getAllTypeConges();
     }
