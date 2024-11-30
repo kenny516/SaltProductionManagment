@@ -31,3 +31,7 @@ LEFT JOIN
     Diplome d ON cd.diplome_id = d.id_diplome
 GROUP BY
     c.id, c.nom, c.prenom, c.email, c.telephone;
+
+create or replace view v_postulation_non_refus as
+	select * from postulations where status <> 'refus' or status <> 'employe';
+
