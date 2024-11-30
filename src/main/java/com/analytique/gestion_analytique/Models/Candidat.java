@@ -5,14 +5,7 @@ import java.util.*;
 
 @Entity
 @Table(name = "Candidats")
-// pour avoir la liste des candidats qui passent pour l'entretien
-// Pour l'appeler List<Candidat> qualifiedCandidats =
-// candidatRepository.candidatReussiTest("TEST");
 
-@NamedQuery(name = "Candidat.candidatReussiTest", query = "SELECT c FROM Candidat c " +
-        "JOIN c.notes nc " +
-        "JOIN nc.typeNote tn " +
-        "WHERE nc.note >= 6 AND tn.nomType = :nomType")
 public class Candidat {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -43,11 +36,11 @@ public class Candidat {
 	@JoinTable(name = "Candidatsdiplomes", joinColumns = @JoinColumn(name = "candidat_id"), inverseJoinColumns = @JoinColumn(name = "diplome_id"))
 	private List<Diplome> diplomes = new ArrayList<>();
 
-	@OneToMany(mappedBy = "candidat")
-	private List<NoteCandidat> notes;
-
-	@OneToMany(mappedBy = "candidat")
+	@OneToMany(mappedBy = "candidat", cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<Postulation> postulations;
+
+	@OneToMany(mappedBy = "candidat", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<CompetencesCandidats> competencesCandidats;
 
 	public Integer getId() {
 		return id;
@@ -116,20 +109,13 @@ public class Candidat {
 		this.diplomes = diplomes;
 	}
 
-	public List<NoteCandidat> getNotes() {
-		return notes;
-	}
-
-	public void setNotes(List<NoteCandidat> noteCandidat) {
-		noteCandidat.forEach(n -> n.setCandidat(null));
-		this.notes = noteCandidat;
-	}
-
 	public void nullCandidat() {
 		formations.forEach(f -> f.setCandidat(null));
 		experiences.forEach(e -> e.setCandidat(null));
-		notes.forEach(n -> n.setCandidat(null));
-		postulations.forEach(p -> p.setCandidat(null));
+		postulations.forEach(p -> {
+			p.setCandidat(null);
+			p.getNotes().forEach(note -> note.setPostulation(null));
+		});
 		setMotDePasse(null);
 	}
 
@@ -138,7 +124,10 @@ public class Candidat {
 	}
 
 	public void setPostulations(List<Postulation> postulations) {
-		postulations.forEach(p -> p.setCandidat(null));
+		postulations.forEach(p -> {
+			p.setCandidat(null);
+			p.getNotes().forEach(note -> note.setPostulation(null));
+		});
 		this.postulations = postulations;
 	}
 

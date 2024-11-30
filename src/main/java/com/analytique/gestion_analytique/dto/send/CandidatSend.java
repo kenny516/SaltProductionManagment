@@ -4,8 +4,6 @@ import java.util.List;
 
 import com.analytique.gestion_analytique.Models.Candidat;
 import com.analytique.gestion_analytique.Models.CompetencesCandidats;
-import com.analytique.gestion_analytique.Models.NoteCandidat;
-import com.analytique.gestion_analytique.constants.RecrutementConst;
 
 public class CandidatSend extends Candidat {
 	List<CompetencesCandidats> competences;
@@ -20,8 +18,6 @@ public class CandidatSend extends Candidat {
 		setEmail(c.getEmail());
 		setTelephone(c.getTelephone());
 		setCompetences(competences);
-		
-		setNotes(c.getNotes());
 		setExperiences(c.getExperiences());
 		setFormations(c.getFormations());
 		setDiplomes(c.getDiplomes());
@@ -36,27 +32,12 @@ public class CandidatSend extends Candidat {
 		return currentStep;
 	}
 
-	@Override
-	public void setNotes(List<NoteCandidat> noteCandidat) {
-		super.setNotes(noteCandidat);
-		setCurrentStep();
-	}
-
-	public void setCurrentStep() {
-		currentStep = getNotes().size();
-		setProgress();
-	}
-
 	public void setCurrentStep(int currentStep) {
 		this.currentStep = currentStep;
 	}
 
 	public double getProgress() {
 		return progress;
-	}
-
-	public void setProgress() {
-		progress = getNotes().size() * 100 / RecrutementConst.nombreEpreuve;
 	}
 
 	

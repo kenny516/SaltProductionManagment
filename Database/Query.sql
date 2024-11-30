@@ -8,8 +8,6 @@ FROM
 GROUP BY 
     candidat_id;
 
-
-
 CREATE OR REPLACE VIEW V_Details_Candidat AS 
 SELECT c.*,     
        SUM(EXTRACT(YEAR FROM AGE(COALESCE(e.date_fin, CURRENT_DATE), e.date_debut)) * 12 +

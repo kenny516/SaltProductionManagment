@@ -1,6 +1,8 @@
 package com.analytique.gestion_analytique.Models;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 import jakarta.persistence.*;
 
@@ -8,72 +10,88 @@ import jakarta.persistence.*;
 @Table(name = "Postulations")
 public class Postulation {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Integer id;
 
-    @ManyToOne
-    @JoinColumn(name = "candidat_id", nullable = false)
-    private Candidat candidat;
+	@ManyToOne
+	@JoinColumn(name = "candidat_id", nullable = false)
+	private Candidat candidat;
 
-    @ManyToOne
-    @JoinColumn(name = "poste_id", nullable = false)
-    private Poste poste;
+	@ManyToOne
+	@JoinColumn(name = "Offre_emploi_id", nullable = false)
+	private OffreEmploi offreEmploi;
 
-    private String status = "En attente";
+	private String status = "En attente";
 
-    private LocalDate datePostulation = LocalDate.now();
+	private LocalDate datePostulation = LocalDate.now();
 
-    public Postulation(Candidat candidat, Poste poste, LocalDate datePostulation) {
-        this.candidat = candidat;
-        this.poste = poste;
-        this.datePostulation = datePostulation;
-    }
+	@OneToMany(mappedBy = "postulation", cascade = CascadeType.ALL, orphanRemoval = true)
+	private List<NoteCandidat> notes = new ArrayList<>();
 
-    public Integer getId() {
-        return id;
-    }
+	public Postulation(Candidat candidat, OffreEmploi offre, LocalDate datePostulation) {
+		this.candidat = candidat;
+		this.offreEmploi = offre;
+		this.datePostulation = datePostulation;
+	}
 
-    public void setId(Integer id) {
-        this.id = id;
-    }
+	public Integer getId() {
+		return id;
+	}
 
-    public Candidat getCandidat() {
-        return candidat;
-    }
+	public void setId(Integer id) {
+		this.id = id;
+	}
 
-    public void setCandidat(Candidat candidat) {
-        this.candidat = candidat;
-    }
+	public Candidat getCandidat() {
+		return candidat;
+	}
 
-    public Poste getPoste() {
-        return poste;
-    }
+	public void setCandidat(Candidat candidat) {
+		this.candidat = candidat;
+	}
 
-    public void setPoste(Poste poste) {
-        this.poste = poste;
-    }
+	public OffreEmploi getOffreEmploi() {
+		return offreEmploi;
+	}
 
-    public String getStatus() {
-        return status;
-    }
+	public void setOffreEmploi(OffreEmploi poste) {
+		this.offreEmploi = poste;
+	}
 
-    public void setStatus(String status) {
-        this.status = status;
-    }
+	public String getStatus() {
+		return status;
+	}
 
-    public LocalDate getDatePostulation() {
-        return datePostulation;
-    }
+	public void setStatus(String status) {
+		this.status = status;
+	}
 
-    public void setDatePostulation(LocalDate datePostulation) {
-        this.datePostulation = datePostulation;
-    }
+	public LocalDate getDatePostulation() {
+		return datePostulation;
+	}
 
-		public Postulation() {
-		}
+	public void setDatePostulation(LocalDate datePostulation) {
+		this.datePostulation = datePostulation;
+	}
 
-		
+	public Postulation() {
+	}
+
+	public OffreEmploi getOffre() {
+		return offreEmploi;
+	}
+
+	public void setOffre(OffreEmploi offre) {
+		this.offreEmploi = offre;
+	}
+
+	public List<NoteCandidat> getNotes() {
+		return notes;
+	}
+
+	public void setNotes(List<NoteCandidat> notes) {
+		this.notes = notes;
+	}
 
 }
-

@@ -10,7 +10,7 @@ import com.analytique.gestion_analytique.Models.Formation;
 import com.analytique.gestion_analytique.Models.NoteCandidat;
 import com.analytique.gestion_analytique.Models.NoteCandidatId;
 import com.analytique.gestion_analytique.Models.Notification;
-import com.analytique.gestion_analytique.Models.Poste;
+import com.analytique.gestion_analytique.Models.OffreEmploi;
 import com.analytique.gestion_analytique.Models.Postulation;
 import com.analytique.gestion_analytique.Models.TypeNote;
 import com.analytique.gestion_analytique.Repositories.CandidatRepository;
@@ -20,7 +20,7 @@ import com.analytique.gestion_analytique.Repositories.ExperienceRepo;
 import com.analytique.gestion_analytique.Repositories.FormationRepo;
 import com.analytique.gestion_analytique.Repositories.NoteCandidatRepository;
 import com.analytique.gestion_analytique.Repositories.NotificationRepository;
-import com.analytique.gestion_analytique.Repositories.PosteRepository;
+import com.analytique.gestion_analytique.Repositories.OffreEmploiRepository;
 import com.analytique.gestion_analytique.Repositories.PostulationRepository;
 import com.analytique.gestion_analytique.dto.receive.CandidatRecieve;
 import com.analytique.gestion_analytique.dto.receive.PostulationRecieve;
@@ -44,7 +44,7 @@ public class CandidatService {
 
 	private CandidatRepository candidatRepository;
 	private PostulationRepository postulationRepository;
-	private PosteRepository posteRepository;
+	private OffreEmploiRepository offreRepository;
 	private CompetencesCandidatsRepository cCandidatsRepository;
 	private NoteCandidatRepository noteCandidatRepository;
 	private FormationRepo formationRepo;
@@ -53,12 +53,12 @@ public class CandidatService {
 	private NotificationRepository notificationRepository;
 
 	public CandidatService(CandidatRepository candidatRepository, PostulationRepository postulationRepository,
-			PosteRepository posteRepository, CompetencesCandidatsRepository cCandidatsRepository,
+			OffreEmploiRepository offreRepository, CompetencesCandidatsRepository cCandidatsRepository,
 			NoteCandidatRepository noteCandidatRepository, FormationRepo formationRepo, ExperienceRepo experienceRepo,
 			CandidatsDiplomeRepo candidatsDiplomeRepo, NotificationRepository notificationRepository) {
 		this.candidatRepository = candidatRepository;
 		this.postulationRepository = postulationRepository;
-		this.posteRepository = posteRepository;
+		this.offreRepository = offreRepository;
 		this.cCandidatsRepository = cCandidatsRepository;
 		this.noteCandidatRepository = noteCandidatRepository;
 		this.formationRepo = formationRepo;
@@ -81,9 +81,9 @@ public class CandidatService {
 		return candidats; 
 	}
 
-	public List<Candidat> getCandidatsRetenus(Integer posteId) {
+	public List<Candidat> getCandidatsRetenus(Integer offreId) {
 		// Récupérer toutes les postulations retenues pour un poste donné
-		List<Postulation> postulationsRetenues = postulationRepository.findByPosteIdAndStatus(posteId, "Retenu");
+		List<Postulation> postulationsRetenues = postulationRepository.findByOffreEmploiIdAndStatus(offreId, "Retenu");
 
 		// Créer une liste pour stocker les candidats
 		List<Candidat> candidatsRetenus = new ArrayList<>();
@@ -98,7 +98,7 @@ public class CandidatService {
 
 	public boolean isCandidatRetenu(Integer candidatId, Integer posteId) {
 		// Rechercher une postulation correspondant au candidat et au poste avec le statut "Retenu"
-		Optional<Postulation> postulation = postulationRepository.findByCandidatIdAndPosteIdAndStatus(candidatId, posteId, "Retenu");
+		Optional<Postulation> postulation = postulationRepository.findByCandidatIdAndOffreEmploiIdAndStatus(candidatId, posteId, "Retenu");
 	
 		// Retourner vrai si une telle postulation existe, sinon faux
 		return postulation.isPresent();
@@ -118,7 +118,7 @@ public class CandidatService {
 		NoteCandidat nc = new NoteCandidat();
 		nc.setNote(note);
 		nc.setTypeNote(em.getReference(TypeNote.class, type));
-		nc.setCandidat(em.getReference(Candidat.class, id));
+		nc.setPostulation(em.getReference(Postulation.class, id));
 
 		int result = 1;
 		if (noteCandidatRepository.existsById(new NoteCandidatId(id, type))) {
@@ -169,7 +169,7 @@ public class CandidatService {
 	@Transactional
 	public Postulation PostulerPosteCandidat(PostulationRecieve cd) {
 		Candidat candidat = cd.extractCandidat(candidatRepository);
-		Poste poste = cd.extractPoste(posteRepository);
+		OffreEmploi offre = cd.extractOffreEmploi(offreRepository);
 
 		// Sauvegarde des compétences du candidat
 		for (CompetencesCandidats competences : cd.extractCCandidat(em)) {
@@ -178,10 +178,10 @@ public class CandidatService {
 		}
 
 		// Création et sauvegarde de la postulation
-		Postulation postulation = new Postulation(candidat, poste, cd.getCandidatureTime());
+		Postulation postulation = new Postulation(candidat, offre, cd.getCandidatureTime());
 		postulation = postulationRepository.save(postulation);
 
-		if (isCandidatRetenu(candidat.getId(), poste.getId())) {
+		if (isCandidatRetenu(candidat.getId(), offre.getPoste().getId())) {
 			String notifMessage = "Votre candidature a ete retenu";
 			Notification notification = new Notification(candidat, notifMessage, Timestamp.valueOf(LocalDateTime.now()), "non_lu");
 			

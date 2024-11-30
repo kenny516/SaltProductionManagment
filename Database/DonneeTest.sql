@@ -1,4 +1,3 @@
--- Insertion des données dans les tables de base
 -- Insérer des types de note
 INSERT INTO typeNote (nomType) VALUES
 ('Technique'),
@@ -19,6 +18,11 @@ INSERT INTO Postes (titre, description, departement) VALUES
 ('Développeur Java', 'Développement backend', 'Informatique'),
 ('Chargé de recrutement', 'Recrutement des candidats', 'Ressources Humaines');
 
+-- Insérer des offres d'emploi
+INSERT INTO Offre_emploi (description, status, poste_id, nbr_candidat_dm) VALUES
+('Recrutement pour un poste de Développeur Java. Expérience en développement backend requise.', TRUE, 1, 5),
+('Recherche d un Chargé de recrutement pour gérer les candidatures et organiser les entretiens.', TRUE, 2, 3);
+
 -- Insérer des compétences
 INSERT INTO Competences (nom, description) VALUES
 ('Java', 'Développement Java'),
@@ -34,7 +38,7 @@ INSERT INTO detailsPoste (idPoste, idCompetence) VALUES
 (2, 4);  -- Chargé de recrutement -> Gestion de projet
 
 -- Insérer des candidats dans la table de compétences candidats avec niveaux
-INSERT INTO CompetencesCandidats (candidat_id, competence_id, niveau) VALUES
+INSERT INTO CompetencesCandidats (id_candidat, competence_id, niveau) VALUES
 (1, 1, 4),  -- Jean -> Java (niveau 4)
 (1, 2, 5),  -- Jean -> SQL (niveau 5)
 (1, 3, 3),  -- Jean -> Communication (niveau 3)
@@ -45,29 +49,18 @@ INSERT INTO CompetencesCandidats (candidat_id, competence_id, niveau) VALUES
 (3, 3, 2);  -- Pierre -> Communication (niveau 2)
 
 -- Insérer des postulants
-INSERT INTO Postulations (candidat_id, poste_id, date_postulation, status) VALUES
+INSERT INTO Postulations (candidat_id, Offre_emploi_id, date_postulation, status) VALUES
 (1, 1, '2024-11-01', 'En attente'),
-(2, 2, '2024-11-02', 'En attente'),
-(3, 1, '2024-11-03', 'En attente');
+(2, 2, '2024-11-02', 'En attente');
 
 -- Insérer des notes pour les candidats
-INSERT INTO noteCandidat (idCandidat, idTypeNote, note) VALUES
+INSERT INTO noteCandidat (id_postulation, idTypeNote, note) VALUES
 (1, 1, 8),  -- Jean, Technique (8)
 (1, 2, 6),  -- Jean, Soft Skills (6)
 (1, 3, 7),  -- Jean, Tests Pratiques (7)
 (2, 1, 5),  -- Alice, Technique (5)
 (2, 2, 7),  -- Alice, Soft Skills (7)
-(2, 3, 6),  -- Alice, Tests Pratiques (6)
-(3, 1, 6),  -- Pierre, Technique (6)
-(3, 2, 5),  -- Pierre, Soft Skills (5)
-(3, 3, 4);  -- Pierre, Tests Pratiques (4)
-
--- Vérification du statut après l'insertion
--- Le trigger va évaluer automatiquement le statut des candidatures en fonction des niveaux de compétence
--- Statut attendu :
--- Jean : Retenu (moyenne des niveaux > 3)
--- Alice : Refus (moyenne des niveaux < 3)
--- Pierre : Refus (moyenne des niveaux < 3)
+(2, 3, 6);  -- Alice, Tests Pratiques (6)
 
 -- Insérer des notifications
 INSERT INTO Notifications (candidat_id, message, statut_notification) VALUES
@@ -99,7 +92,8 @@ INSERT INTO CandidatsDiplomes (candidat_id, diplome_id) VALUES
 (2, 2),  -- Alice -> Master en Ressources Humaines
 (3, 3);  -- Pierre -> Master en Management
 
-INSERT INTO TypeContrat (id, nomType, dureeMois) VALUES (1, 'CDD', 6);
-INSERT INTO TypeContrat (id, nomType, dureeMois) VALUES (2, 'ESSAI', 3);
-INSERT INTO TypeContrat (id, nomType, dureeMois) VALUES (3, 'CDI', 0);
-
+-- Insérer des types de contrat
+INSERT INTO TypeContrat (id, nomType, dureeMois) VALUES 
+(1, 'CDD', 6),
+(2, 'ESSAI', 3),
+(3, 'CDI', 0);
