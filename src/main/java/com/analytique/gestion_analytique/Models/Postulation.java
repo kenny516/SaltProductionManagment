@@ -48,6 +48,7 @@ public class Postulation {
 	}
 
 	public void setCandidat(Candidat candidat) {
+		candidat.nullCandidat();
 		this.candidat = candidat;
 	}
 

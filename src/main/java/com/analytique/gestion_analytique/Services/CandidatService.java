@@ -1,3 +1,6 @@
+// TODO : cancidat non refus
+// TODO : embaucher candidat = toutes les autres postulations sont refus 
+
 package com.analytique.gestion_analytique.Services;
 
 import org.springframework.stereotype.Service;

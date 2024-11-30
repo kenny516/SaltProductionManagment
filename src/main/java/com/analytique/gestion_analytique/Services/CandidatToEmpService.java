@@ -44,6 +44,7 @@ public class CandidatToEmpService {
 		Postulation postulation = postulationRepository.findByCandidatIdAndStatus(candidatId, "Retenu")
 				.orElseThrow(() -> new IllegalArgumentException("Postulation non trouvée ou candidat non retenu"));
 
+
 		// Création de l'employé basé sur la postulation
 		Candidat candidat = postulation.getCandidat();
 		Employe employe = new Employe(
@@ -51,8 +52,8 @@ public class CandidatToEmpService {
 				candidat.getPrenom(),
 				candidat.getEmail(),
 				candidat.getTelephone(),
-				LocalDate.now(), // Remplacez par la date actuelle
-				postulation.getOffreEmploi().getPoste() // Récupération du poste depuis la postulation
+				LocalDate.now(),
+				null
 		);
 
 		employe = employeRepository.save(employe);
@@ -73,6 +74,8 @@ public class CandidatToEmpService {
 		String notifMessage = "Vous avez été retenu pour le poste de " + postulation.getOffreEmploi().getPoste().getTitre();
 		Notification notification = new Notification(candidat, notifMessage, Timestamp.valueOf(LocalDateTime.now()), "non_lu");
 		
+		//  TODO : contrat employe
+
 		notificationRepository.save(notification);
 
 		return employe;
