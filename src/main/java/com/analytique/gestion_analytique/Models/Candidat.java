@@ -112,7 +112,10 @@ public class Candidat {
 	public void nullCandidat() {
 		formations.forEach(f -> f.setCandidat(null));
 		experiences.forEach(e -> e.setCandidat(null));
-		postulations.forEach(p -> p.setCandidat(null));
+		postulations.forEach(p -> {
+			p.setCandidat(null);
+			p.getNotes().forEach(note -> note.setPostulation(null));
+		});
 		setMotDePasse(null);
 	}
 
@@ -121,7 +124,10 @@ public class Candidat {
 	}
 
 	public void setPostulations(List<Postulation> postulations) {
-		postulations.forEach(p -> p.setCandidat(null));
+		postulations.forEach(p -> {
+			p.setCandidat(null);
+			p.getNotes().forEach(note -> note.setPostulation(null));
+		});
 		this.postulations = postulations;
 	}
 
