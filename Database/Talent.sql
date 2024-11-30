@@ -102,7 +102,7 @@ CREATE TABLE CompetencesCandidats (
     id_candidat INT REFERENCES Candidats(id) ON DELETE CASCADE,
     competence_id INT REFERENCES Competences(id) ON DELETE CASCADE,
     niveau INT CHECK (niveau >= 0 AND niveau <= 5),
-    PRIMARY KEY (id_postulation, competence_id)
+    PRIMARY KEY (id_candidat, competence_id)
 );
 
 CREATE TABLE Notifications (

@@ -39,6 +39,9 @@ public class Candidat {
 	@OneToMany(mappedBy = "candidat", cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<Postulation> postulations;
 
+	@OneToMany(mappedBy = "candidat", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<CompetencesCandidats> competencesCandidats;
+
 	public Integer getId() {
 		return id;
 	}

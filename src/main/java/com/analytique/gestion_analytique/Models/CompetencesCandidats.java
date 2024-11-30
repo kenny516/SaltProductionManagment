@@ -9,7 +9,7 @@ public class CompetencesCandidats {
 	@Id
 	@ManyToOne
 	@JoinColumn(name = "idCandidat")
-	private Candidat Candidat;
+	private Candidat candidat;
 
     @Id
     @ManyToOne
@@ -37,11 +37,11 @@ public class CompetencesCandidats {
     }
 
     public Candidat getCandidat() {
-        return Candidat;
+        return candidat;
     }
 
     public void setCandidat(Candidat Candidat) {
-        this.Candidat = Candidat;
+        this.candidat = Candidat;
     }
 
 }
