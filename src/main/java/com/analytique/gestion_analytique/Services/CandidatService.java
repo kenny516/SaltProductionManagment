@@ -81,9 +81,9 @@ public class CandidatService {
 		return candidats; 
 	}
 
-	public List<Candidat> getCandidatsRetenus(Integer posteId) {
+	public List<Candidat> getCandidatsRetenus(Integer offreId) {
 		// Récupérer toutes les postulations retenues pour un poste donné
-		List<Postulation> postulationsRetenues = postulationRepository.findByPosteIdAndStatus(posteId, "Retenu");
+		List<Postulation> postulationsRetenues = postulationRepository.findByOffreEmploiIdAndStatus(offreId, "Retenu");
 
 		// Créer une liste pour stocker les candidats
 		List<Candidat> candidatsRetenus = new ArrayList<>();
@@ -98,7 +98,7 @@ public class CandidatService {
 
 	public boolean isCandidatRetenu(Integer candidatId, Integer posteId) {
 		// Rechercher une postulation correspondant au candidat et au poste avec le statut "Retenu"
-		Optional<Postulation> postulation = postulationRepository.findByCandidatIdAndPosteIdAndStatus(candidatId, posteId, "Retenu");
+		Optional<Postulation> postulation = postulationRepository.findByCandidatIdAndOffreEmploiIdAndStatus(candidatId, posteId, "Retenu");
 	
 		// Retourner vrai si une telle postulation existe, sinon faux
 		return postulation.isPresent();
@@ -108,7 +108,7 @@ public class CandidatService {
 	public CandidatSend getById(Integer id) {
 		Candidat c = candidatRepository.findById(id).get();
 		List<CompetencesCandidats> cc = cCandidatsRepository.findByCandidatId(id);
-		cc.forEach(com -> com.setPostulation(null));
+		cc.forEach(com -> com.setCandidat(null));
 
 		return new CandidatSend(c, cc);
 	}
@@ -173,7 +173,7 @@ public class CandidatService {
 
 		// Sauvegarde des compétences du candidat
 		for (CompetencesCandidats competences : cd.extractCCandidat(em)) {
-			competences.setPostulation(postulationRepository.findByCandidatIdAndOffreId(candidat.getId(), offre.getId()));
+			competences.setCandidat(candidat);
 			cCandidatsRepository.save(competences);
 		}
 

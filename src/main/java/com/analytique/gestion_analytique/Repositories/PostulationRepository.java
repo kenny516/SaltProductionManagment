@@ -13,16 +13,16 @@ import org.springframework.data.repository.query.Param;
 public interface PostulationRepository extends JpaRepository<Postulation, Long> {
 	Optional<Postulation> findByCandidatIdAndStatus(Integer candidatId, String status);
 
-	// Méthode pour trouver les postulations retenues pour un poste donné
-	List<Postulation> findByPosteIdAndStatus(Integer posteId, String status);
+	// Méthode pour trouver les postulations retenues pour une offre d'emploi donnée
+	List<Postulation> findByOffreEmploiIdAndStatus(Integer offreId, String status);
 
-	Optional<Postulation> findByCandidatIdAndPosteIdAndStatus(Integer candidatId, Integer posteId, String status);
+	Optional<Postulation> findByCandidatIdAndOffreEmploiIdAndStatus(Integer candidatId, Integer offreEmploiId, String status);
 	
 	@Modifying
 	@Query(value = "UPDATE postulations SET status = :status WHERE id = :id", nativeQuery = true)
 	public void updateStatus(@Param("id") Integer id, @Param("status") String status);
 
 	// Méthode pour trouver une postulation par candidat et offre d'emploi
-    Postulation findByCandidatIdAndOffreId(Integer candidatId, Integer offreId);
+    Postulation findByCandidatIdAndOffreEmploiId(Integer candidatId, Integer offreId);
 
 }

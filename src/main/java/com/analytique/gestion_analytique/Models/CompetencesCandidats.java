@@ -8,8 +8,8 @@ import jakarta.persistence.*;
 public class CompetencesCandidats {
 	@Id
 	@ManyToOne
-	@JoinColumn(name = "idPostulation")
-	private Postulation postulation;
+	@JoinColumn(name = "idCandidat")
+	private Candidat Candidat;
 
     @Id
     @ManyToOne
@@ -36,12 +36,12 @@ public class CompetencesCandidats {
         this.niveau = niveau;
     }
 
-    public Postulation getPostulation() {
-        return postulation;
+    public Candidat getCandidat() {
+        return Candidat;
     }
 
-    public void setPostulation(Postulation postulation) {
-        this.postulation = postulation;
+    public void setCandidat(Candidat Candidat) {
+        this.Candidat = Candidat;
     }
 
 }

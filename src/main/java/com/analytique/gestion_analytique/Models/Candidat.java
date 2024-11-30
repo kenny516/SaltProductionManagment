@@ -5,9 +5,6 @@ import java.util.*;
 
 @Entity
 @Table(name = "Candidats")
-// pour avoir la liste des candidats qui passent pour l'entretien
-// Pour l'appeler List<Candidat> qualifiedCandidats =
-// candidatRepository.candidatReussiTest("TEST");
 
 public class Candidat {
 	@Id

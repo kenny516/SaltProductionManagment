@@ -20,7 +20,7 @@ public class Postulation {
 
     @ManyToOne
     @JoinColumn(name = "Offre_emploi_id", nullable = false)
-    private OffreEmploi offre;
+    private OffreEmploi offreEmploi;
 
     private String status = "En attente";
 
@@ -34,7 +34,7 @@ public class Postulation {
 
     public Postulation(Candidat candidat, OffreEmploi offre, LocalDate datePostulation) {
         this.candidat = candidat;
-        this.offre = offre;
+        this.offreEmploi = offre;
         this.datePostulation = datePostulation;
     }
 
@@ -55,11 +55,11 @@ public class Postulation {
     }
 
     public OffreEmploi getOffreEmploi() {
-        return offre;
+        return offreEmploi;
     }
 
     public void setOffreEmploi(OffreEmploi poste) {
-        this.offre = poste;
+        this.offreEmploi = poste;
     }
 
     public String getStatus() {
@@ -82,11 +82,11 @@ public class Postulation {
 		}
 
         public OffreEmploi getOffre() {
-            return offre;
+            return offreEmploi;
         }
 
         public void setOffre(OffreEmploi offre) {
-            this.offre = offre;
+            this.offreEmploi = offre;
         }
 
         public List<NoteCandidat> getNotes() {
