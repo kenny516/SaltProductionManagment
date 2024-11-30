@@ -96,52 +96,6 @@ CREATE TABLE Postulations (
     status VARCHAR(20) DEFAULT 'En attente'
 );
 
--- Mise à jour de la fonction evaluer_statut_candidat pour utiliser la table Postulations
-CREATE OR REPLACE FUNCTION evaluer_statut_candidat()
-RETURNS TRIGGER AS $$
-DECLARE
-    moyenne_niveau FLOAT;
-BEGIN
-    -- Calculer la moyenne des niveaux de compétence pour le candidat et le poste postulé
-    SELECT AVG(cc.niveau) INTO moyenne_niveau
-    FROM CompetencesCandidats cc
-    JOIN detailsPoste dp ON cc.competence_id = dp.idCompetence
-    WHERE cc.candidat_id = NEW.candidat_id
-    AND dp.idPoste = NEW.poste_id;
-
-    -- Mettre à jour le statut de la candidature en fonction de la moyenne
-    IF moyenne_niveau IS NOT NULL AND moyenne_niveau >= 3 THEN
-        -- Vérifier si le statut n'est pas déjà 'Retenu' pour éviter des mises à jour inutiles
-        IF NEW.status != 'Retenu' THEN
-            UPDATE Postulations SET status = 'Retenu' WHERE id = NEW.id;
-        END IF;
-    ELSE
-        -- Vérifier si le statut n'est pas déjà 'Refus' pour éviter des mises à jour inutiles
-        IF NEW.status != 'Refus' THEN
-            UPDATE Postulations SET status = 'Refus' WHERE id = NEW.id;
-        END IF;
-    END IF;
-
-    RETURN NEW;
-END;
-$$ LANGUAGE plpgsql;
-
-
--- Créer un trigger pour évaluer le statut d'une candidature
-CREATE OR REPLACE TRIGGER trigger_evaluer_statut_candidat
-AFTER INSERT OR UPDATE ON Postulations
-FOR EACH ROW
-EXECUTE FUNCTION evaluer_statut_candidat();
-
-create or replace view candidats_elligibles as SELECT c.*
-FROM Candidats c
-JOIN (
-    SELECT nc.idCandidat
-    FROM noteCandidat nc
-    GROUP BY nc.idCandidat
-    HAVING COUNT(DISTINCT nc.idTypeNote) = (SELECT COUNT(*) FROM typeNote)
-) AS subquery ON c.id = subquery.idCandidat;
-
 CREATE TABLE Notifications (
     id SERIAL PRIMARY KEY,
     candidat_id INT REFERENCES Candidats(id) ON DELETE CASCADE,
