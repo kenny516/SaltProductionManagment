@@ -59,7 +59,7 @@ public class CongeService {
             BigDecimal duree = BigDecimal.valueOf(ChronoUnit.DAYS.between(conge.getDateDebut(), conge.getDateFin()) + 1);
             conge.setDuree(duree);
             String currentStatus = conge.getStatus();
-            if (conge.getDateDebut().isBefore(LocalDate.now()) && conge.getDateFin().isAfter(LocalDate.now())) {
+            if ((conge.getDateDebut().isBefore(LocalDate.now()) || conge.getDateDebut().isEqual(LocalDate.now())) && conge.getDateFin().isAfter(LocalDate.now())) {
                 conge.setStatus("En cours");
             } else if (conge.getDateFin().isBefore(LocalDate.now())) {
                 conge.setStatus("Termine");
