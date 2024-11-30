@@ -117,6 +117,9 @@ public class Candidat {
 			p.getNotes().forEach(note -> note.setPostulation(null));
 		});
 		setMotDePasse(null);
+		competencesCandidats.forEach(cc -> {
+			cc.setCandidat(null);
+		});
 	}
 
 	public List<Postulation> getPostulations() {
@@ -149,5 +152,14 @@ public class Candidat {
 		this.motDePasse = motDePasse;
 	}
 
+	public List<CompetencesCandidats> getCompetencesCandidats() {
+		return competencesCandidats;
+	}
+
+	public void setCompetencesCandidats(List<CompetencesCandidats> competencesCandidats) {
+		this.competencesCandidats = competencesCandidats;
+	}
+
+	
 	
 }

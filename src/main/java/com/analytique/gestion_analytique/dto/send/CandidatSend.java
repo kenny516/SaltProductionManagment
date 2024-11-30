@@ -8,42 +8,20 @@ import com.analytique.gestion_analytique.Models.CompetencesCandidats;
 public class CandidatSend extends Candidat {
 	List<CompetencesCandidats> competences;
 
-	int currentStep;
-	double progress;
-
-	public CandidatSend(Candidat c, List<CompetencesCandidats> competences) {
+	public CandidatSend(Candidat c) {
 		setId(c.getId());
 		setNom(c.getNom());
 		setPrenom(c.getPrenom());
 		setEmail(c.getEmail());
 		setTelephone(c.getTelephone());
-		setCompetences(competences);
+		setCompetences(c.getCompetencesCandidats());
 		setExperiences(c.getExperiences());
 		setFormations(c.getFormations());
 		setDiplomes(c.getDiplomes());
 		setPostulations(c.getPostulations());
-
 	}
 
 	public CandidatSend() {
-	}
-
-	public int getCurrentStep() {
-		return currentStep;
-	}
-
-	public void setCurrentStep(int currentStep) {
-		this.currentStep = currentStep;
-	}
-
-	public double getProgress() {
-		return progress;
-	}
-
-	
-
-	public void setProgress(double progress) {
-		this.progress = progress;
 	}
 
 	public List<CompetencesCandidats> getCompetences() {

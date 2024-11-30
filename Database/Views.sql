@@ -3,7 +3,7 @@ SELECT c.*
 FROM Candidats c
 JOIN (
     SELECT nc.id_postulation
-    FROM noteCandidat nc
+    FROM noteCandidat nc 
     GROUP BY nc.id_postulation
     HAVING COUNT(DISTINCT nc.idTypeNote) = (SELECT COUNT(*) FROM typeNote)
 ) AS subquery ON c.id = subquery.id_postulation;
@@ -32,6 +32,4 @@ LEFT JOIN
 GROUP BY
     c.id, c.nom, c.prenom, c.email, c.telephone;
 
-create or replace view v_postulation_non_refus as
-	select * from postulations where status <> 'refus' or status <> 'employe';
-
+create or replace candidats_postules as select * from postulation 
