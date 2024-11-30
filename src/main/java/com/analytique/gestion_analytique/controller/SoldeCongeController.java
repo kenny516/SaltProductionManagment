@@ -12,6 +12,7 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/solde-conge")
+@CrossOrigin(origins = "http://localhost:3000")
 public class SoldeCongeController {
 
     @Autowired

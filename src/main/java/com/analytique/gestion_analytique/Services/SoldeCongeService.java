@@ -31,7 +31,7 @@ public class SoldeCongeService {
     }
 
     // utils
-    public double congePossible(Integer idEmploye, Integer anneeDebut, Integer anneeFin) {
-        return repository.congePossible(idEmploye, anneeDebut, anneeFin);
+    public Double congePossible(Integer idTypeConge,Integer idEmploye, Integer anneeDebut, Integer anneeFin) {
+        return repository.congePossible(idTypeConge,idEmploye, anneeDebut, anneeFin);
     }
 }

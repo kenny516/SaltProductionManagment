@@ -76,12 +76,14 @@ public class CongeService {
         return conges;
     }
 
-    public double totalCongeByEmploye(Integer idEmploye, Integer anneDebut, Integer anneeFin) {
-        return repository.totalCongeByEmploye(idEmploye, anneDebut, anneeFin);
+    public double totalCongeByEmploye(Integer idTypeConge,Integer idEmploye, Integer anneeDebut, Integer anneeFin) {
+        return repository.totalCongeByEmploye(idTypeConge,idEmploye, anneeDebut, anneeFin);
     }
-    public double CongePossible(Integer idEmploye, Integer anneeDebut, Integer anneeFin) {
-        double congePossible = soldeCongeService.congePossible(idEmploye, anneeDebut, anneeFin);
-        double totalConge = totalCongeByEmploye(idEmploye, anneeDebut, anneeFin);
+
+
+    public double CongePossible(Integer idTypeConge,Integer idEmploye, Integer anneeDebut, Integer anneeFin) {
+        double congePossible = soldeCongeService.congePossible(idTypeConge,idEmploye, anneeDebut, anneeFin) == null ? 0 : soldeCongeService.congePossible(idTypeConge,idEmploye, anneeDebut, anneeFin);
+        double totalConge = repository.totalCongeByEmploye(idTypeConge,idEmploye, anneeDebut, anneeFin) == null ? 0 : repository.totalCongeByEmploye(idTypeConge,idEmploye, anneeDebut, anneeFin);
         return congePossible - totalConge < 0 ? 0 : congePossible - totalConge;
     }
 

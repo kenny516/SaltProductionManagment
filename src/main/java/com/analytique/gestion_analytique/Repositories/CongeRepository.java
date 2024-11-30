@@ -12,12 +12,12 @@ public interface CongeRepository extends JpaRepository<Conge, Integer> {
     @Query(value = """
             SELECT sum(duree)
             FROM conge
-            where id_type_conge = 1
+            where id_type_conge = :idTypeConge
               AND extract(YEAR FROM date_debut) >= :anneDebut
               AND extract(YEAR FROM date_fin) <= :anneeFin
               AND id_employe = :idEmploye
             group by id_employe;""", nativeQuery = true)
-    double totalCongeByEmploye(@Param("idEmploye") Integer idEmploye, @Param("anneDebut") Integer anneDebut, @Param("anneeFin") Integer anneeFin);
+    Double totalCongeByEmploye(@Param("idTypeConge")Integer idTypeConge ,@Param("idEmploye") Integer idEmploye, @Param("anneDebut") Integer anneDebut, @Param("anneeFin") Integer anneeFin);
 
     @Query(value = """
             SELECT *

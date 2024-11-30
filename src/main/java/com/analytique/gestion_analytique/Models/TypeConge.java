@@ -22,6 +22,8 @@ public class TypeConge {
 
     @Column(name = "est_paye", nullable = false)
     private Boolean estPaye = false;
+    @Column(name = "cumulable", nullable = false)
+    private Boolean cumulable = false;
 
     @Column(name = "duree_max", precision = 4, scale = 2)
     private BigDecimal dureeMax;

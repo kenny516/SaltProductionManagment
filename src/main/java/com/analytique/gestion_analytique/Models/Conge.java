@@ -33,6 +33,9 @@ public class Conge {
     @Column(name = "duree", precision = 5, scale = 2)
     private BigDecimal duree;
 
+    @Column(name = "motif", length = 255)
+    private String motif;
+
     @ColumnDefault("'En attente'")
     @Column(name = "status", length = 20)
     private String status;

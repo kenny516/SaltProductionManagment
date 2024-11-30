@@ -30,6 +30,7 @@ CREATE TABLE Conge
     date_fin      DATE    NOT NULL,
     duree         NUMERIC(5, 2),
     status        VARCHAR(20) DEFAULT 'En attente',
+    motif         text,
     PRIMARY KEY (id),
     FOREIGN KEY (id_employe) REFERENCES Employes (id),
     FOREIGN KEY (id_type_conge) REFERENCES TypeConge (id)

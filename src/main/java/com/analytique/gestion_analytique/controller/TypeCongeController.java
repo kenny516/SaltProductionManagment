@@ -9,6 +9,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/type-conge")
+@CrossOrigin(origins = "http://localhost:3000")
 public class TypeCongeController {
     private final TypeCongeService service;
 
