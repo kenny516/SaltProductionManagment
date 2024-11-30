@@ -1,21 +1,19 @@
 package com.analytique.gestion_analytique.dto.receive;
 
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
 import com.analytique.gestion_analytique.Models.Candidat;
-import com.analytique.gestion_analytique.Models.CompetencesCandidats;
-import com.analytique.gestion_analytique.Models.Poste;
-import com.analytique.gestion_analytique.dto.CompetenceUser;
-
-import jakarta.persistence.EntityManager;
+import com.analytique.gestion_analytique.Models.CandidatsDiplomes;
+import com.analytique.gestion_analytique.Models.Diplome;
+import com.analytique.gestion_analytique.Models.Experience;
+import com.analytique.gestion_analytique.Models.Formation;
 
 public class CandidatRecieve {
-	String nom, prenom, email, telephone;
-	int poste_id;
-	LocalDateTime dateCandidature;
-	List<CompetenceUser> competences;
+	String nom, prenom, email, telephone, motDePasse;
+	List<Formation> formations;
+	List<Experience> experiences;
+	List<Integer> diplomes;
 
 	public String getNom() {
 		return nom;
@@ -45,68 +43,65 @@ public class CandidatRecieve {
 		return telephone;
 	}
 
-	public void setTelephone(String telephone) {
-		this.telephone = telephone;
+	public void setTelephone(String telepohne) {
+		this.telephone = telepohne;
 	}
 
-	public int getPoste_id() {
-		return poste_id;
+	public String getMotDePasse() {
+		return motDePasse;
 	}
 
-	public void setPoste_id(int poste_id) {
-		this.poste_id = poste_id;
+	public void setMotDePasse(String motDePasse) {
+		this.motDePasse = motDePasse;
 	}
 
-	public LocalDateTime getDateCandidature() {
-		return dateCandidature;
+	public List<Formation> getFormations() {
+		return formations;
 	}
 
-	public void setDateCandidature(LocalDateTime candidaturTime) {
-		this.dateCandidature = candidaturTime;
+	public void setFormations(List<Formation> formations) {
+		this.formations = formations;
 	}
 
-	
+	public List<Experience> getExperiences() {
+		return experiences;
+	}
 
-	public CandidatRecieve(String nom, String prenom, String email, String telephone, int poste_id,
-			LocalDateTime candidaturTime, List<CompetenceUser> competences) {
-		this.nom = nom;
-		this.prenom = prenom;
-		this.email = email;
-		this.telephone = telephone;
-		this.poste_id = poste_id;
-		this.dateCandidature = candidaturTime;
-		this.competences = competences;
+	public void setExperiences(List<Experience> experiences) {
+		this.experiences = experiences;
+	}
+
+	public List<Integer> getDiplomes() {
+		return diplomes;
+	}
+
+	public void setDiplomes(List<Integer> diplomes) {
+		this.diplomes = diplomes;
 	}
 
 	public Candidat extractCandidat() {
 		Candidat c = new Candidat();
 		c.setNom(nom);
 		c.setPrenom(prenom);
-		c.setDateCandidature(dateCandidature.toLocalDate());
 		c.setEmail(email);
 		c.setTelephone(telephone);
-		Poste p = new Poste();
-		p.setId(getPoste_id());
-		c.setPoste(p);
+		c.setMotDePasse(motDePasse);
 		return c;
 	}
 
-	public List<CompetencesCandidats> extractCCandidat(EntityManager em) {
-		List<CompetencesCandidats> csc = new ArrayList<CompetencesCandidats>();
+	public List<CandidatsDiplomes> extractDiplomes() {
+		List<CandidatsDiplomes> dips = new ArrayList<>();
 
-		for (CompetenceUser competences : getCompetences()) {
-			CompetencesCandidats cc = competences.extractCandidat(em);
-			csc.add(cc);
+		for (Integer diplome : getDiplomes()) {
+			Diplome m = new Diplome();
+			m.setId(diplome);
+			CandidatsDiplomes cd = new CandidatsDiplomes();
+			cd.setDiplome(m);
+
+			dips.add(cd);
 		}
-		return csc;
-	}
 
-	public List<CompetenceUser> getCompetences() {
-		return competences;
-	}
-
-	public void setCompetences(List<CompetenceUser> competences) {
-		this.competences = competences;
+		return dips;
 	}
 
 }

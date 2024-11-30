@@ -3,47 +3,74 @@ package com.analytique.gestion_analytique.dto.send;
 import java.util.List;
 
 import com.analytique.gestion_analytique.Models.Candidat;
-import com.analytique.gestion_analytique.Models.Competence;
-import com.analytique.gestion_analytique.dto.CompetenceUser;
-import com.analytique.gestion_analytique.dto.NoteUser;
+import com.analytique.gestion_analytique.Models.CompetencesCandidats;
+import com.analytique.gestion_analytique.Models.NoteCandidat;
+import com.analytique.gestion_analytique.constants.RecrutementConst;
 
 public class CandidatSend extends Candidat {
-	List<CompetenceUser> competences;
-	List<NoteUser> notes;
+	List<CompetencesCandidats> competences;
 
+	int currentStep;
+	double progress;
 
-	public CandidatSend(Candidat c,List<CompetenceUser> competences,List<NoteUser> notes) {
+	public CandidatSend(Candidat c, List<CompetencesCandidats> competences) {
 		setId(c.getId());
 		setNom(c.getNom());
 		setPrenom(c.getPrenom());
-		setDateCandidature(c.getDateCandidature());
 		setEmail(c.getEmail());
 		setTelephone(c.getTelephone());
-		setPoste(c.getPoste());
-		setStatus(c.getStatus());
 		setCompetences(competences);
-		setNotes(notes);
+		
+		setNotes(c.getNotes());
+		setExperiences(c.getExperiences());
+		setFormations(c.getFormations());
+		setDiplomes(c.getDiplomes());
+		setPostulations(c.getPostulations());
+
 	}
 
-	public CandidatSend(){}
-
-	public List<NoteUser> getNotes() {
-		return notes;
+	public CandidatSend() {
 	}
 
-	public void setNotes(List<NoteUser> notes) {
-		this.notes = notes;
+	public int getCurrentStep() {
+		return currentStep;
 	}
 
-	public List<CompetenceUser> getCompetences() {
+	@Override
+	public void setNotes(List<NoteCandidat> noteCandidat) {
+		super.setNotes(noteCandidat);
+		setCurrentStep();
+	}
+
+	public void setCurrentStep() {
+		currentStep = getNotes().size();
+		setProgress();
+	}
+
+	public void setCurrentStep(int currentStep) {
+		this.currentStep = currentStep;
+	}
+
+	public double getProgress() {
+		return progress;
+	}
+
+	public void setProgress() {
+		progress = getNotes().size() * 100 / RecrutementConst.nombreEpreuve;
+	}
+
+	
+
+	public void setProgress(double progress) {
+		this.progress = progress;
+	}
+
+	public List<CompetencesCandidats> getCompetences() {
 		return competences;
 	}
 
-	public void setCompetences(List<CompetenceUser> competences) {
+	public void setCompetences(List<CompetencesCandidats> competences) {
 		this.competences = competences;
 	}
 
-	
-
-	
 }

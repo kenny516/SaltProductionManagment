@@ -9,17 +9,25 @@ import com.analytique.gestion_analytique.Models.Candidat;
 import java.util.List;
 
 public interface CandidatRepository extends JpaRepository<Candidat, Integer> {
-	List<Candidat> findByPosteIdAndStatus(Integer posteId, String status);
-
 	// Pour l'appeler List<Candidat> qualifiedCandidats =
 	// candidatRepository.candidatReussiTest("TEST");
 	List<Candidat> candidatReussiTest(@Param("nomType") String nomType);
 
+	@Query(value = "select * from candidats_postules", nativeQuery = true)
+	List<Candidat> findAllPostule();
 
+	@Query(value = "select * from candidats_postules where id in ( select distinct candidat_id from postulations where status <> 'Refus')", nativeQuery = true)
+	List<Candidat> findAllNonRefus();
 
-	@Query(value = "select * from candidats_elligibles where poste_id = :posteId",nativeQuery = true)
+	@Query(value = "select id from candidats where email = :email and mot_de_passe = :mdp", nativeQuery = true)
+	public int candidatExists(@Param("email") String email, @Param("mdp") String motDePasse);
+
+	@Query(value = "select * from candidats_elligibles where poste_id = :posteId", nativeQuery = true)
 	public List<Candidat> findElligiblesByPoste(@Param("posteId") Integer posteId);
 
-	@Query(value = "select * from candidats_elligibles",nativeQuery = true)
+	@Query(value = "select * from candidats_elligibles", nativeQuery = true)
 	public List<Candidat> findElligibles();
+
+	@Query(value = "select * from candidats_postules", nativeQuery = true)
+	List<Candidat> findNonEmploye();
 }
