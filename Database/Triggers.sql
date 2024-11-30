@@ -8,8 +8,9 @@ BEGIN
     SELECT AVG(cc.niveau) INTO moyenne_niveau
     FROM CompetencesCandidats cc
     JOIN detailsPoste dp ON cc.competence_id = dp.idCompetence
-    WHERE cc.candidat_id = NEW.candidat_id
-    AND dp.idPoste = NEW.poste_id;
+    JOIN Offre_emploi oe ON dp.idPoste = oe.poste_id
+    WHERE cc.id_candidat = NEW.candidat_id
+    AND oe.id = NEW.Offre_emploi_id;
 
     -- Mettre à jour le statut de la candidature en fonction de la moyenne
     IF moyenne_niveau IS NOT NULL AND moyenne_niveau >= 3 THEN
