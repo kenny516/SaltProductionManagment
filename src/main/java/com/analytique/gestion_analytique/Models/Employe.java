@@ -1,6 +1,7 @@
 package com.analytique.gestion_analytique.Models;
 
 import java.time.LocalDate;
+import java.util.List;
 
 import jakarta.persistence.*;
 
@@ -30,6 +31,9 @@ public class Employe {
 	@JoinColumn(name = "id_contrat_actuel")
 	private ContratEmploye contrat;
 
+	@OneToMany(mappedBy = "employe", cascade = CascadeType.ALL, orphanRemoval = true)
+	private List<Avance> Avances;
+
 	public Employe(String nom, String prenom, String email, String telephone, LocalDate dateEmbauche,
 			ContratEmploye contrat) {
 		this.nom = nom;
@@ -41,6 +45,10 @@ public class Employe {
 	}
 
 	public Employe() {
+	}
+
+	public List<Avance> getAvances() {
+		return Avances;
 	}
 
 	public Integer getId() {
@@ -99,6 +107,5 @@ public class Employe {
 		contrat.setEmploye(null);
 		this.contrat = contrat;
 	}
-
 
 }
