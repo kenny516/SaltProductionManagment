@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.List;
 
 @Data
 @Entity
@@ -28,6 +29,9 @@ public class Avance {
 
     @Column(name = "pourcentage_debitable")
     private BigDecimal pourcentageDebitable;
+
+    @OneToMany(mappedBy = "avance", cascade = CascadeType.ALL, orphanRemoval = true)
+	private List<AvanceRemboursement> remboursements;
 
     @Transient
     public static final double MIN_POURCENTAGE = 10;

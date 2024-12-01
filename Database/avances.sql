@@ -43,10 +43,10 @@ VALUES
 
 INSERT INTO AvanceRemboursement (id_avance, montant, date_remboursement)
 VALUES 
-(2, 2000.00, '2024-01-15'),  -- First payment of 2000
-(2, 2000.00, '2024-02-01');  -- Second payment of 2000 (full repayment)
+(5, 2000.00, '2024-12-01'),  -- First payment of 2000
+(5, 2000.00, '2024-12-01');  -- Second payment of 2000 (full repayment)
 
 INSERT INTO AvanceRemboursement (id_avance, montant, date_remboursement)
 VALUES 
-(1, 100.00, '2024-01-15'),  -- First payment of 2000
+(1, 100.00, '2024-11-15'),  -- First payment of 2000
 (1, 150.00, '2024-02-01');  -- Second payment of 2000 (full repayment)
