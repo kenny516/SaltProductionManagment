@@ -1,5 +1,7 @@
 package com.analytique.gestion_analytique.Services;
 
+import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -7,7 +9,10 @@ import java.util.Optional;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 
+import com.analytique.gestion_analytique.Models.AvanceRemboursement;
 import com.analytique.gestion_analytique.Models.Employe;
+import com.analytique.gestion_analytique.Repositories.AvanceRemboursementRepository;
+import com.analytique.gestion_analytique.Repositories.AvanceRepository;
 import com.analytique.gestion_analytique.Repositories.CompetenceRepository;
 import com.analytique.gestion_analytique.Repositories.ContratEmployeRepository;
 import com.analytique.gestion_analytique.Repositories.EmployeRepository;
@@ -19,13 +24,17 @@ public class EmployeService {
 	private final EmployeRepository employeRepository;
 	private final CompetenceRepository competenceRepository;
 	private final ContratEmployeRepository contratEmployeRepository;
+	private final AvanceRepository avanceRepository;
+	private final AvanceRemboursementRepository avanceRemboursementRepository;
 	JdbcTemplate jdbcTemplate;
 
 	public EmployeService(EmployeRepository employeRepository, CompetenceRepository competenceRepository,
-			ContratEmployeRepository contratEmployeRepository, JdbcTemplate jdbcTemplate) {
+			ContratEmployeRepository contratEmployeRepository, AvanceRepository avanceRepository, AvanceRemboursementRepository avanceRemboursementRepository, JdbcTemplate jdbcTemplate) {
 		this.employeRepository = employeRepository;
 		this.competenceRepository = competenceRepository;
 		this.contratEmployeRepository = contratEmployeRepository;
+		this.avanceRepository = avanceRepository;
+		this.avanceRemboursementRepository = avanceRemboursementRepository;
 		this.jdbcTemplate = jdbcTemplate;
 	}
 
@@ -77,6 +86,34 @@ public class EmployeService {
 			}
 			return result;
 		}, idEmploye);
+	}
+
+	public RemboursementReste getDernierImpaye(Integer idEmploye) {
+		List<RemboursementReste> result = getAllAvances(idEmploye, true);
+		if(result == null || result.size() == 0) {
+			return null;
+		} else {
+			return result.get(0);
+		}
+	}
+
+	public BigDecimal getRemboursementMensuel(RemboursementReste rr) {
+		Employe e = employeRepository.getReferenceById(rr.idEmploye());
+		BigDecimal salaire = e.getContrat().getSalaire();
+
+		return salaire.multiply(rr.pourcentageDebitable()).divide(BigDecimal.valueOf(100));
+	} 
+
+	public AvanceRemboursement remboursementMensuel(Integer idEmploye, LocalDate dateRemboursement) {
+		RemboursementReste rr = getDernierImpaye(idEmploye);
+		BigDecimal aPayer = getRemboursementMensuel(rr);
+
+		AvanceRemboursement ar = new AvanceRemboursement();
+		ar.setAvance(avanceRepository.getReferenceById(rr.id()));
+		ar.setDateRemboursement(dateRemboursement);
+		ar.setMontant(aPayer);
+
+		return avanceRemboursementRepository.save(ar);
 	}
 	
 }

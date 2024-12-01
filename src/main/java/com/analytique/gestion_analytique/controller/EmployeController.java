@@ -1,5 +1,6 @@
 package com.analytique.gestion_analytique.controller;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
