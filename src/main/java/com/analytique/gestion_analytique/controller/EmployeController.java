@@ -1,18 +1,22 @@
 package com.analytique.gestion_analytique.controller;
 
+import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.analytique.gestion_analytique.Services.EmployeService;
+import com.analytique.gestion_analytique.dto.receive.RemboursementReste;
 import com.analytique.gestion_analytique.dto.send.EmployeSend;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-
 
 @RestController
 @RequestMapping("/api/employe")
@@ -21,7 +25,7 @@ public class EmployeController {
 
 	EmployeService employeService;
 
-	public EmployeController(EmployeService employeService) {
+	public EmployeController(EmployeService employeService, JdbcTemplate jdbcTemplate) {
 		this.employeService = employeService;
 	}
 
@@ -42,5 +46,10 @@ public class EmployeController {
 	@GetMapping("/poste/{id}")
 	public List<EmployeSend> getEmployeByPoste(@PathVariable Integer id) {
 		return employeService.getQualifiedEmployeesForPost(id);
+	}
+
+	@GetMapping("/{id}/avances")
+	public List<RemboursementReste> getAllAvances(@PathVariable Integer id, @RequestParam(required = false, name = "unpaid") Boolean unpaid) {
+		return employeService.getAllAvances(id, unpaid);
 	}
 }

@@ -3,7 +3,7 @@ package com.analytique.gestion_analytique.dto.receive;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
-public record RemboursementImpaye(
+public record RemboursementReste(
         Integer id,
         Integer idEmploye,
         BigDecimal montant,

@@ -15,7 +15,7 @@ import com.analytique.gestion_analytique.Models.AvanceRemboursement;
 import com.analytique.gestion_analytique.Repositories.AvanceRemboursementRepository;
 import com.analytique.gestion_analytique.Services.AvanceService;
 import com.analytique.gestion_analytique.dto.receive.AvanceReceive;
-import com.analytique.gestion_analytique.dto.receive.RemboursementImpaye;
+import com.analytique.gestion_analytique.dto.receive.RemboursementReste;
 
 @RestController
 @RequestMapping("/api/avance")
