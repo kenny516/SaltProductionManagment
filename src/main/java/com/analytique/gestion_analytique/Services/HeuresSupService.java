@@ -42,5 +42,9 @@ public class HeuresSupService {
         // Appel au repository
         return heuresSupRepository.findByEmployeAndWeek(idEmploye, semaine);
     }
+
+    public List<HeuresSup> getHeuresSupByEmployeAndMonthAndYear(Long idEmploye, int mois, int annee) {
+        return heuresSupRepository.findByEmployeAndMonthAndYear(idEmploye, mois, annee);
+    }
 }
 

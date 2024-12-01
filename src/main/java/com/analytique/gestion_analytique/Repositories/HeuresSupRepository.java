@@ -12,4 +12,11 @@ import com.analytique.gestion_analytique.Models.HeuresSup;
 public interface HeuresSupRepository extends JpaRepository<HeuresSup, Long> {
     @Query("SELECT h FROM HeuresSup h WHERE h.idEmploye = :idEmploye AND FUNCTION('DATE_TRUNC', 'week', h.dateDebut) = :semaine")
     List<HeuresSup> findByEmployeAndWeek(@Param("idEmploye") Long idEmploye, @Param("semaine") LocalDate semaine);
+
+    @Query("SELECT h FROM HeuresSup h " +
+       "WHERE h.idEmploye = :idEmploye " +
+       "AND FUNCTION('EXTRACT', 'MONTH', h.dateDebut) = :mois " +
+       "AND FUNCTION('EXTRACT', 'YEAR', h.dateDebut) = :annee")
+    List<HeuresSup> findByEmployeAndMonthAndYear(@Param("idEmploye") Long idEmploye, @Param("mois") int mois, @Param("annee") int annee);
+
 }
