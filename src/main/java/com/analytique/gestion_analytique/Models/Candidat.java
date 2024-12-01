@@ -40,7 +40,7 @@ public class Candidat {
 	private List<Postulation> postulations;
 
 	@OneToMany(mappedBy = "candidat", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<CompetencesCandidats> competencesCandidats;
+    private List<CompetencesCandidats> competences;
 
 	public Integer getId() {
 		return id;
@@ -117,6 +117,9 @@ public class Candidat {
 			p.getNotes().forEach(note -> note.setPostulation(null));
 		});
 		setMotDePasse(null);
+		competences.forEach(cc -> {
+			cc.setCandidat(null);
+		});
 	}
 
 	public List<Postulation> getPostulations() {
@@ -149,5 +152,14 @@ public class Candidat {
 		this.motDePasse = motDePasse;
 	}
 
+	public List<CompetencesCandidats> getCompetences() {
+		return competences;
+	}
+
+	public void setCompetences(List<CompetencesCandidats> competencesCandidats) {
+		this.competences = competencesCandidats;
+	}
+
+	
 	
 }

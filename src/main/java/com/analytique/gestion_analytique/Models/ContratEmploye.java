@@ -16,7 +16,7 @@ public class ContratEmploye {
 	private Integer id;
 
 	@ManyToOne
-	@JoinColumn(name = "idemploye")
+	@JoinColumn(name = "id_employe")
 	private Employe employe;
 
 	@ManyToOne
