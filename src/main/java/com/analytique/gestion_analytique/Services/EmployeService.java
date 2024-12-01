@@ -3,6 +3,7 @@ package com.analytique.gestion_analytique.Services;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.analytique.gestion_analytique.Models.Employe;
@@ -48,4 +49,9 @@ public class EmployeService {
 				.findById(id)
 				.map(e -> EmployeSend.map(e, competenceRepository.findByEmploye(e.getId())));
 	}
+
+    public Employe getEmployeById(Integer id) {
+        Optional<Employe> employe = employeRepository.findById(id);
+        return employe.orElseThrow(() -> new RuntimeException("Employé introuvable pour l'id: " + id));
+    }
 }

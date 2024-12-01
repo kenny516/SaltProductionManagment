@@ -34,7 +34,8 @@ public class HeuresSupService {
 
     public HeuresSup creerHeureSup(HeuresSup heureSup) {
         // Calcul du montant
-        heureSup.setMontant(heureSup.getTauxHoraire() * heureSup.getTotalHeuresSup());
+        Double tauxHoraire = heureSup.getEmploye().getContrat().getTauxHoraire().doubleValue();
+        heureSup.setMontant(tauxHoraire * heureSup.getTotalHeuresSup());
         return heuresSupRepository.save(heureSup);
     }
 

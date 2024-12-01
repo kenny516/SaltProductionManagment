@@ -4,7 +4,6 @@ CREATE TABLE HeuresSup (
     date_debut TIMESTAMP NOT NULL,
     date_fin TIMESTAMP NOT NULL,
     total_heures_sup DOUBLE PRECISION,
-    taux_horaire DOUBLE PRECISION NOT NULL,
     montant DOUBLE PRECISION NOT NULL,
     PRIMARY KEY(id),
     FOREIGN KEY(id_employe) REFERENCES Employes(id)

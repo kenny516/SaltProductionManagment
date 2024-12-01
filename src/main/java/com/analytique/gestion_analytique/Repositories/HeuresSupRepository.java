@@ -10,6 +10,6 @@ import org.springframework.data.repository.query.Param;
 import com.analytique.gestion_analytique.Models.HeuresSup;
 
 public interface HeuresSupRepository extends JpaRepository<HeuresSup, Long> {
-    @Query("SELECT h FROM HeuresSup h WHERE h.idEmploye = :idEmploye AND FUNCTION('DATE_TRUNC', 'week', h.dateDebut) = :semaine")
+    @Query("SELECT h FROM HeuresSup h WHERE h.employe.id = :idEmploye AND FUNCTION('DATE_TRUNC', 'week', h.dateDebut) = :semaine")
     List<HeuresSup> findByEmployeAndWeek(@Param("idEmploye") Long idEmploye, @Param("semaine") LocalDate semaine);
 }

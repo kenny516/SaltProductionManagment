@@ -11,7 +11,9 @@ public class HeuresSup {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    private Integer idEmploye;
+    @ManyToOne
+    @JoinColumn(name = "id_employe",referencedColumnName = "id", nullable = false)
+    private Employe employe;
 
     private LocalDateTime dateDebut;
 
@@ -19,17 +21,13 @@ public class HeuresSup {
 
     private Double totalHeuresSup;
 
-    private Double tauxHoraire;
-
     private Double montant;
 
-    public HeuresSup(Integer idEmploye, LocalDateTime dateDebut, LocalDateTime dateFin, Double totalHeuresSup,
-            Double tauxHoraire, Double montant) {
-        this.idEmploye = idEmploye;
+    public HeuresSup(Employe employe, LocalDateTime dateDebut, LocalDateTime dateFin, Double totalHeuresSup, Double montant) {
+        this.employe = employe;
         this.dateDebut = dateDebut;
         this.dateFin = dateFin;
         this.totalHeuresSup = totalHeuresSup;
-        this.tauxHoraire = tauxHoraire;
         this.montant = montant;
     }
 
@@ -44,12 +42,12 @@ public class HeuresSup {
         this.id = id;
     }
 
-    public Integer getIdEmploye() {
-        return idEmploye;
+    public Employe getEmploye() {
+        return employe;
     }
 
-    public void setIdEmploye(Integer idEmploye) {
-        this.idEmploye = idEmploye;
+    public void setEmploye(Employe employe) {
+        this.employe = employe;
     }
 
     public LocalDateTime getDateDebut() {
@@ -74,14 +72,6 @@ public class HeuresSup {
 
     public void setTotalHeuresSup(Double totalHeuresSup) {
         this.totalHeuresSup = totalHeuresSup;
-    }
-
-    public Double getTauxHoraire() {
-        return tauxHoraire;
-    }
-
-    public void setTauxHoraire(Double tauxHoraire) {
-        this.tauxHoraire = tauxHoraire;
     }
 
     public Double getMontant() {
