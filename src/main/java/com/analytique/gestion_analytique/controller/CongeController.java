@@ -35,10 +35,9 @@ public class CongeController {
 
     @PostMapping("")
     public ResponseEntity<?> createConge(@RequestBody Conge conge) {
-        double jourRestant = congeService.CongePossible(
+        double jourRestant = congeService.nbrCongeDisponible(
                 conge.getIdTypeConge().getId(),
                 conge.getEmploye().getId(),
-                conge.getDateFin().getYear() - 3,
                 conge.getDateFin().getYear()
         );
         TypeConge typeConge = typeCongeService.getTypeCongeById(conge.getIdTypeConge().getId());
