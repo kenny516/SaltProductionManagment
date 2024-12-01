@@ -1,3 +1,7 @@
+INSERT INTO public.employes (id, nom, prenom, email, telephone, date_embauche, id_contrat_actuel) VALUES (1, 'kenny', 'kenny', 'kenny', '2002202', '2024-11-30', null);
+INSERT INTO public.employes (id, nom, prenom, email, telephone, date_embauche, id_contrat_actuel) VALUES (2, 'kenshi', 'kenshi', 'kenshill', '21615384', '2020-11-06', null);
+
+
 -- Insertion de types de congé
 INSERT INTO TypeConge (nom, est_paye, cumulable, duree_max)
 VALUES
