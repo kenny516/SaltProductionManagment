@@ -91,5 +91,9 @@ public class CongeService {
         return repository.congeParAns(idEmploye, anne);
     }
 
+    public double nbJourParMois(Integer idEmploye,Integer mois,Integer anne){
+        return repository.nbrJourCongeParMois(idEmploye, mois, anne) == null ? 0 : repository.nbrJourCongeParMois(idEmploye, mois, anne);
+    }
+
 
 }
