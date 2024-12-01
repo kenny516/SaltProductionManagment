@@ -1,3 +1,6 @@
+// TODO : cancidat non refus
+// TODO : embaucher candidat = toutes les autres postulations sont refus 
+
 package com.analytique.gestion_analytique.Services;
 
 import org.springframework.stereotype.Service;
@@ -107,10 +110,7 @@ public class CandidatService {
 
 	public CandidatSend getById(Integer id) {
 		Candidat c = candidatRepository.findById(id).get();
-		List<CompetencesCandidats> cc = cCandidatsRepository.findByCandidatId(id);
-		cc.forEach(com -> com.setCandidat(null));
-
-		return new CandidatSend(c, cc);
+		return new CandidatSend(c);
 	}
 
 	@Transactional
@@ -128,7 +128,7 @@ public class CandidatService {
 
 		noteCandidatRepository.save(nc);
 
-		String notifMessage = "Vous avez reçu une note de " + nc.getNote() + " à votre test";
+		String notifMessage = "Vous avez reçu une note de " + nc.getNote() + " à votre test  : " + nc.getTypeNote().getNomType();
 		Notification notification = new Notification(em.getReference(Candidat.class, id), notifMessage, Timestamp.valueOf(LocalDateTime.now()), "non_lu");
 		
 		notificationRepository.save(notification);
@@ -141,7 +141,16 @@ public class CandidatService {
 		List<Candidat> posts = posteId == null ? candidatRepository.findElligibles()
 				: candidatRepository.findElligiblesByPoste(posteId);
 
-		posts.forEach(p -> p.nullCandidat());
+		posts.forEach(p -> {
+			p.nullCandidat();
+			for (int i = 0; i < p.getPostulations().size(); i++) {
+				if (p.getPostulations().get(i).getStatus() == "Refus" || p.getPostulations().get(i).getNotes().size() < 3) {
+					p.getPostulations().remove(i);
+					i--;
+					continue;
+				}
+			}
+		});
 
 		return posts;
 	}

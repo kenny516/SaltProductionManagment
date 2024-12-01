@@ -11,37 +11,36 @@ public class CompetencesCandidats {
 	@JoinColumn(name = "idCandidat")
 	private Candidat candidat;
 
-    @Id
-    @ManyToOne
-    @JoinColumn(name = "competence_id")
-    private Competence competence;
+	@Id
+	@ManyToOne
+	@JoinColumn(name = "competence_id")
+	private Competence competence;
 
-    @Column(nullable = false)
-    private Integer niveau;
+	@Column(nullable = false)
+	private Integer niveau;
 
+	public Competence getCompetence() {
+		return competence;
+	}
 
-    public Competence getCompetence() {
-        return competence;
-    }
+	public void setCompetence(Competence competence) {
+		this.competence = competence;
+	}
 
-    public void setCompetence(Competence competence) {
-        this.competence = competence;
-    }
+	public Integer getNiveau() {
+		return niveau;
+	}
 
-    public Integer getNiveau() {
-        return niveau;
-    }
+	public void setNiveau(Integer niveau) {
+		this.niveau = niveau;
+	}
 
-    public void setNiveau(Integer niveau) {
-        this.niveau = niveau;
-    }
+	public Candidat getCandidat() {
+		return candidat;
+	}
 
-    public Candidat getCandidat() {
-        return candidat;
-    }
-
-    public void setCandidat(Candidat Candidat) {
-        this.candidat = Candidat;
-    }
+	public void setCandidat(Candidat Candidat) {
+		this.candidat = Candidat;
+	}
 
 }

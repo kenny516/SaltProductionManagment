@@ -62,29 +62,28 @@ BEFORE INSERT ON ContratEmploye
 FOR EACH ROW
 EXECUTE FUNCTION calculate_date_fin();
 
-
-
--- Creation ContratEmploye
-CREATE OR REPLACE FUNCTION insert_contrat_employe()
+-- Create the trigger function
+CREATE OR REPLACE FUNCTION update_offre_status()
 RETURNS TRIGGER AS $$
-DECLARE
-    essai_contrat_id INT;
 BEGIN
-    SELECT id INTO essai_contrat_id
-    FROM TypeContrat
-    WHERE nomType = 'ESSAI';
-
-    INSERT INTO ContratEmploye (idEmploye, idContrat, dateDebut)
-    VALUES (NEW.id, essai_contrat_id, NEW.date_embauche);
+    -- Check if the status was updated to 'employe'
+    IF NEW.status = 'employe' THEN
+        -- Check if the number of applicants meets or exceeds the available seats
+        IF (SELECT COUNT(*) FROM Postulations WHERE Offre_emploi_id = NEW.Offre_emploi_id AND status = 'employe') >=
+           (SELECT nbr_candidat_dm FROM Offre_emploi WHERE id = NEW.Offre_emploi_id) THEN
+            -- Update the status of the Offre_emploi to its opposite
+            UPDATE Offre_emploi
+            SET status = false
+            WHERE id = NEW.Offre_emploi_id;
+        END IF;
+    END IF;
 
     RETURN NEW;
 END;
 $$ LANGUAGE plpgsql;
 
-CREATE TRIGGER trg_insert_contrat_employe
-AFTER INSERT ON Employes
+-- Create the trigger on the Postulations table
+CREATE TRIGGER trigger_update_offre_status
+AFTER UPDATE OF status ON Postulations
 FOR EACH ROW
-EXECUTE FUNCTION insert_contrat_employe();
-
-
-
+EXECUTE FUNCTION update_offre_status();

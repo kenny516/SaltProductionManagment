@@ -27,6 +27,7 @@ CREATE TABLE Offre_emploi (
     status BOOLEAN,
     Date_publication DATE DEFAULT CURRENT_DATE,
     poste_id INT REFERENCES Postes(id) ON DELETE CASCADE,
+		salaire numeric(20,2),
     nbr_candidat_dm INT
 );
 

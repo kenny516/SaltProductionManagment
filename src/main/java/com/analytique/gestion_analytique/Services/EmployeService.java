@@ -27,8 +27,7 @@ public class EmployeService {
 	public List<EmployeSend> getQualifiedEmployeesForPost(Integer posteId) {
 		return employeRepository.findQualifiedEmployeesForPost(posteId)
 				.stream()
-				.map(e -> EmployeSend.map(e, competenceRepository.findByEmploye(e.getId()),
-						contratEmployeRepository.findByMaxDateAndEmployeId(e.getId())))
+				.map(e -> EmployeSend.map(e, competenceRepository.findByEmploye(e.getId())))
 				.toList();
 	}
 
@@ -40,15 +39,13 @@ public class EmployeService {
 		return employeRepository
 				.findAll()
 				.stream()
-				.map(e -> EmployeSend.map(e, competenceRepository.findByEmploye(e.getId()),
-						contratEmployeRepository.findByMaxDateAndEmployeId(e.getId())))
+				.map(e -> EmployeSend.map(e, competenceRepository.findByEmploye(e.getId())))
 				.toList();
 	}
 
 	public Optional<EmployeSend> getOne(int id) {
 		return employeRepository
 				.findById(id)
-				.map(e -> EmployeSend.map(e, competenceRepository.findByEmploye(e.getId()),
-						contratEmployeRepository.findByMaxDateAndEmployeId(e.getId())));
+				.map(e -> EmployeSend.map(e, competenceRepository.findByEmploye(e.getId())));
 	}
 }
