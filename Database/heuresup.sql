@@ -18,18 +18,3 @@ SELECT
 FROM HeuresSup
 GROUP BY id_employe, DATE_TRUNC('week', date_debut);
 
-
-CREATE VIEW total_heures_sup AS
-SELECT
-    e.id AS employe_id,
-    EXTRACT(week FROM hs.date_debut) AS semaine,
-    SUM(hs.total_heures_sup) AS total_heures,
-    SUM(hs.montant) AS total_montant
-FROM
-    heures_supplementaires hs
-JOIN
-    employes e ON hs.id_employe = e.id
-GROUP BY
-    e.id, EXTRACT(week FROM hs.date_debut)
-HAVING
-    SUM(hs.total_heures_sup) <= 20;
