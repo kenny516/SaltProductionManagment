@@ -1,3 +1,16 @@
+
+drop table PostEmploye ;
+
+alter table contratemploye rename column idcontrat to id_type_contrat;
+alter table contratemploye rename column datedebut to date_debut;
+alter table contratemploye rename column datefin to date_fin;
+alter table contratemploye rename column idemploye to id_employe;
+
+alter table contratemploye add column id_poste integer not null references postes(id);
+alter table contratemploye add column salaire numeric(20,2);
+alter table contratemploye add column taux_horaire numeric(20,2);
+alter table contratemploye add column id serial primary key;
+
 alter table employes drop column poste_id;
 alter table employes add column id_contrat_actuel integer references contratemploye(id);
 
@@ -11,16 +24,7 @@ CREATE TABLE CategoriePersonnel(
 
 ALTER TABLE Postes ADD COLUMN id_categorie_personnel INTEGER NOT NULL REFERENCES CategoriePersonnel(id);
 
-drop table PostEmploye ;
 
-alter table contratemploye rename column idcontrat to id_type_contrat;
-alter table contratemploye rename column datedebut to date_debut;
-alter table contratemploye rename column datefin to date_fin;
-alter table contratemploye rename column idemploye to id_employe;
-
-alter table contratemploye add column salaire numeric(20,2);
-alter table contratemploye add column taux_horaire numeric(20,2);
-alter table contratemploye add column id serial primary key;
 
 CREATE OR REPLACE FUNCTION update_taux_horaire()
 RETURNS TRIGGER AS $$
@@ -100,7 +104,7 @@ AFTER INSERT OR UPDATE ON RuptureContrat
 FOR EACH ROW
 EXECUTE FUNCTION update_contrat_date_fin();
 
-CREATE OR REPLACE VIEW EmployeesStillInCompany AS
+CREATE OR REPLACE VIEW v_employes_actuels AS
 SELECT
     e.id,
     e.id_contrat_actuel,
@@ -115,10 +119,4 @@ ON
     e.id_contrat_actuel = c.id
 WHERE
     c.date_fin IS NULL OR c.date_fin >= NOW();
-
-
-
-
-
-
 

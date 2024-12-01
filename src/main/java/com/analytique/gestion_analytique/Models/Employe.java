@@ -37,7 +37,7 @@ public class Employe {
 		this.email = email;
 		this.telephone = telephone;
 		this.dateEmbauche = dateEmbauche;
-		this.contrat = contrat;
+		setContrat(contrat);
 	}
 
 	public Employe() {
@@ -96,6 +96,7 @@ public class Employe {
 	}
 
 	public void setContrat(ContratEmploye contrat) {
+		contrat.setEmploye(null);
 		this.contrat = contrat;
 	}
 

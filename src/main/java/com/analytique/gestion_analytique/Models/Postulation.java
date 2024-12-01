@@ -79,14 +79,6 @@ public class Postulation {
 	public Postulation() {
 	}
 
-	public OffreEmploi getOffre() {
-		return offreEmploi;
-	}
-
-	public void setOffre(OffreEmploi offre) {
-		this.offreEmploi = offre;
-	}
-
 	public List<NoteCandidat> getNotes() {
 		return notes;
 	}
