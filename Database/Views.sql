@@ -23,7 +23,7 @@ LEFT JOIN
 GROUP BY
     c.id, c.nom, c.prenom, c.email, c.telephone;
 
-
+-- TODO : implementrr dans les listes
 CREATE VIEW v_candidat_postulation AS
 SELECT
     P.id AS id,
@@ -55,4 +55,4 @@ JOIN (
     HAVING COUNT(DISTINCT nc.idTypeNote) = (SELECT COUNT(*) FROM typeNote)
 ) AS subquery ON c.id = subquery.id_postulation;
 
-create or replace candidats_postules as select * from v_candidat_postulation where status  <> 'Employe' 
+create or replace view candidats_postules as select * from v_candidat_postulation where status  <> 'Employe' and offre_status is  true; 
