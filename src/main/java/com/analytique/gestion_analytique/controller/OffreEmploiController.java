@@ -1,7 +1,5 @@
 package com.analytique.gestion_analytique.controller;
 
-package com.analytique.gestion_analytique.controller;
-
 import org.springframework.web.bind.annotation.*;
 
 import com.analytique.gestion_analytique.Models.OffreEmploi;

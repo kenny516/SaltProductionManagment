@@ -8,15 +8,15 @@ import com.analytique.gestion_analytique.dto.receive.OffreEmploiRecieve;
 
 public class OffreEmploiService {
 
-    OffreEmploiRepository OeRepository;
+    OffreEmploiRepository oeRepository;
 
     public List<OffreEmploi> getAll() {
-        return OeRepository.findAll();
+        return oeRepository.findAll();
     }
 
     public OffreEmploi saveOffreEmploi(OffreEmploiRecieve offreEmploi) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'saveOffreEmploi'");
+        OffreEmploi oe = oeRepository.save(offreEmploi);
+        return oe;
     }
     
 }
