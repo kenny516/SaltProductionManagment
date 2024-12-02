@@ -96,4 +96,4 @@ INSERT INTO CandidatsDiplomes (candidat_id, diplome_id) VALUES
 INSERT INTO TypeContrat (id, nomType, dureeMois) VALUES 
 (1, 'CDD', 24),
 (2, 'ESSAI', 3),
-(3, 'CDI', 0);
+(3, 'CDI', null);

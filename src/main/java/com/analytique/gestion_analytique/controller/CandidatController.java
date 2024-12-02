@@ -9,9 +9,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import com.analytique.gestion_analytique.Services.CandidatService;
-import com.analytique.gestion_analytique.Models.Candidat;
 import com.analytique.gestion_analytique.Models.Notification;
 import com.analytique.gestion_analytique.Models.Postulation;
+import com.analytique.gestion_analytique.Models.V_CandidatPostulation;
 import com.analytique.gestion_analytique.Repositories.CompetenceRepository;
 import com.analytique.gestion_analytique.Repositories.PosteRepository;
 import com.analytique.gestion_analytique.Repositories.TypeNoteRepository;
@@ -49,7 +49,7 @@ public class CandidatController {
 	}
 
 	@GetMapping("")
-	public List<Candidat> getAll() {
+	public List<V_CandidatPostulation> getAll() {
 		return candidatService.findAll();
 	}
 
@@ -123,12 +123,12 @@ public class CandidatController {
 	}
 
 	@GetMapping("/elligibles/{id}")
-	public List<Candidat> getMethodName(@PathVariable Integer id) {
+	public List<V_CandidatPostulation> getMethodName(@PathVariable Integer id) {
 		return candidatService.getElligibles(id);
 	}
 
 	@GetMapping("/elligibles")
-	public List<Candidat> getMethodName() {
+	public List<V_CandidatPostulation> getMethodName() {
 		return candidatService.getElligibles(null);
 	}
 	
@@ -158,7 +158,7 @@ public class CandidatController {
 	}
 
 	@GetMapping("/non_refus")
-	public List<Candidat> getNonRefus(){
+	public List<V_CandidatPostulation> getNonRefus(){
 		return candidatService.findCandidatNonRefus();
 	}
 
