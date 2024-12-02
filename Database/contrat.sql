@@ -24,8 +24,6 @@ CREATE TABLE CategoriePersonnel(
 
 ALTER TABLE Postes ADD COLUMN id_categorie_personnel INTEGER NOT NULL REFERENCES CategoriePersonnel(id);
 
-
-
 CREATE OR REPLACE FUNCTION update_taux_horaire()
 RETURNS TRIGGER AS $$
 BEGIN
