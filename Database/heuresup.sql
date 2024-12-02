@@ -13,11 +13,12 @@ CREATE TABLE HeuresSup (
 CREATE OR REPLACE VIEW vue_heures_sup_semaine AS
 SELECT 
     id_employe,
-    DATE_TRUNC('week', date_debut) AS semaine,
+    DATE_TRUNC('week', date_debut)::DATE AS semaine,  -- Conversion explicite à DATE
     SUM(total_heures_sup) AS total_heures_sup,
     SUM(montant) AS total_montant
 FROM HeuresSup
 GROUP BY id_employe, DATE_TRUNC('week', date_debut);
+
 
 -- 1. Fonction pour calculer total_heures_sup
 CREATE OR REPLACE FUNCTION calculate_total_heures_sup()

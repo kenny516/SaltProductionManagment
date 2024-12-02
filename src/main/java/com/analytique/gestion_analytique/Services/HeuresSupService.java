@@ -14,10 +14,10 @@ import org.springframework.stereotype.Service;
 
 import com.analytique.gestion_analytique.Models.Employe;
 import com.analytique.gestion_analytique.Models.HeuresSup;
+import com.analytique.gestion_analytique.Models.HeuresSupSemaine;
 import com.analytique.gestion_analytique.Repositories.EmployeRepository;
 import com.analytique.gestion_analytique.Repositories.HeuresSupRepository;
 import com.analytique.gestion_analytique.Repositories.HeuresSupSemaineRepository;
-import com.analytique.gestion_analytique.dto.VueHeuresSupSemaineDTO;
 
 @Service
 public class HeuresSupService {
@@ -62,12 +62,6 @@ public class HeuresSupService {
             LocalDate.of(jour.getYear(), 6, 26),   // Indépendance
             LocalDate.of(jour.getYear(), 12, 25)   // Noël
         );
-    
-        // Ajouter les jours fériés variables
-        joursFeriesFixes.add(getLundiDePâques(jour.getYear()));
-        joursFeriesFixes.add(getAscension(jour.getYear()));
-        joursFeriesFixes.add(getPentecôte(jour.getYear()));
-    
         // Vérifier si la date donnée est un jour férié
         return joursFeriesFixes.contains(jour);
     }
@@ -114,7 +108,7 @@ public class HeuresSupService {
         LocalDate dateDebut = heureSup.getDateDebut().toLocalDate();
         LocalDate premierJourSemaine = dateDebut.with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY));
 
-        VueHeuresSupSemaine v_hs = heuresSupSemaineRepository.findBySemaineAndIdEmploye(heureSup.getEmploye().getId(), premierJourSemaine);
+        HeuresSupSemaine v_hs = heuresSupSemaineRepository.findBySemaineAndIdEmploye( premierJourSemaine, heureSup.getEmploye().getId());
 
         double heures = Duration.between(heureSup.getDateDebut(), heureSup.getDateFin()).toHours();
         heureSup.setTotalHeuresSup(heures);

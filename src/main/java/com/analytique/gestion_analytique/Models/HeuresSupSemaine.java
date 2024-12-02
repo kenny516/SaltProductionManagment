@@ -4,25 +4,25 @@ import java.time.LocalDate;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
-
-import java.math.BigDecimal;
+import jakarta.persistence.Table;
 
 @Entity
+@Table(name = "vue_heures_sup_semaine")
 public class HeuresSupSemaine {
 
     @Id
-    private Long idEmploye;
+    private Integer idEmploye;
     private LocalDate semaine;
-    private BigDecimal totalHeuresSup;
-    private BigDecimal totalMontant;
+    private Double totalHeuresSup;
+    private Double totalMontant;
 
     // Getters and setters
 
-    public Long getIdEmploye() {
+    public Integer getIdEmploye() {
         return idEmploye;
     }
 
-    public void setIdEmploye(Long idEmploye) {
+    public void setIdEmploye(Integer idEmploye) {
         this.idEmploye = idEmploye;
     }
 
@@ -34,19 +34,19 @@ public class HeuresSupSemaine {
         this.semaine = semaine;
     }
 
-    public BigDecimal getTotalHeuresSup() {
+    public Double getTotalHeuresSup() {
         return totalHeuresSup;
     }
 
-    public void setTotalHeuresSup(BigDecimal totalHeuresSup) {
+    public void setTotalHeuresSup(Double totalHeuresSup) {
         this.totalHeuresSup = totalHeuresSup;
     }
 
-    public BigDecimal getTotalMontant() {
+    public Double getTotalMontant() {
         return totalMontant;
     }
 
-    public void setTotalMontant(BigDecimal totalMontant) {
+    public void setTotalMontant(Double totalMontant) {
         this.totalMontant = totalMontant;
     }
 }

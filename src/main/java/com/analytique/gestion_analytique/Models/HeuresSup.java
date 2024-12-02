@@ -17,10 +17,10 @@ public class HeuresSup {
     @JoinColumn(name = "id_employe",referencedColumnName = "id", nullable = false)
     private Employe employe;
 
-    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
+    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm")
     private LocalDateTime dateDebut;
 
-    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
+    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm")
     private LocalDateTime dateFin;
 
     private Double totalHeuresSup;

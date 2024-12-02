@@ -6,9 +6,8 @@ import org.springframework.stereotype.Repository;
 import com.analytique.gestion_analytique.Models.HeuresSupSemaine;
 
 import java.time.LocalDate;
-import java.util.List;
 
 @Repository
 public interface HeuresSupSemaineRepository extends JpaRepository<HeuresSupSemaine, Long> {
-    List<HeuresSupSemaine> findBySemaineAndIdEmploye( Long idEmploye, LocalDate semaine,);
+    HeuresSupSemaine findBySemaineAndIdEmploye(  LocalDate semaine, Integer idEmploye);
 }
