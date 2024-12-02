@@ -10,6 +10,10 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 import com.analytique.gestion_analytique.Models.Paye;
 import com.analytique.gestion_analytique.Models.AvanceRemboursement;
+import com.analytique.gestion_analytique.Models.ContratEmploye;
+import com.analytique.gestion_analytique.Models.Employe;
+import com.analytique.gestion_analytique.Models.Poste;
+import com.analytique.gestion_analytique.Models.TypeContrat;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -31,13 +35,16 @@ import com.analytique.gestion_analytique.dto.send.EmployeSend;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import jakarta.transaction.Transactional;
+import com.analytique.gestion_analytique.Repositories.HeuresSupRepository;
 
 import com.analytique.gestion_analytique.Repositories.HeuresSupRepository;
 @Service
 public class EmployeService {
-	private final HeuresSupRepository heuresSupRepository;
 	@PersistenceContext
 	EntityManager entityManager;
+
+
+	private final HeuresSupRepository heuresSupRepository;
 	private final EmployeRepository employeRepository;
 	private final CompetenceRepository competenceRepository;
 	private final ContratEmployeRepository contratEmployeRepository;
@@ -46,17 +53,20 @@ public class EmployeService {
 	private final PayeRepository payeRepository;
 	JdbcTemplate jdbcTemplate;
 
-	public EmployeService(EmployeRepository employeRepository, CompetenceRepository competenceRepository,
-			ContratEmployeRepository contratEmployeRepository, AvanceRepository avanceRepository,
-			AvanceRemboursementRepository avanceRemboursementRepository, JdbcTemplate jdbcTemplate) {
+	
+
+	public EmployeService(HeuresSupRepository heuresSupRepository, EmployeRepository employeRepository,
+			CompetenceRepository competenceRepository, ContratEmployeRepository contratEmployeRepository,
+			AvanceRepository avanceRepository, AvanceRemboursementRepository avanceRemboursementRepository,
+			PayeRepository payeRepository, JdbcTemplate jdbcTemplate) {
+		this.heuresSupRepository = heuresSupRepository;
 		this.employeRepository = employeRepository;
 		this.competenceRepository = competenceRepository;
 		this.contratEmployeRepository = contratEmployeRepository;
 		this.avanceRepository = avanceRepository;
 		this.avanceRemboursementRepository = avanceRemboursementRepository;
-		this.jdbcTemplate = jdbcTemplate;
 		this.payeRepository = payeRepository;
-		this.heuresSupRepository = heuresSupRepository;
+		this.jdbcTemplate = jdbcTemplate;
 	}
 
 	public List<EmployeSend> getQualifiedEmployeesForPost(Integer posteId) {
