@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.analytique.gestion_analytique.Models.Paye;
+import com.analytique.gestion_analytique.Models.Employe;
 import com.analytique.gestion_analytique.Services.EmployeService;
 import com.analytique.gestion_analytique.dto.send.EmployeSend;
 
@@ -34,6 +35,11 @@ public class EmployeController {
 	@GetMapping("")
 	public List<EmployeSend> getAll() {
 		return employeService.getAll();
+	}
+
+	@GetMapping("/all")
+	public List<Employe> getAllEmp() {
+		return employeService.getAllEmp();
 	}
 
 	@GetMapping("/{id}")
