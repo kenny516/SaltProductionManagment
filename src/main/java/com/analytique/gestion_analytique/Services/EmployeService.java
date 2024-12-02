@@ -106,14 +106,19 @@ public class EmployeService {
 
 	public AvanceRemboursement remboursementMensuel(Integer idEmploye, LocalDate dateRemboursement) {
 		RemboursementReste rr = getDernierImpaye(idEmploye);
-		BigDecimal aPayer = getRemboursementMensuel(rr);
 
-		AvanceRemboursement ar = new AvanceRemboursement();
-		ar.setAvance(avanceRepository.getReferenceById(rr.id()));
-		ar.setDateRemboursement(dateRemboursement);
-		ar.setMontant(aPayer);
+		if(rr != null) {
+			BigDecimal aPayer = getRemboursementMensuel(rr);
+	
+			AvanceRemboursement ar = new AvanceRemboursement();
+			ar.setAvance(avanceRepository.getReferenceById(rr.id()));
+			ar.setDateRemboursement(dateRemboursement);
+			ar.setMontant(aPayer);
+	
+			return avanceRemboursementRepository.save(ar);
+		}
 
-		return avanceRemboursementRepository.save(ar);
+		return null;
 	}
 	
 }
