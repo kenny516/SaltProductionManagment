@@ -4,6 +4,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.analytique.gestion_analytique.constants.RecrutementConst;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 
 import jakarta.persistence.*;
@@ -31,6 +32,9 @@ public class Postulation {
 
 	@OneToMany(mappedBy = "postulation", cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<NoteCandidat> notes = new ArrayList<>();
+
+	@Transient
+	public int progress,curentStep;
 
 	public Postulation(Candidat candidat, OffreEmploi offre, LocalDate datePostulation) {
 		this.candidat = candidat;
@@ -88,6 +92,26 @@ public class Postulation {
 
 	public void setNotes(List<NoteCandidat> notes) {
 		this.notes = notes;
+		setProgress((int)notes.size()*100/RecrutementConst.nombreEpreuve);
+		setCurentStep(notes.size());
 	}
+
+	public int getProgress() {
+		return progress;
+	}
+
+	public void setProgress(int progress) {
+		this.progress = progress;
+	}
+
+	public int getCurentStep() {
+		return curentStep;
+	}
+
+	public void setCurentStep(int curentStep) {
+		this.curentStep = curentStep;
+	}
+
+	
 
 }
