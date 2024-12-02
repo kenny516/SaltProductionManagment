@@ -37,11 +37,12 @@ public class EmployeService {
 	private final AvanceRemboursementRepository avanceRemboursementRepository;
 	private final PayeRepository payeRepository;
 	public final PayeDetailsRepository payeDetailsRepository;
+	public final CongeService congeService;
 	JdbcTemplate jdbcTemplate;
 
 	public EmployeService(EmployeRepository employeRepository, CompetenceRepository competenceRepository,
 			ContratEmployeRepository contratEmployeRepository, AvanceRepository avanceRepository,
-			AvanceRemboursementRepository avanceRemboursementRepository, JdbcTemplate jdbcTemplate, PayeRepository payeRepository, HeuresSupRepository heuresSupRepository, BonusSalaireRepository bonusSalaireRepository, PayeDetailsRepository payeDetailsRepository) {
+			AvanceRemboursementRepository avanceRemboursementRepository, JdbcTemplate jdbcTemplate, PayeRepository payeRepository, HeuresSupRepository heuresSupRepository, BonusSalaireRepository bonusSalaireRepository, PayeDetailsRepository payeDetailsRepository, CongeService congeService) {
 		this.employeRepository = employeRepository;
 		this.competenceRepository = competenceRepository;
 		this.contratEmployeRepository = contratEmployeRepository;
@@ -52,6 +53,7 @@ public class EmployeService {
 		this.heuresSupRepository = heuresSupRepository;
 		this.bonusSalaireRepository = bonusSalaireRepository;
 		this.payeDetailsRepository = payeDetailsRepository;
+		this.congeService = congeService;
 	}
 
 	public List<EmployeSend> getQualifiedEmployeesForPost(Integer posteId) {
@@ -203,11 +205,11 @@ public class EmployeService {
 			// Double totalSalaire = salaireBase.subtract(totalAvance).doubleValue() + montantHeureSup;
 
 			// TODO: prendre nb heure conge 
-			BigDecimal nbHeureAbsence = BigDecimal.ZERO;
+			BigDecimal nbHeureAbsence = BigDecimal.valueOf(congeService.getNbrHeuresCongeParMois(IdEmploye, Integer.valueOf(datePaiement.getMonthValue()), Integer.valueOf(datePaiement.getYear())));
 			// TODO: prendre mmontant preavis
 			BigDecimal droitPreavis = BigDecimal.ZERO;
 			// TODO: prendre montant a deduire du salaire pour les conges non payé
-			BigDecimal droitConge = BigDecimal.ZERO;
+			BigDecimal droitConge = BigDecimal.valueOf(congeService.getMontantDroitConge(IdEmploye, Integer.valueOf(datePaiement.getMonthValue()), Integer.valueOf(datePaiement.getYear())));
 
 			BigDecimal indemnite = getIndemnite(IdEmploye,datePaiement.getMonthValue(), datePaiement.getYear());
 			BigDecimal prime = getPrime(IdEmploye,datePaiement.getMonthValue(), datePaiement.getYear());

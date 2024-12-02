@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.analytique.gestion_analytique.Models.CategoriePersonnel;
 import com.analytique.gestion_analytique.Models.Paye;
+import com.analytique.gestion_analytique.Models.PayeDetails;
 import com.analytique.gestion_analytique.Repositories.CategoriePersonnelRepository;
 import com.analytique.gestion_analytique.Services.EmployeService;
 import com.analytique.gestion_analytique.dto.receive.RemboursementReste;
@@ -62,12 +63,12 @@ public class EmployeController {
 	}
 
 	@PostMapping("/payer")
-	public ResponseEntity<Paye> payer(
+	public ResponseEntity<PayeDetails> payer(
             @RequestParam Integer id,
             @RequestParam(name="datePaiement") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate datePaiement,
             @RequestParam(required = false, name="heureNormale", defaultValue = "160.0") Double heureNormale) {
         try {
-            Paye paye = employeService.payer(id, datePaiement, heureNormale);
+            PayeDetails paye = employeService.validerPaiement(id, datePaiement, heureNormale);
             return ResponseEntity.ok(paye);
         } catch (Exception e) {
 			System.out.println(e.getMessage());
