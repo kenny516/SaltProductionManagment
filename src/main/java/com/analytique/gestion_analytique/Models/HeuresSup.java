@@ -2,6 +2,8 @@ package com.analytique.gestion_analytique.Models;
 
 import java.time.LocalDateTime;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import jakarta.persistence.*;
 
 @Entity
@@ -15,8 +17,10 @@ public class HeuresSup {
     @JoinColumn(name = "id_employe",referencedColumnName = "id", nullable = false)
     private Employe employe;
 
+    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
     private LocalDateTime dateDebut;
 
+    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
     private LocalDateTime dateFin;
 
     private Double totalHeuresSup;

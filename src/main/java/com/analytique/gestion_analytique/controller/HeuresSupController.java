@@ -10,7 +10,7 @@ import com.analytique.gestion_analytique.Models.HeuresSup;
 import com.analytique.gestion_analytique.Services.HeuresSupService;
 
 @RestController
-@RequestMapping("api/heures-sup")
+@RequestMapping("/api/heures-sup")
 @CrossOrigin(origins = "http://localhost:3000")
 public class HeuresSupController {
 
