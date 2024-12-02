@@ -4,6 +4,8 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import jakarta.persistence.*;
 
 @Entity
@@ -16,6 +18,7 @@ public class Postulation {
 
 	@ManyToOne
 	@JoinColumn(name = "candidat_id", nullable = false)
+	@JsonBackReference
 	private Candidat candidat;
 
 	@ManyToOne
