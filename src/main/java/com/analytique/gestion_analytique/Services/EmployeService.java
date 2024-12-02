@@ -8,14 +8,16 @@ import java.util.Optional;
 
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
-
+import com.analytique.gestion_analytique.Models.Paye;
 import com.analytique.gestion_analytique.Models.AvanceRemboursement;
 import com.analytique.gestion_analytique.Models.Employe;
+import com.analytique.gestion_analytique.Models.HeuresSup;
 import com.analytique.gestion_analytique.Repositories.AvanceRemboursementRepository;
 import com.analytique.gestion_analytique.Repositories.AvanceRepository;
 import com.analytique.gestion_analytique.Repositories.CompetenceRepository;
 import com.analytique.gestion_analytique.Repositories.ContratEmployeRepository;
 import com.analytique.gestion_analytique.Repositories.EmployeRepository;
+import com.analytique.gestion_analytique.Repositories.PayeRepository;
 import com.analytique.gestion_analytique.dto.receive.RemboursementReste;
 import com.analytique.gestion_analytique.dto.send.EmployeSend;
 
@@ -26,6 +28,7 @@ public class EmployeService {
 	private final ContratEmployeRepository contratEmployeRepository;
 	private final AvanceRepository avanceRepository;
 	private final AvanceRemboursementRepository avanceRemboursementRepository;
+	private final PayeRepository payeRepository;
 	JdbcTemplate jdbcTemplate;
 
 	public EmployeService(EmployeRepository employeRepository, CompetenceRepository competenceRepository,
@@ -119,6 +122,19 @@ public class EmployeService {
 		}
 
 		return null;
+	}
+
+	public Paye payer(Integer IdEmploye, LocalDate datePaiement, Double heureNormale){
+		AvanceRemboursement ar = remboursementMensuel(IdEmploye, datePaiement);
+		BigDecimal totalAvance = ar.getMontant();
+		List<HeuresSup> heuresSups = new HeuresSupService().getHeuresSupByEmployeAndMonthAndYear(Long.valueOf(IdEmploye), datePaiement.getMonthValue(), datePaiement.getYear());
+		double montantHeureSup = heuresSups.stream().map(HeuresSup::getMontant).filter(montant -> montant != null).reduce(0.0,Double::sum);
+		double totalHeureSup = heuresSups.stream().map(HeuresSup::getTotalHeuresSup).filter(heureSup -> heureSup != null).reduce(0.0,Double::sum);
+		BigDecimal salaireBase = contratEmployeRepository.findByMaxDateAndEmployeId(IdEmploye).getSalaire();
+		Double totalSalaire = salaireBase.subtract(totalAvance).doubleValue() + montantHeureSup;
+
+		Paye paye = new Paye(null, employeRepository.getReferenceById(IdEmploye), datePaiement.getMonthValue(), datePaiement.getYear(), heureNormale, totalHeureSup, totalAvance.doubleValue(), salaireBase.doubleValue(), totalSalaire);
+		return payeRepository.save(paye);
 	}
 	
 }
