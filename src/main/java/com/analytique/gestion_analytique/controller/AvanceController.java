@@ -6,7 +6,6 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -16,6 +15,9 @@ import com.analytique.gestion_analytique.Repositories.AvanceRemboursementReposit
 import com.analytique.gestion_analytique.Services.AvanceService;
 import com.analytique.gestion_analytique.dto.receive.AvanceReceive;
 import com.analytique.gestion_analytique.dto.receive.RemboursementReste;
+
+import org.springframework.web.bind.annotation.GetMapping;
+
 
 @RestController
 @RequestMapping("/api/avance")
@@ -27,6 +29,11 @@ public class AvanceController {
     public AvanceController(AvanceRemboursementRepository avanceRemboursementRepository, AvanceService avanceService) {
         this.avanceRemboursementRepository = avanceRemboursementRepository;
         this.avanceService = avanceService;
+    }
+
+    @GetMapping("")
+    public List<RemboursementReste> getAllUnpaid() {
+        return avanceService.getAllUnpaid();
     }
 
     @GetMapping("/intervalle-montant")
@@ -70,5 +77,8 @@ public class AvanceController {
 
         return response;
     }
+
+    
+    
 
 }

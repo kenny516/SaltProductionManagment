@@ -62,6 +62,9 @@ CREATE TABLE Employes (
     poste_id int REFERENCES Postes(id)
 );
 
+-- INSERT INTO employes (nom, prenom, email, telephone, date_embauche) VALUES ('Rakoto', 'Jean', 'blabla@gmail.com', '+2610012345', '2024-10-01');
+-- INSERT INTO employes (nom, prenom, email, telephone, date_embauche) VALUES ('Rabe', 'Onja', 'bla.bla@gmail.com', '+2610012345', '2024-10-01');
+
 CREATE TABLE PostEmploye(
     id INT PRIMARY KEY,
     idEmploye int REFERENCES Employes(id),

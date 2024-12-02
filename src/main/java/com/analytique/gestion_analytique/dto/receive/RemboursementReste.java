@@ -10,6 +10,8 @@ public record RemboursementReste(
         BigDecimal pourcentageDebitable,
         LocalDate dateAvance,
         String raison,
-        BigDecimal restePaye) {
+        BigDecimal restePaye,
+        String nom,
+        String prenom) {
 
 }

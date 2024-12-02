@@ -12,8 +12,8 @@ CREATE TABLE avances (
     PRIMARY KEY(id),
     FOREIGN KEY(id_employe) REFERENCES Employes(id),
     CHECK (montant > 0),
-    CHECK (pourcentage_debitable > 0),
-    CHECK (date_avance <= CURRENT_DATE)
+    CHECK (pourcentage_debitable > 0)
+    -- CHECK (date_avance <= CURRENT_DATE)
 );
 
 CREATE TABLE AvanceRemboursement (
@@ -24,19 +24,19 @@ CREATE TABLE AvanceRemboursement (
 
     PRIMARY KEY(id),
     FOREIGN KEY(id_avance) REFERENCES Avances(id),
-    CHECK (montant > 0),
-    CHECK (date_remboursement <= CURRENT_DATE)
+    CHECK (montant > 0)
+    -- CHECK (date_remboursement <= CURRENT_DATE)
 );
 
 -- Insert an advance for Employee A (id=1), not paid off yet
 INSERT INTO avances (id_employe, montant, pourcentage_debitable, date_avance, raison)
 VALUES 
-(1, 2000.00, 50.00, '2024-01-01', 'Advance for Employee A');
+(1, 2000000.00, 15.00, '2024-01-01', 'Déménagement');
 
 -- Insert an advance for Employee B (id=3), fully paid off
 INSERT INTO avances (id_employe, montant, pourcentage_debitable, date_avance, raison)
 VALUES 
-(3, 4000.00, 50.00, '2024-01-01', 'Advance for Employee B');
+(3, 25000000.00, 50.00, '2024-01-05', 'Ecolage Master 2');
 
 -- Insert payments for Employee B to fully pay off the advance
 -- Employee B has salary 4500 and advance of 4000, so they will pay off the full amount
@@ -48,5 +48,5 @@ VALUES
 
 INSERT INTO AvanceRemboursement (id_avance, montant, date_remboursement)
 VALUES 
-(1, 100.00, '2024-11-15'),  -- First payment of 2000
-(1, 150.00, '2024-02-01');  -- Second payment of 2000 (full repayment)
+(1, 450.00, '2024-01-15'),  -- First payment of 2000
+(1, 450.00, '2024-02-18');  -- Second payment of 2000 (full repayment)

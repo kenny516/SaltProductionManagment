@@ -1,15 +1,20 @@
 package com.analytique.gestion_analytique.Services;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 
 import com.analytique.gestion_analytique.Models.Avance;
+import com.analytique.gestion_analytique.Models.AvanceRemboursement;
 import com.analytique.gestion_analytique.Models.Employe;
 import com.analytique.gestion_analytique.Repositories.AvanceRepository;
 import com.analytique.gestion_analytique.Repositories.EmployeRepository;
 import com.analytique.gestion_analytique.dto.receive.AvanceReceive;
+import com.analytique.gestion_analytique.dto.receive.RemboursementReste;
 
 @Service
 public class AvanceService {
@@ -50,5 +55,32 @@ public class AvanceService {
         avance.setMontant(a.montant());
 
         return avanceRepository.save(avance);
+    }
+
+    public List<RemboursementReste> getAllUnpaid() {
+        String sql = "SELECT v.*, e.nom, e.prenom FROM v_avances_impayes v JOIN employes e ON v.id_employe = e.id";
+
+        return jdbcTemplate.query(
+            sql,
+            rs -> {
+                List<RemboursementReste> avances = new ArrayList<>();
+
+                while (rs.next()) {
+                    RemboursementReste r = new RemboursementReste(
+						rs.getInt("id"),
+						rs.getInt("id_employe"),
+						rs.getBigDecimal("montant"),
+						rs.getBigDecimal("pourcentage_debitable"),
+						rs.getDate("date_avance").toLocalDate(),
+						rs.getString("raison"),
+						rs.getBigDecimal("reste_payer"),
+						rs.getString("nom"),
+						rs.getString("prenom"));
+                    avances.add(r);
+                }
+
+                return avances;
+            }
+        );
     }
 }

@@ -1,17 +1,12 @@
 package com.analytique.gestion_analytique.controller;
 
-import java.math.BigDecimal;
-import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.analytique.gestion_analytique.Models.Paye;
 import com.analytique.gestion_analytique.Services.EmployeService;
-import com.analytique.gestion_analytique.dto.receive.RemboursementReste;
 import com.analytique.gestion_analytique.dto.send.EmployeSend;
 
 import org.springframework.format.annotation.DateTimeFormat;

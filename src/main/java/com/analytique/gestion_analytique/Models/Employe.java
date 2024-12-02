@@ -3,6 +3,9 @@ package com.analytique.gestion_analytique.Models;
 import java.time.LocalDate;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.*;
 
 @Entity
@@ -32,6 +35,8 @@ public class Employe {
 	private ContratEmploye contrat;
 
 	@OneToMany(mappedBy = "employe", cascade = CascadeType.ALL, orphanRemoval = true)
+	// @JsonBackReference
+	@JsonIgnore
 	private List<Avance> Avances;
 
 	public Employe(String nom, String prenom, String email, String telephone, LocalDate dateEmbauche,
@@ -41,7 +46,7 @@ public class Employe {
 		this.email = email;
 		this.telephone = telephone;
 		this.dateEmbauche = dateEmbauche;
-		setContrat(contrat);
+		this.contrat = contrat;
 	}
 
 	public Employe() {

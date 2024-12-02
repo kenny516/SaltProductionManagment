@@ -47,7 +47,7 @@ public class ContratEmploye {
 	}
 
 	public void setEmploye(Employe employe) {
-		employe.setContrat(null);
+		// employe.setContrat(null);
 		this.employe = employe;
 	}
 
