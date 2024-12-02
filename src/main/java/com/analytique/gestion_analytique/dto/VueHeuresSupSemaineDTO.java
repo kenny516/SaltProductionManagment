@@ -3,26 +3,23 @@ package com.analytique.gestion_analytique.dto;
 import java.time.LocalDate;
 
 public class VueHeuresSupSemaineDTO {
-    private Long idEmploye;
+    private Integer idEmploye;
     private LocalDate semaine;
     private Double totalHeuresSup;
     private Double totalMontant;
 
-    // Constructeurs, getters et setters
-    public VueHeuresSupSemaineDTO() {}
-
-    public VueHeuresSupSemaineDTO(Long idEmploye, LocalDate semaine, Double totalHeuresSup, Double totalMontant) {
+    public VueHeuresSupSemaineDTO(Integer idEmploye, LocalDate semaine, Double totalHeuresSup, Double totalMontant) {
         this.idEmploye = idEmploye;
         this.semaine = semaine;
         this.totalHeuresSup = totalHeuresSup;
         this.totalMontant = totalMontant;
     }
 
-    public Long getIdEmploye() {
+    public Integer getIdEmploye() {
         return idEmploye;
     }
 
-    public void setIdEmploye(Long idEmploye) {
+    public void setIdEmploye(Integer idEmploye) {
         this.idEmploye = idEmploye;
     }
 
