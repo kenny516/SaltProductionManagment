@@ -61,8 +61,6 @@ public class CandidatController {
 			response.put("id", postulation.getId()); // Récupère l'ID de la postulation
 			return ResponseEntity.ok(response);
 		} catch (Exception e) {
-			System.out.println(e);
-
 			response.put("error", "500");
 			return ResponseEntity.internalServerError().body(e.getMessage());
 		}
@@ -75,7 +73,6 @@ public class CandidatController {
 			response.put("id", candidatService.login(params.get("email"), params.get("password")));
 			return ResponseEntity.ok(response);
 		} catch (Exception e) {
-			System.out.println(e);
 
 			response.put("error", "500");
 			return ResponseEntity.internalServerError().body(e.getMessage());
@@ -87,7 +84,6 @@ public class CandidatController {
 		try {
 			return ResponseEntity.status(HttpStatus.CREATED).body(candidatToEmpService.embaucherCandidat(candidat));
 		} catch (Exception e) {
-			System.out.println(e);
 
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
 		}
@@ -98,7 +94,6 @@ public class CandidatController {
 		try {
 			return ResponseEntity.ok(candidatService.getById(id));
 		} catch (Exception e) {
-			System.out.println(e);
 
 			return ResponseEntity.internalServerError().body(e.getMessage());
 		}
@@ -117,7 +112,6 @@ public class CandidatController {
 					return ResponseEntity.status(HttpStatus.CREATED).body("note created");
 			}
 		} catch (Exception e) {
-			System.out.println(e);
 			return ResponseEntity.internalServerError().body(e.getMessage());
 		}
 	}
@@ -152,7 +146,6 @@ public class CandidatController {
 		try {
 			return ResponseEntity.ok(candidatService.saveCandidat(c));
 		} catch (Exception e) {
-			System.out.println(e);
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
 		}
 	}

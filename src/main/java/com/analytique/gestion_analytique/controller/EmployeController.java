@@ -1,6 +1,7 @@
 package com.analytique.gestion_analytique.controller;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -14,6 +15,8 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 
 @RestController
 @RequestMapping("/api/employe")
@@ -45,6 +48,10 @@ public class EmployeController {
 		return employeService.getQualifiedEmployeesForPost(id);
 	}
 
+	// TODO : mbola tsy mety
 	@PostMapping("/{id}/contrat")
-	public ContratEmploye 
+	public ResponseEntity<?> modifierContrat(@PathVariable("id") Integer id , @RequestBody Map<String, Object> body){
+
+		return ResponseEntity.ok(employeService.getOne(id));
+	}
 }
