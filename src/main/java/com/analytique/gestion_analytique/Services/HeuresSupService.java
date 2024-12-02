@@ -7,11 +7,14 @@ import java.time.LocalDateTime;
 import java.time.temporal.TemporalAdjusters;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.analytique.gestion_analytique.Models.Employe;
 import com.analytique.gestion_analytique.Models.HeuresSup;
+import com.analytique.gestion_analytique.Repositories.EmployeRepository;
 import com.analytique.gestion_analytique.Repositories.HeuresSupRepository;
 import com.analytique.gestion_analytique.dto.VueHeuresSupSemaineDTO;
 
@@ -20,6 +23,9 @@ public class HeuresSupService {
 
     @Autowired
     private HeuresSupRepository heuresSupRepository;
+    @Autowired
+    private EmployeRepository employeRepository;
+
 
     public double determinerTauxHoraire(LocalDateTime dateDebut, LocalDateTime dateFin, double tauxHoraireBase) {
         int dayOfWeek = dateDebut.getDayOfWeek().getValue();
@@ -97,6 +103,10 @@ public class HeuresSupService {
 
     public HeuresSup creerHeureSup(HeuresSup heureSup) {
 
+        Integer a = heureSup.getEmploye().getId();
+
+        Optional<Employe> emp = employeRepository.findById(a);
+
         // Obtenir le premier jour de la semaine à partir de la date de début
         LocalDate dateDebut = heureSup.getDateDebut().toLocalDate();
         LocalDate premierJourSemaine = dateDebut.with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY));
@@ -106,7 +116,7 @@ public class HeuresSupService {
         double heures = Duration.between(heureSup.getDateDebut(), heureSup.getDateFin()).toHours();
         heureSup.setTotalHeuresSup(heures);
 
-        Double tauxHoraire = determinerTauxHoraire(heureSup.getDateDebut(), heureSup.getDateFin(), heureSup.getEmploye().getContrat().getTauxHoraire().doubleValue());
+        Double tauxHoraire = determinerTauxHoraire(heureSup.getDateDebut(), heureSup.getDateFin(), emp.get().getContrat().getTauxHoraire().doubleValue());
         heureSup.setTauxHoraire(tauxHoraire);
         heureSup.setMontant(tauxHoraire * heureSup.getTotalHeuresSup());
 

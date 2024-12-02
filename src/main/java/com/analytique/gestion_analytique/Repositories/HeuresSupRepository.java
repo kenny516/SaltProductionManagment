@@ -18,7 +18,7 @@ public interface HeuresSupRepository extends JpaRepository<HeuresSup, Long> {
             DATE_TRUNC('week', h.date_debut) AS semaine,
             SUM(h.total_heures_sup) AS totalHeuresSup,
             SUM(h.montant) AS totalMontant
-        FROM heures_sup h
+        FROM heuressup h
         WHERE h.id_employe = :idEmploye
           AND DATE_TRUNC('week', h.date_debut) = :semaine
         GROUP BY h.id_employe, DATE_TRUNC('week', h.date_debut)
