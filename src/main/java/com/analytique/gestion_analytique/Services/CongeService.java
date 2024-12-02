@@ -1,27 +1,22 @@
 package com.analytique.gestion_analytique.Services;
 
 import com.analytique.gestion_analytique.Models.Conge;
-import com.analytique.gestion_analytique.Models.Employe;
 import com.analytique.gestion_analytique.Repositories.CongeRepository;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 @Service
 public class CongeService {
     private final CongeRepository repository;
     private final SoldeCongeService soldeCongeService;
-    private final EmployeService employeService;
 
-    public CongeService(CongeRepository repository, SoldeCongeService soldeCongeService, EmployeService employeService) {
+    public CongeService(CongeRepository repository, SoldeCongeService soldeCongeService) {
         this.repository = repository;
         this.soldeCongeService = soldeCongeService;
-        this.employeService = employeService;
     }
 
     public List<Conge> getAllConges() {
@@ -43,7 +38,6 @@ public class CongeService {
         }
         return null;
     }
-
     public void updateCongeStatus(Integer id, String newStatus) {
         if (repository.existsById(id)) {
             Conge existingConge = repository.findById(id).orElse(null);
@@ -55,10 +49,10 @@ public class CongeService {
     }
 
 
+
     public void deleteConge(Integer id) {
         repository.deleteById(id);
     }
-
     // utils
     public void updateStatus(List<Conge> conges) {
         for (Conge conge : conges) {
@@ -76,20 +70,20 @@ public class CongeService {
         }
     }
 
-    public List<Conge> getCongeValide() {
+    public List<Conge> getCongeValide(){
         List<Conge> conges = repository.findAll();
         updateStatus(conges);
         return conges;
     }
 
-    public double totalCongeByEmploye(Integer idTypeConge, Integer idEmploye, Integer anneeDebut, Integer anneeFin) {
-        return repository.totalCongeByEmploye(idTypeConge, idEmploye, anneeDebut, anneeFin);
+    public double totalCongeByEmploye(Integer idTypeConge,Integer idEmploye, Integer anneeDebut, Integer anneeFin) {
+        return repository.totalCongeByEmploye(idTypeConge,idEmploye, anneeDebut, anneeFin);
     }
 
 
-    public double CongePossible(Integer idTypeConge, Integer idEmploye, Integer anneeDebut, Integer anneeFin) {
-        double congePossible = soldeCongeService.congePossible(idTypeConge, idEmploye, anneeDebut, anneeFin) == null ? 0 : soldeCongeService.congePossible(idTypeConge, idEmploye, anneeDebut, anneeFin);
-        double totalConge = repository.totalCongeByEmploye(idTypeConge, idEmploye, anneeDebut, anneeFin) == null ? 0 : repository.totalCongeByEmploye(idTypeConge, idEmploye, anneeDebut, anneeFin);
+    public double CongePossible(Integer idTypeConge,Integer idEmploye, Integer anneeDebut, Integer anneeFin) {
+        double congePossible = soldeCongeService.congePossible(idTypeConge,idEmploye, anneeDebut, anneeFin) == null ? 0 : soldeCongeService.congePossible(idTypeConge,idEmploye, anneeDebut, anneeFin);
+        double totalConge = repository.totalCongeByEmploye(idTypeConge,idEmploye, anneeDebut, anneeFin) == null ? 0 : repository.totalCongeByEmploye(idTypeConge,idEmploye, anneeDebut, anneeFin);
         return congePossible - totalConge < 0 ? 0 : congePossible - totalConge;
     }
 
@@ -97,41 +91,43 @@ public class CongeService {
         return repository.congeParAns(idEmploye, anne);
     }
 
-    public double nbJourParMois(Integer idEmploye, Integer mois, Integer anne) {
-        return repository.nbrJourCongeParMois(idEmploye, mois, anne) == null ? 0 : repository.nbrJourCongeParMois(idEmploye, mois, anne);
-    }
-
-    public double nbJourParMoisPaye(Integer idEmploye, Integer mois, Integer annee) {
-        return repository.nbrJourCongeParMoisPaye(idEmploye, mois, annee) == null ? 0 : repository.nbrJourCongeParMoisPaye(idEmploye, mois, annee);
-    }
-
-    public Map<Integer, Integer> congeByYear(Integer idTypeConge,Integer idEmploye) {
-        List<Conge> conges = repository.findByEmployeId(idTypeConge,idEmploye);
-        Map<Integer, Integer> congePerYear = new HashMap<>();
-        for (Conge conge : conges) {
-            if (conge.getDateDebut().getYear() != conge.getDateFin().getYear()) {
-                LocalDate finAnnee = LocalDate.of(conge.getDateDebut().getYear(), 12, 31);
-                long nbJours = ChronoUnit.DAYS.between(conge.getDateDebut(), finAnnee) + 1;
-                congePerYear.put(conge.getDateDebut().getYear(),
-                        congePerYear.getOrDefault(conge.getDateDebut().getYear(), 0) + (int) nbJours);
-                // date fin
-                LocalDate debutAnneeSuivante = LocalDate.of(conge.getDateFin().getYear(), 1, 1);
-                nbJours = ChronoUnit.DAYS.between(debutAnneeSuivante, conge.getDateFin()) + 1;
-                congePerYear.put(conge.getDateFin().getYear(),
-                        congePerYear.getOrDefault(conge.getDateFin().getYear(), 0) + (int) nbJours);
-            } else {
-                long nbJours = ChronoUnit.DAYS.between(conge.getDateDebut(), conge.getDateFin()) + 1;
-                congePerYear.put(conge.getDateDebut().getYear(),
-                        congePerYear.getOrDefault(conge.getDateDebut().getYear(), 0) + (int) nbJours);
-            }
-        }
-        return congePerYear;
-    }
 
     public double nbrCongeDisponible(Integer idTypeConge,Integer idEmploye, Integer annee) {
         double congeDisponible = 0;
         Map<Integer, Integer> congePerYear = congeByYear(idTypeConge,idEmploye);
         congeDisponible = (12*2.5) - congePerYear.get(annee);
         return congeDisponible;
+    }
+
+    public double getNbrHeuresCongeParMois(Integer idEmploye, Integer mois, Integer annee) {
+        double joursConge = repository.nbrJourCongeParMois(idEmploye, mois, annee) == null 
+            ? 0 
+            : repository.nbrJourCongeParMois(idEmploye, mois, annee);
+        
+        // Convertir les jours de congé en heures (8 heures par jour)
+        return joursConge * 8;
+    }    
+
+    public double getNbrHeuresCongeNonPayeParMois(Integer idEmploye, Integer mois, Integer annee) {
+        Double joursCongeNonPaye = repository.nbrJourCongeNonPayeParMois(idEmploye, mois, annee) == null
+            ? 0
+            : repository.nbrJourCongeNonPayeParMois(idEmploye, mois, annee);
+    
+        // Convertir les jours de congé non payés en heures (8 heures par jour)
+        return joursCongeNonPaye * 8;
+    }
+    
+    public double getMontantDroitConge(Integer idEmploye, Integer mois, Integer annee) {
+        Employe employe = employeService.getEmployeById(idEmploye);
+        
+        if (employe == null || employe.getContrat().getTauxHoraire() == null) {
+            throw new IllegalArgumentException("L'employé ou son taux horaire est introuvable.");
+        }
+
+        double tauxHoraire = employe.getContrat().getTauxHoraire().doubleValue();
+    
+        double heuresCongesPayes = getNbrHeuresCongeNonPayeParMois(idEmploye, mois, annee);
+    
+        return heuresCongesPayes * tauxHoraire;
     }
 }
