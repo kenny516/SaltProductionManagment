@@ -1,29 +1,21 @@
 package com.analytique.gestion_analytique.controller;
 
-import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.analytique.gestion_analytique.Models.ContratEmploye;
-import com.analytique.gestion_analytique.Models.Paye;
-import com.analytique.gestion_analytique.Models.Employe;
+import com.analytique.gestion_analytique.Models.CategoriePersonnel;
+import com.analytique.gestion_analytique.Repositories.CategoriePersonnelRepository;
 import com.analytique.gestion_analytique.Services.EmployeService;
-import com.analytique.gestion_analytique.dto.receive.RemboursementReste;
 import com.analytique.gestion_analytique.dto.send.EmployeSend;
 
-import org.springframework.format.annotation.DateTimeFormat;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 
 @RestController
 @RequestMapping("/api/employe")
@@ -31,19 +23,16 @@ import org.springframework.web.bind.annotation.RequestBody;
 public class EmployeController {
 
 	EmployeService employeService;
+	CategoriePersonnelRepository categoriePersonnelRepository;
 
-	public EmployeController(EmployeService employeService, JdbcTemplate jdbcTemplate) {
+	public EmployeController(EmployeService employeService, CategoriePersonnelRepository categoriePersonnelRepository) {
 		this.employeService = employeService;
+		this.categoriePersonnelRepository = categoriePersonnelRepository;
 	}
 
 	@GetMapping("")
 	public List<EmployeSend> getAll() {
 		return employeService.getAll();
-	}
-
-	@GetMapping("/all")
-	public List<Employe> getAllEmp() {
-		return employeService.getAllEmp();
 	}
 
 	@GetMapping("/{id}")
@@ -60,30 +49,22 @@ public class EmployeController {
 		return employeService.getQualifiedEmployeesForPost(id);
 	}
 
-	// TODO : mbola tsy mety
-	@PostMapping("/{id}/contrat")
-	public ResponseEntity<?> modifierContrat(@PathVariable("id") Integer id , @RequestBody Map<String, Object> body){
+	@GetMapping("/categories-personnel")
+	public List<CategoriePersonnel> getCategoriesPersonnel() {
+		List<CategoriePersonnel> fetched = categoriePersonnelRepository.findAll();
 
-		return ResponseEntity.ok(employeService.getOne(id));
-	}
-  
-	@GetMapping("/{id}/avances")
-	public List<RemboursementReste> getAllAvances(@PathVariable Integer id, @RequestParam(required = false, name = "unpaid") Boolean unpaid) {
-		return employeService.getAllAvances(id, unpaid);
-	}
+		List<CategoriePersonnel> categs = new ArrayList<>();
+		
+		CategoriePersonnel tous = new CategoriePersonnel();
+		tous.setId(0);
+		tous.setNom("Tous");
+		tous.setDescription("Toutes les catégories de personnel");
 
-	@PostMapping("/payer")
-	public ResponseEntity<Paye> payer(
-            @RequestParam Integer id,
-            @RequestParam(name="datePaiement") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate datePaiement,
-            @RequestParam(required = false, name="heureNormale", defaultValue = "160.0") Double heureNormale) {
-        try {
-            Paye paye = employeService.payer(id, datePaiement, heureNormale);
-            return ResponseEntity.ok(paye);
-        } catch (Exception e) {
-			System.out.println(e.getMessage());
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
-        }
-    }
+		// categs.add(tous);
+
+		categs.addAll(fetched);
+
+		return categs;
+	}
 	
 }

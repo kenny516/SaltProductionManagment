@@ -19,7 +19,7 @@ public interface CongeRepository extends JpaRepository<Conge, Integer> {
               AND extract(YEAR FROM date_fin) <= :anneeFin
               AND id_employe = :idEmploye
             group by id_employe;""", nativeQuery = true)
-    Double totalCongeByEmploye(@Param("idTypeConge") Integer idTypeConge, @Param("idEmploye") Integer idEmploye, @Param("anneDebut") Integer anneDebut, @Param("anneeFin") Integer anneeFin);
+    Double totalCongeByEmploye(@Param("idTypeConge")Integer idTypeConge ,@Param("idEmploye") Integer idEmploye, @Param("anneDebut") Integer anneDebut, @Param("anneeFin") Integer anneeFin);
 
     @Query(value = """
             SELECT *

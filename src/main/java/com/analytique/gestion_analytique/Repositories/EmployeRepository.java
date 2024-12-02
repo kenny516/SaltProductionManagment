@@ -6,7 +6,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import com.analytique.gestion_analytique.Models.Employe;
-import com.analytique.gestion_analytique.Models.Paye;
+
 import java.util.List;
 
 @Repository
@@ -23,8 +23,4 @@ public interface EmployeRepository extends JpaRepository<Employe, Integer> {
 			HAVING AVG(ce2.niveau) > 3
 			""", nativeQuery = true)
 	List<Employe> findQualifiedEmployeesForPost(@Param("posteId") Integer posteId);
-
-	@Query(value="SELECT * FROM Paye where mois = :mois and annee = :annee and id_employe = :id_employe", nativeQuery = true) 
-	Paye getPaye(@Param("mois") Integer mois, @Param("annee") Integer annee, @Param("id_employe") Integer id_employe);
-
 }

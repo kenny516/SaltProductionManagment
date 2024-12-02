@@ -4,8 +4,8 @@ CREATE TABLE HeuresSup (
     date_debut TIMESTAMP NOT NULL,
     date_fin TIMESTAMP NOT NULL,
     total_heures_sup DOUBLE PRECISION,
-    taux_horaire DOUBLE PRECISION,
-    montant DOUBLE PRECISION,
+    taux_horaire DOUBLE PRECISION NOT NULL,
+    montant DOUBLE PRECISION NOT NULL,
     PRIMARY KEY(id),
     FOREIGN KEY(id_employe) REFERENCES Employes(id)
 );
@@ -13,7 +13,7 @@ CREATE TABLE HeuresSup (
 CREATE OR REPLACE VIEW vue_heures_sup_semaine AS
 SELECT 
     id_employe,
-    DATE_TRUNC('week', date_debut)::DATE AS semaine,  -- Conversion explicite à DATE
+    DATE_TRUNC('week', date_debut) AS semaine,
     SUM(total_heures_sup) AS total_heures_sup,
     SUM(montant) AS total_montant
 FROM HeuresSup
@@ -40,3 +40,4 @@ CREATE TRIGGER before_insert_calculate_total_heures_sup
 BEFORE INSERT ON HeuresSup
 FOR EACH ROW
 EXECUTE FUNCTION calculate_total_heures_sup();
+
