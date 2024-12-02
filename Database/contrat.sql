@@ -6,7 +6,7 @@ alter table contratemploye rename column datedebut to date_debut;
 alter table contratemploye rename column datefin to date_fin;
 alter table contratemploye rename column idemploye to id_employe;
 
-alter table contratemploye add column id_poste integer not null references postes(id);
+alter table contratemploye add column id_poste integer references postes(id);
 alter table contratemploye add column salaire numeric(20,2);
 alter table contratemploye add column taux_horaire numeric(20,2);
 alter table contratemploye add column id serial primary key;
@@ -176,11 +176,15 @@ INSERT INTO CategoriePersonnel (nom, description) VALUES
 ('Technique', 'Personnel technique'),
 ('Support', 'Personnel de support');
 
+INSERT INTO TypeContrat (id, nomType, dureeMois) VALUES 
+(1, 'CDD', 24),
+(2, 'ESSAI', 3),
+(3, 'CDI', null);
 
 INSERT INTO Postes (titre, description, departement, id_categorie_personnel) VALUES
-('Secrétaire', 'Responsable des tâches administratives', 'Administration', 1),
+('Secrétaire', 'Responsable des taches administratives', 'Administration', 1),
 ('Technicien informatique', 'Gestion du matériel informatique', 'Technique', 2),
-('Agent de maintenance', 'Responsable de l’entretien des installations', 'Support', 3);
+('Agent de maintenance', 'Responsable de entretien des installations', 'Support', 3);
 
 
 INSERT INTO Employes (nom, prenom, email, telephone, id_contrat_actuel) VALUES
@@ -194,9 +198,9 @@ INSERT INTO ContratEmploye (id_employe, id_type_contrat, date_debut,id_poste, sa
 (3, 3, '2024-01-01', 3, 1200);
 
 INSERT INTO TypeRupture (nom, description, preavis_requis, indemnite) VALUES
-('Démission', 'Rupture volontaire par l’employé', TRUE, FALSE),
-('Licenciement', 'Rupture décidée par l’employeur', TRUE, TRUE),
-('Fin de contrat', 'Expiration du contrat à durée déterminée', FALSE, FALSE);
+('Démission', 'Rupture volontaire par employe', TRUE, FALSE),
+('Licenciement', 'Rupture décidée par employeur', TRUE, TRUE),
+('Fin de contrat', 'Expiration du contrat a duree determinee', FALSE, FALSE);
 
 
 INSERT INTO RuptureContrat (id_type_rupture, id_employe, date_notification, date_fin_contrat, preavis_effectue, motif, indemnite_verse) VALUES

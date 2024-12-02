@@ -91,9 +91,3 @@ INSERT INTO CandidatsDiplomes (candidat_id, diplome_id) VALUES
 (1, 1),  -- Jean -> Licence en Informatique
 (2, 2),  -- Alice -> Master en Ressources Humaines
 (3, 3);  -- Pierre -> Master en Management
-
--- Insérer des types de contrat
-INSERT INTO TypeContrat (id, nomType, dureeMois) VALUES 
-(1, 'CDD', 24),
-(2, 'ESSAI', 3),
-(3, 'CDI', null);
