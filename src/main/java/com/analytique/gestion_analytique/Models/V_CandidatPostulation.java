@@ -46,8 +46,6 @@ public class V_CandidatPostulation {
 
     private String status;
 
-    @OneToMany(mappedBy = "notecadindat", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private List<NoteCandidat> noteCandidat;
 
     // Getters and Setters
     public Integer getId() {
@@ -146,12 +144,4 @@ public class V_CandidatPostulation {
         this.status = status;
     }
 
-    public List<NoteCandidat> getNoteCandidat() {
-        return noteCandidat;
-    }
-
-    public void setNoteCandidat(List<NoteCandidat> noteCandidat) {
-			noteCandidat.forEach(nc -> nc.setPostulation(null));
-        this.noteCandidat = noteCandidat;
-    }
 }
