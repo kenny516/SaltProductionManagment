@@ -75,9 +75,10 @@ CREATE TABLE RuptureContrat(
 	id_employe INTEGER NOT NULL,
 	date_notification DATE NOT NULL,
 	date_fin_contrat DATE NOT NULL,
-	preavis_effectue BOOLEAN NOT NULL,
+	preavis_employe BOOLEAN NOT NULL,
+	preavis_entreprise BOOLEAN NOT NULL,
 	motif VARCHAR(50),
-	indemnite_verse NUMERIC(15, 2) NOT NULL,
+	indemnite_verse NUMERIC(15, 2) default 0,
 	PRIMARY KEY(id),
 	FOREIGN KEY(id_type_rupture) REFERENCES TypeRupture(id),
 	FOREIGN KEY(id_employe) REFERENCES employes(id)
@@ -89,7 +90,7 @@ RETURNS TRIGGER AS $$
 BEGIN
     -- Update the date_fin in ContratEmploye for the current contract of the employee
     UPDATE ContratEmploye
-    SET date_fin = NEW.date_fin_contrat
+    SET date_fin = NEW.date_fin
     WHERE id = (SELECT id_contrat_actuel FROM employes WHERE id = NEW.id_employe);
 
     RETURN NEW;
@@ -121,7 +122,6 @@ AFTER INSERT ON ContratEmploye
 FOR EACH ROW
 EXECUTE FUNCTION update_employe_id_contrat_actuel();
 
--- Trigger Function
 CREATE OR REPLACE FUNCTION set_date_fin_contrat()
 RETURNS TRIGGER AS $$
 DECLARE
@@ -129,16 +129,21 @@ DECLARE
 BEGIN
     -- Récupérer la durée en mois à partir du type de contrat
     SELECT dureeMois
-    INTO STRICT contract_duration
+    INTO contract_duration
     FROM TypeContrat
     WHERE id = NEW.id_type_contrat;
+
+    -- Si aucune durée n'est trouvée, lever une exception ou définir une valeur par défaut
+    IF NOT FOUND THEN
+        RAISE EXCEPTION 'TypeContrat introuvable pour id_type_contrat=%', NEW.id_type_contrat;
+    END IF;
 
     -- Si la durée est null, la date de fin est null
     IF contract_duration IS NULL THEN
         NEW.date_fin := NULL;
     ELSE
         -- Calculer la date de fin en ajoutant la durée en mois à la date de début
-        NEW.date_fin := NEW.date_debut + INTERVAL '1 month' * contract_duration;
+        NEW.date_fin := NEW.date_debut + INTERVAL '1' MONTH * contract_duration;
     END IF;
 
     RETURN NEW;
@@ -153,12 +158,7 @@ EXECUTE FUNCTION set_date_fin_contrat();
 
 
 CREATE OR REPLACE VIEW v_employes_actuels AS
-SELECT
-    e.id,
-    e.id_contrat_actuel,
-    c.date_debut,
-    c.salaire,
-    c.taux_horaire
+SELECT e.*, c.salaire
 FROM
     Employes e
 JOIN
@@ -204,3 +204,79 @@ INSERT INTO TypeRupture (nom, description, preavis_requis, indemnite) VALUES
 INSERT INTO RuptureContrat (id_type_rupture, id_employe, date_notification, date_fin_contrat, preavis_effectue, motif, indemnite_verse) VALUES
 (1, 2, '2024-11-01', '2024-11-30', TRUE, 'Nouvelle opportunité professionnelle', 0.00),
 (2, 3, '2024-11-15', '2024-12-31', FALSE, 'Faute grave', 1500.00);
+
+SELECT dureeMois FROM TypeContrat WHERE id = 1;
+
+CREATE OR REPLACE VIEW v_rupture_contrat_actuel AS
+SELECT 
+    rc.*,
+		CASE 
+        WHEN rc.preavis_employe = rc.preavis_entreprise THEN rc.date_fin_contrat
+        ELSE rc.date_notification
+    END AS date_effective,
+FROM 
+    RuptureContrat rc
+WHERE rc.indemnite_verse <> 0
+    DATE_PART('month', 
+        CASE 
+            WHEN rc.preavis_employe = rc.preavis_entreprise THEN rc.date_fin_contrat
+            ELSE rc.date_notification
+        END
+    ) = DATE_PART('month', CURRENT_DATE)
+    AND 
+    DATE_PART('year', 
+        CASE 
+            WHEN rc.preavis_employe = rc.preavis_entreprise THEN rc.date_fin_contrat
+            ELSE rc.date_notification
+        END
+    ) = DATE_PART('year', CURRENT_DATE);
+
+
+CREATE OR REPLACE FUNCTION handle_rupture_contrat()
+RETURNS TRIGGER AS $$
+DECLARE
+    salaire_actuel NUMERIC(20, 2); -- Stocke le salaire actuel de l'employé
+    preavis_requis BOOLEAN;       -- Indique si le préavis est requis pour le type de rupture
+BEGIN
+    -- Récupérer le salaire actuel de l'employé
+    SELECT salaire
+    INTO salaire_actuel
+    FROM ContratEmploye
+    WHERE id = (SELECT id_contrat_actuel FROM Employes WHERE id = NEW.id_employe);
+
+    -- Récupérer le statut du préavis requis du type de rupture
+    SELECT preavis_requis
+    INTO preavis_requis
+    FROM TypeRupture
+    WHERE id = NEW.id_type_rupture;
+
+    -- Calculer la date de fin du contrat
+    IF preavis_requis THEN
+        NEW.date_fin_contrat := NEW.date_notification + INTERVAL '1 MONTH';
+    ELSE
+        NEW.date_fin_contrat := NEW.date_notification;
+    END IF;
+
+    -- Si un préavis est requis
+    IF preavis_requis THEN
+        IF NEW.preavis_employe = NEW.preavis_entreprise THEN
+            -- Les deux parties respectent ou ignorent le préavis, rien à faire
+            RETURN NEW;
+        ELSIF NOT NEW.preavis_employe THEN
+            -- L'employé ne respecte pas le préavis
+            NEW.indemnite_verse := NEW.indemnite_verse + salaire_actuel;
+        ELSE
+            -- L'entreprise ne respecte pas le préavis
+            NEW.indemnite_verse := NEW.indemnite_verse - salaire_actuel;
+        END IF;
+    END IF;
+
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER before_insert_rupture_contrat
+BEFORE INSERT
+ON RuptureContrat
+FOR EACH ROW
+EXECUTE FUNCTION handle_rupture_contrat();

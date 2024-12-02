@@ -10,9 +10,12 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 import com.analytique.gestion_analytique.Models.Paye;
 import com.analytique.gestion_analytique.Models.AvanceRemboursement;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.analytique.gestion_analytique.Models.Poste;
+import com.analytique.gestion_analytique.Models.TypeContrat;
 import com.analytique.gestion_analytique.Models.ContratEmploye;
 import com.analytique.gestion_analytique.Models.Employe;
 import com.analytique.gestion_analytique.Models.HeuresSup;
@@ -24,10 +27,17 @@ import com.analytique.gestion_analytique.Repositories.EmployeRepository;
 import com.analytique.gestion_analytique.Repositories.PayeRepository;
 import com.analytique.gestion_analytique.dto.receive.RemboursementReste;
 import com.analytique.gestion_analytique.dto.send.EmployeSend;
+
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
+import jakarta.transaction.Transactional;
+
 import com.analytique.gestion_analytique.Repositories.HeuresSupRepository;
 @Service
 public class EmployeService {
 	private final HeuresSupRepository heuresSupRepository;
+	@PersistenceContext
+	EntityManager entityManager;
 	private final EmployeRepository employeRepository;
 	private final CompetenceRepository competenceRepository;
 	private final ContratEmployeRepository contratEmployeRepository;
@@ -133,6 +143,24 @@ public class EmployeService {
 
 		return null;
 	}
+
+	public ContratEmploye modifierContrat(Integer idEmploye, LocalDate date_debut, Integer contrat, Integer poste,BigDecimal nouveauSalaire){
+		TypeContrat tc = contrat == null ? null :entityManager.getReference(TypeContrat.class,contrat );
+		Poste p = poste == null ? null : entityManager.getReference(Poste.class, poste);
+
+		return modifierContrat(idEmploye, date_debut, tc, p, nouveauSalaire);
+	}
+
+	@Transactional
+	public ContratEmploye modifierContrat(Integer idEmploye, LocalDate date_debut, TypeContrat contrat, Poste poste,BigDecimal nouveauSalaire){
+		Employe e = getOne(idEmploye).get();
+		ContratEmploye nouveauContratEmploye = e.getContrat().modify(date_debut, contrat, poste, nouveauSalaire);
+
+		entityManager.persist(e.getContrat());
+		nouveauContratEmploye = contratEmployeRepository.save(nouveauContratEmploye);
+		return nouveauContratEmploye;
+	}
+
 
 	public void validerPaiement(Integer id_employe, int mois, int annee)throws Exception{
 		Paye paye = employeRepository.getPaye(mois, annee, id_employe);
