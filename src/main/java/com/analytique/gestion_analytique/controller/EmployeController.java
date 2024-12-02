@@ -9,10 +9,10 @@ import com.analytique.gestion_analytique.Services.EmployeService;
 import com.analytique.gestion_analytique.dto.send.EmployeSend;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-
 
 @RestController
 @RequestMapping("/api/employe")
@@ -21,7 +21,7 @@ public class EmployeController {
 
 	EmployeService employeService;
 
-	public EmployeController(EmployeService employeService) {
+	public EmployeController(EmployeService employeService, JdbcTemplate jdbcTemplate) {
 		this.employeService = employeService;
 	}
 
