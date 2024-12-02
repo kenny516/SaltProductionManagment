@@ -13,11 +13,6 @@ VALUES
     ('Lemoine', 'Claire', 'claire.lemoine@example.com', '0712345678', 'mypassword101'),
     ('Benoit', 'Lucie', 'lucie.benoit@example.com', '0685743920', 'securepass202');
 
--- Insérer des postes
-INSERT INTO Postes (titre, description, departement) VALUES
-('Développeur Java', 'Développement backend', 'Informatique'),
-('Chargé de recrutement', 'Recrutement des candidats', 'Ressources Humaines');
-
 -- Insérer des offres d'emploi
 INSERT INTO Offre_emploi (description, status, poste_id, nbr_candidat_dm) VALUES
 ('Recrutement pour un poste de Développeur Java. Expérience en développement backend requise.', TRUE, 1, 5),
@@ -91,9 +86,3 @@ INSERT INTO CandidatsDiplomes (candidat_id, diplome_id) VALUES
 (1, 1),  -- Jean -> Licence en Informatique
 (2, 2),  -- Alice -> Master en Ressources Humaines
 (3, 3);  -- Pierre -> Master en Management
-
--- Insérer des types de contrat
-INSERT INTO TypeContrat (id, nomType, dureeMois) VALUES 
-(1, 'CDD', 24),
-(2, 'ESSAI', 3),
-(3, 'CDI', 0);
