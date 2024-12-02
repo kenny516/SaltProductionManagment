@@ -14,9 +14,12 @@ import com.analytique.gestion_analytique.Models.ContratEmploye;
 import com.analytique.gestion_analytique.Models.Employe;
 import com.analytique.gestion_analytique.Models.Poste;
 import com.analytique.gestion_analytique.Models.TypeContrat;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.analytique.gestion_analytique.Models.Poste;
+import com.analytique.gestion_analytique.Models.TypeContrat;
 import com.analytique.gestion_analytique.Models.ContratEmploye;
 import com.analytique.gestion_analytique.Models.Employe;
 import com.analytique.gestion_analytique.Models.HeuresSup;
@@ -34,6 +37,7 @@ import jakarta.persistence.PersistenceContext;
 import jakarta.transaction.Transactional;
 import com.analytique.gestion_analytique.Repositories.HeuresSupRepository;
 
+import com.analytique.gestion_analytique.Repositories.HeuresSupRepository;
 @Service
 public class EmployeService {
 	@PersistenceContext

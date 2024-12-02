@@ -25,6 +25,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
+
 @RestController
 @RequestMapping("/api/employe")
 @CrossOrigin(origins = "http://localhost:3000")
@@ -66,6 +67,7 @@ public class EmployeController {
 
 		return ResponseEntity.ok(employeService.getOne(id));
 	}
+  
 	@GetMapping("/{id}/avances")
 	public List<RemboursementReste> getAllAvances(@PathVariable Integer id, @RequestParam(required = false, name = "unpaid") Boolean unpaid) {
 		return employeService.getAllAvances(id, unpaid);
