@@ -8,8 +8,11 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import com.analytique.gestion_analytique.Models.Avance;
 import com.analytique.gestion_analytique.Repositories.DetailsPosteRepository;
+import com.analytique.gestion_analytique.Services.AvanceService;
 import com.analytique.gestion_analytique.Services.CandidatService;
+import com.analytique.gestion_analytique.dto.receive.AvanceReceive;
 
 import java.util.List;
 import java.util.Map;
@@ -25,11 +28,10 @@ class GestionAnalytiqueApplicationTests {
 	@Autowired
 	CongeService congeService;
 
-	@Test
-	void testCamelCase(){
-		assertEquals(7, dpRepo.findAll().size());
-	}
+	@Autowired
+	AvanceService as;
 
+<<<<<<< HEAD
 	@Test
 	void insertionCandidat(){
 		List<Conge> conges = congeService.getCongeValide();
@@ -39,7 +41,17 @@ class GestionAnalytiqueApplicationTests {
 		//cs.intsertNote(1, 1, 10);
 //		double nbrJour = congeService.nbJourParMois(4,12,2024);
 //		System.out.println(nbrJour);
+=======
+	// @Test
+	// void testCamelCase(){
+	// 	assertEquals(7, dpRepo.findAll().size());
+	// }
+>>>>>>> main
 
-	}
+	// @Test
+	// void insertionCandidat(){
+	// 	cs.intsertNote(1, 1, 10);
+
+	// }
 
 }
