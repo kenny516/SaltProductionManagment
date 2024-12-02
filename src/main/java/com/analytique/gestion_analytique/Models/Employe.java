@@ -1,6 +1,7 @@
 package com.analytique.gestion_analytique.Models;
 
 import java.time.LocalDate;
+import java.util.List;
 
 import jakarta.persistence.*;
 
@@ -27,19 +28,27 @@ public class Employe {
 	private LocalDate dateEmbauche = LocalDate.now();
 
 	@ManyToOne
-	@JoinColumn(name = "poste_id")
-	private Poste poste;
+	@JoinColumn(name = "id_contrat_actuel")
+	private ContratEmploye contrat;
 
-	public Employe(String nom, String prenom, String email, String telephone, LocalDate dateEmbauche, Poste poste) {
+	@OneToMany(mappedBy = "employe", cascade = CascadeType.ALL, orphanRemoval = true)
+	private List<Avance> Avances;
+
+	public Employe(String nom, String prenom, String email, String telephone, LocalDate dateEmbauche,
+			ContratEmploye contrat) {
 		this.nom = nom;
 		this.prenom = prenom;
 		this.email = email;
 		this.telephone = telephone;
-		this.dateEmbauche = dateEmbauche != null ? dateEmbauche : LocalDate.now();
-		this.poste = poste;
+		this.dateEmbauche = dateEmbauche;
+		setContrat(contrat);
 	}
 
 	public Employe() {
+	}
+
+	public List<Avance> getAvances() {
+		return Avances;
 	}
 
 	public Integer getId() {
@@ -90,12 +99,13 @@ public class Employe {
 		this.dateEmbauche = dateEmbauche;
 	}
 
-	public Poste getPoste() {
-		return poste;
+	public ContratEmploye getContrat() {
+		return contrat;
 	}
 
-	public void setPoste(Poste poste) {
-		this.poste = poste;
+	public void setContrat(ContratEmploye contrat) {
+		contrat.setEmploye(null);
+		this.contrat = contrat;
 	}
 
 }

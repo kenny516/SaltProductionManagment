@@ -11,15 +11,16 @@ import java.util.List;
 
 @Repository
 public interface EmployeRepository extends JpaRepository<Employe, Integer> {
-    @Query(value = """
-        SELECT e.id, e.nom, e.prenom, ep.poste.id, AVG(ce.niveau) AS moyenne_niveau
-        FROM Employe e
-        JOIN PostEmploye ep ON e.id = ep.employe.id
-        JOIN CompetencesEmployes ce ON e.id = ce.employe.id
-        JOIN DetailsPoste dp ON dp.poste.id = ep.poste.id AND ce.competence.id = dp.competence.id
-        WHERE ep.poste.id = :posteId
-        GROUP BY e.id, e.nom, e.prenom, ep.poste.id
-        HAVING AVG(ce.niveau) > 3
-        """)
-    List<Employe> findQualifiedEmployeesForPost(@Param("posteId") Integer posteId);
+	@Query(value = """
+			SELECT e.id, e.nom, e.prenom, e.email, e.telephone,e.date_embauche ,ce.id_poste, AVG(ce2.niveau) AS moyenne_niveau
+			FROM Employes e
+			JOIN ContratEmploye ce ON e.id = ce.id_employe
+			JOIN Postes ep ON ep.id = ce.id_poste
+			JOIN CompetencesEmployes ce2 ON e.id = ce2.employe_id
+			JOIN DetailsPoste dp ON dp.idPoste = ep.id AND ce2.competence_id = dp.idCompetence
+			WHERE ep.id = :posteId
+			GROUP BY e.id, e.nom, e.prenom, e.email, e.telephone,e.date_embauche ,ce.id_poste
+			HAVING AVG(ce2.niveau) > 3
+			""", nativeQuery = true)
+	List<Employe> findQualifiedEmployeesForPost(@Param("posteId") Integer posteId);
 }

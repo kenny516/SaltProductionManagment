@@ -1,5 +1,6 @@
 package com.analytique.gestion_analytique.Models;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 
 import jakarta.persistence.*;
@@ -26,6 +27,10 @@ public class OffreEmploi {
 
     @Column(name = "nbr_candidat_dm")
     private Integer nbrCandidatDm;
+
+		@Column(name = "salaire", precision = 20,scale = 2)
+		private BigDecimal salaire;
+
 
     // Getters and Settersz
 
@@ -76,5 +81,13 @@ public class OffreEmploi {
     public void setNbrCandidatDm(Integer nbrCandidatDm) {
         this.nbrCandidatDm = nbrCandidatDm;
     }
+
+		public BigDecimal getSalaire() {
+			return salaire;
+		}
+
+		public void setSalaire(BigDecimal salaire) {
+			this.salaire = salaire;
+		}
 }
 

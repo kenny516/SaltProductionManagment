@@ -1,12 +1,3 @@
-CREATE OR REPLACE VIEW candidats_elligibles AS 
-SELECT c.*
-FROM Candidats c
-JOIN (
-    SELECT nc.id_postulation
-    FROM noteCandidat nc
-    GROUP BY nc.id_postulation
-    HAVING COUNT(DISTINCT nc.idTypeNote) = (SELECT COUNT(*) FROM typeNote)
-) AS subquery ON c.id = subquery.id_postulation;
 
 ---Pour le filtre
 CREATE OR REPLACE VIEW V_detailsCandidat AS
@@ -31,3 +22,37 @@ LEFT JOIN
     Diplome d ON cd.diplome_id = d.id_diplome
 GROUP BY
     c.id, c.nom, c.prenom, c.email, c.telephone;
+
+-- TODO : implementrr dans les listes
+CREATE VIEW v_candidat_postulation AS
+SELECT
+    P.id AS id,
+    C.id AS candidat_id,
+    O.id AS offre_id,
+    C.nom,
+    C.prenom,
+    C.email,
+    C.telephone,
+    C.mot_de_passe,
+    O.poste_id,
+		O.status as offre_status,
+    P.date_postulation,
+    P.status AS status
+FROM
+    Postulations P
+JOIN
+    Candidats C ON P.candidat_id = C.id
+JOIN
+    Offre_emploi O ON P.Offre_emploi_id = O.id;
+
+CREATE OR REPLACE VIEW candidats_elligibles AS 
+SELECT c.*
+FROM v_candidat_postulation c
+JOIN (
+    SELECT nc.id_postulation
+    FROM noteCandidat nc 
+    GROUP BY nc.id_postulation
+    HAVING COUNT(DISTINCT nc.idTypeNote) = (SELECT COUNT(*) FROM typeNote)
+) AS subquery ON c.id = subquery.id_postulation;
+
+create or replace view candidats_postules as select * from v_candidat_postulation where status  <> 'Employe' and offre_status is  true; 

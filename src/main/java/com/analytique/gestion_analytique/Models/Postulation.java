@@ -48,6 +48,7 @@ public class Postulation {
 	}
 
 	public void setCandidat(Candidat candidat) {
+		candidat.nullCandidat();
 		this.candidat = candidat;
 	}
 
@@ -76,14 +77,6 @@ public class Postulation {
 	}
 
 	public Postulation() {
-	}
-
-	public OffreEmploi getOffre() {
-		return offreEmploi;
-	}
-
-	public void setOffre(OffreEmploi offre) {
-		this.offreEmploi = offre;
 	}
 
 	public List<NoteCandidat> getNotes() {
