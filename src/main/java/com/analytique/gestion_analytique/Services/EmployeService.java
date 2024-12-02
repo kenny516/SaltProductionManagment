@@ -29,7 +29,8 @@ public class EmployeService {
 	JdbcTemplate jdbcTemplate;
 
 	public EmployeService(EmployeRepository employeRepository, CompetenceRepository competenceRepository,
-			ContratEmployeRepository contratEmployeRepository, AvanceRepository avanceRepository, AvanceRemboursementRepository avanceRemboursementRepository, JdbcTemplate jdbcTemplate) {
+			ContratEmployeRepository contratEmployeRepository, AvanceRepository avanceRepository,
+			AvanceRemboursementRepository avanceRemboursementRepository, JdbcTemplate jdbcTemplate) {
 		this.employeRepository = employeRepository;
 		this.competenceRepository = competenceRepository;
 		this.contratEmployeRepository = contratEmployeRepository;
@@ -82,7 +83,9 @@ public class EmployeService {
 						rs.getBigDecimal("pourcentage_debitable"),
 						rs.getDate("date_avance").toLocalDate(),
 						rs.getString("raison"),
-						rs.getBigDecimal("reste_payer")));
+						rs.getBigDecimal("reste_payer"),
+						null,
+						null));
 			}
 			return result;
 		}, idEmploye);
@@ -90,7 +93,7 @@ public class EmployeService {
 
 	public RemboursementReste getDernierImpaye(Integer idEmploye) {
 		List<RemboursementReste> result = getAllAvances(idEmploye, true);
-		if(result == null || result.size() == 0) {
+		if (result == null || result.size() == 0) {
 			return null;
 		} else {
 			return result.get(0);
@@ -102,23 +105,23 @@ public class EmployeService {
 		BigDecimal salaire = e.getContrat().getSalaire();
 
 		return salaire.multiply(rr.pourcentageDebitable()).divide(BigDecimal.valueOf(100));
-	} 
+	}
 
 	public AvanceRemboursement remboursementMensuel(Integer idEmploye, LocalDate dateRemboursement) {
 		RemboursementReste rr = getDernierImpaye(idEmploye);
 
-		if(rr != null) {
+		if (rr != null) {
 			BigDecimal aPayer = getRemboursementMensuel(rr);
-	
+
 			AvanceRemboursement ar = new AvanceRemboursement();
 			ar.setAvance(avanceRepository.getReferenceById(rr.id()));
 			ar.setDateRemboursement(dateRemboursement);
 			ar.setMontant(aPayer);
-	
+
 			return avanceRemboursementRepository.save(ar);
 		}
 
 		return null;
 	}
-	
+
 }

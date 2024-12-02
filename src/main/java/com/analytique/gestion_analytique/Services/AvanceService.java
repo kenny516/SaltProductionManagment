@@ -14,6 +14,7 @@ import com.analytique.gestion_analytique.Models.Employe;
 import com.analytique.gestion_analytique.Repositories.AvanceRepository;
 import com.analytique.gestion_analytique.Repositories.EmployeRepository;
 import com.analytique.gestion_analytique.dto.receive.AvanceReceive;
+import com.analytique.gestion_analytique.dto.receive.RemboursementReste;
 
 @Service
 public class AvanceService {
@@ -56,28 +57,29 @@ public class AvanceService {
         return avanceRepository.save(avance);
     }
 
-    public List<AvanceRemboursement> getAllUnpaid() {
-        String sql = "SELECT id, reste_payer from v_avances_impayes";
+    public List<RemboursementReste> getAllUnpaid() {
+        String sql = "SELECT v.*, e.nom, e.prenom FROM v_avances_impayes v JOIN employes e ON v.id_employe = e.id";
 
         return jdbcTemplate.query(
             sql,
             rs -> {
-                List<AvanceRemboursement> remboursements = new ArrayList<>();
+                List<RemboursementReste> avances = new ArrayList<>();
 
                 while (rs.next()) {
-                    Integer idAvance = rs.getInt(1);
-                    BigDecimal montantRestant = rs.getBigDecimal(2);
-                    Avance avance = avanceRepository.getReferenceById(idAvance);
-
-                    AvanceRemboursement ar = new AvanceRemboursement();
-                    ar.setAvance(avance);
-                    ar.setDateRemboursement(avance.getDateAvance());
-                    ar.setMontant(montantRestant);
-
-                    remboursements.add(ar);
+                    RemboursementReste r = new RemboursementReste(
+						rs.getInt("id"),
+						rs.getInt("id_employe"),
+						rs.getBigDecimal("montant"),
+						rs.getBigDecimal("pourcentage_debitable"),
+						rs.getDate("date_avance").toLocalDate(),
+						rs.getString("raison"),
+						rs.getBigDecimal("reste_payer"),
+						rs.getString("nom"),
+						rs.getString("prenom"));
+                    avances.add(r);
                 }
 
-                return remboursements;
+                return avances;
             }
         );
     }

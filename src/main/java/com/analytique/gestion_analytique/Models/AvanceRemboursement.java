@@ -6,6 +6,8 @@ import jakarta.persistence.*;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 @Data
 @Entity
 @Table(name = "avanceremboursement")
@@ -16,6 +18,7 @@ public class AvanceRemboursement {
 
     @ManyToOne
     @JoinColumn(name = "id_avance", nullable = false)
+    @JsonBackReference
     private Avance avance;
 
     private BigDecimal montant;

@@ -7,6 +7,9 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
+
 @Data
 @Entity
 @Table(name = "avances")
@@ -17,6 +20,7 @@ public class Avance {
 
     @ManyToOne
     @JoinColumn(name = "id_employe", nullable = false)
+    // @JsonManagedReference
     private Employe employe;
 
     private BigDecimal montant;
@@ -32,6 +36,9 @@ public class Avance {
 
     @OneToMany(mappedBy = "avance", cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<AvanceRemboursement> remboursements;
+
+    @Transient
+    private BigDecimal flexibleValue;
 
     @Transient
     public static final double MIN_POURCENTAGE = 10;

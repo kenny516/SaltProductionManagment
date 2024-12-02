@@ -1,16 +1,11 @@
 package com.analytique.gestion_analytique.controller;
 
-import java.math.BigDecimal;
-import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.analytique.gestion_analytique.Services.EmployeService;
-import com.analytique.gestion_analytique.dto.receive.RemboursementReste;
 import com.analytique.gestion_analytique.dto.send.EmployeSend;
 
 import org.springframework.http.ResponseEntity;
@@ -47,10 +42,5 @@ public class EmployeController {
 	@GetMapping("/poste/{id}")
 	public List<EmployeSend> getEmployeByPoste(@PathVariable Integer id) {
 		return employeService.getQualifiedEmployeesForPost(id);
-	}
-
-	@GetMapping("/{id}/avances")
-	public List<RemboursementReste> getAllAvances(@PathVariable Integer id, @RequestParam(required = false, name = "unpaid") Boolean unpaid) {
-		return employeService.getAllAvances(id, unpaid);
 	}
 }
