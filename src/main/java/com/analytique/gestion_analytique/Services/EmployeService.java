@@ -10,10 +10,6 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 import com.analytique.gestion_analytique.Models.Paye;
 import com.analytique.gestion_analytique.Models.AvanceRemboursement;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
-import com.analytique.gestion_analytique.Models.ContratEmploye;
 import com.analytique.gestion_analytique.Models.Employe;
 import com.analytique.gestion_analytique.Models.HeuresSup;
 import com.analytique.gestion_analytique.Repositories.AvanceRemboursementRepository;
@@ -38,7 +34,7 @@ public class EmployeService {
 
 	public EmployeService(EmployeRepository employeRepository, CompetenceRepository competenceRepository,
 			ContratEmployeRepository contratEmployeRepository, AvanceRepository avanceRepository,
-			AvanceRemboursementRepository avanceRemboursementRepository, JdbcTemplate jdbcTemplate) {
+			AvanceRemboursementRepository avanceRemboursementRepository, JdbcTemplate jdbcTemplate, PayeRepository payeRepository, HeuresSupRepository heuresSupRepository) {
 		this.employeRepository = employeRepository;
 		this.competenceRepository = competenceRepository;
 		this.contratEmployeRepository = contratEmployeRepository;
