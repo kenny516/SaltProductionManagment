@@ -14,6 +14,13 @@ public class HeuresSupService {
 
     @Autowired
     private HeuresSupRepository heuresSupRepository;
+    
+    public HeuresSupService(HeuresSupRepository heuresSupRepository){
+        this.heuresSupRepository = heuresSupRepository;
+    }
+    public HeuresSupService(){
+        
+    }
 
     public Double determinerTaux(LocalDate semaine, Long idEmploye, Double heuresAjoutees) {
         List<HeuresSup> heuresSupSemaine = heuresSupRepository.findByEmployeAndWeek(idEmploye, semaine);
@@ -41,6 +48,10 @@ public class HeuresSupService {
     public List<HeuresSup> getByEmployeAndWeek(Long idEmploye, LocalDate semaine) {
         // Appel au repository
         return heuresSupRepository.findByEmployeAndWeek(idEmploye, semaine);
+    }
+
+    public List<HeuresSup> getHeuresSupByEmployeAndMonthAndYear(Long idEmploye, int mois, int annee) {
+        return heuresSupRepository.findByEmployeAndMonthAndYear(idEmploye, mois, annee);
     }
 }
 
