@@ -6,6 +6,7 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.analytique.gestion_analytique.Models.ContratEmploye;
 import com.analytique.gestion_analytique.Models.Employe;
 import com.analytique.gestion_analytique.Repositories.CompetenceRepository;
 import com.analytique.gestion_analytique.Repositories.ContratEmployeRepository;
@@ -53,5 +54,10 @@ public class EmployeService {
     public Employe getEmployeById(Integer id) {
         Optional<Employe> employe = employeRepository.findById(id);
         return employe.orElseThrow(() -> new RuntimeException("Employé introuvable pour l'id: " + id));
+    }
+
+	public List<Employe> getAllEmp() {
+        List<Employe> employes = employeRepository.findAll();
+        return employes;
     }
 }

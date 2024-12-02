@@ -21,6 +21,8 @@ public class HeuresSup {
 
     private Double totalHeuresSup;
 
+    private Double tauxHoraire;
+
     private Double montant;
 
     public HeuresSup(Employe employe, LocalDateTime dateDebut, LocalDateTime dateFin, Double totalHeuresSup, Double montant) {
@@ -80,6 +82,14 @@ public class HeuresSup {
 
     public void setMontant(Double montant) {
         this.montant = montant;
+    }
+
+    public Double getTauxHoraire() {
+        return tauxHoraire;
+    }
+
+    public void setTauxHoraire(Double tauxHoraire) {
+        this.tauxHoraire = tauxHoraire;
     }
 
 }

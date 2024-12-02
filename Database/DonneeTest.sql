@@ -97,3 +97,14 @@ INSERT INTO TypeContrat (id, nomType, dureeMois) VALUES
 (1, 'CDD', 24),
 (2, 'ESSAI', 3),
 (3, 'CDI', 0);
+
+INSERT INTO employe (id, nom, prenom, email, telephone, date_embauche)
+VALUES
+(1, 'Randria', 'Jean', 'jean.randria@example.com', '0321234567', '2023-01-15'),
+(2, 'Rasoanaivo', 'Marie', 'marie.rasoanaivo@example.com', '0345678912', '2022-05-20');
+
+INSERT INTO contratemploye (id_employe, id_type_contrat, date_debut, date_fin, id_poste, salaire, taux_horaire)
+VALUES
+(1, 2, '2024-01-01', '2025-01-01', 1, 1500.00, 15.00),
+(2, 1, '2024-06-01', '2024-12-31', 2, 1200.00, 12.00);
+

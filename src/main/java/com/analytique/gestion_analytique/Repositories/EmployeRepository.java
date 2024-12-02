@@ -23,4 +23,5 @@ public interface EmployeRepository extends JpaRepository<Employe, Integer> {
 			HAVING AVG(ce2.niveau) > 3
 			""", nativeQuery = true)
 	List<Employe> findQualifiedEmployeesForPost(@Param("posteId") Integer posteId);
+
 }
