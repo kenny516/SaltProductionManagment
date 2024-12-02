@@ -104,6 +104,56 @@ AFTER INSERT OR UPDATE ON RuptureContrat
 FOR EACH ROW
 EXECUTE FUNCTION update_contrat_date_fin();
 
+-- Trigger Function
+CREATE OR REPLACE FUNCTION update_employe_id_contrat_actuel()
+RETURNS TRIGGER AS $$
+BEGIN
+    -- Update the id_contrat_actuel in Employes for the employee of the current contract
+    UPDATE Employes
+    SET id_contrat_actuel = NEW.id
+    WHERE id = NEW.id_employe;
+
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+-- Trigger
+CREATE TRIGGER trg_update_employe_id_contrat_actuel
+AFTER INSERT ON ContratEmploye
+FOR EACH ROW
+EXECUTE FUNCTION update_employe_id_contrat_actuel();
+
+-- Trigger Function
+CREATE OR REPLACE FUNCTION set_date_fin_contrat()
+RETURNS TRIGGER AS $$
+DECLARE
+    contract_duration INT;  -- Variable temporaire pour stocker dureeMois
+BEGIN
+    -- Récupérer la durée en mois à partir du type de contrat
+    SELECT dureeMois
+    INTO STRICT contract_duration
+    FROM TypeContrat
+    WHERE id = NEW.id_type_contrat;
+
+    -- Si la durée est null, la date de fin est null
+    IF contract_duration IS NULL THEN
+        NEW.date_fin := NULL;
+    ELSE
+        -- Calculer la date de fin en ajoutant la durée en mois à la date de début
+        NEW.date_fin := NEW.date_debut + INTERVAL '1 month' * contract_duration;
+    END IF;
+
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+-- Trigger
+CREATE TRIGGER trg_set_date_fin_contrat
+BEFORE INSERT ON ContratEmploye
+FOR EACH ROW
+EXECUTE FUNCTION set_date_fin_contrat();
+
+
 CREATE OR REPLACE VIEW v_employes_actuels AS
 SELECT
     e.id,
@@ -120,3 +170,35 @@ ON
 WHERE
     c.date_fin IS NULL OR c.date_fin >= NOW();
 
+
+INSERT INTO CategoriePersonnel (nom, description) VALUES
+('Administration', 'Personnel administratif'),
+('Technique', 'Personnel technique'),
+('Support', 'Personnel de support');
+
+
+INSERT INTO Postes (titre, description, departement, id_categorie_personnel) VALUES
+('Secrétaire', 'Responsable des tâches administratives', 'Administration', 1),
+('Technicien informatique', 'Gestion du matériel informatique', 'Technique', 2),
+('Agent de maintenance', 'Responsable de l’entretien des installations', 'Support', 3);
+
+
+INSERT INTO Employes (nom, prenom, email, telephone, id_contrat_actuel) VALUES
+('Dupont', 'Jean', 'jean.dupont@example.com', '0612345678', NULL),
+('Durand', 'Sophie', 'sophie.durand@example.com', '0676543210', NULL),
+('Martin', 'Luc', 'luc.martin@example.com', '0654321098', NULL);
+
+INSERT INTO ContratEmploye (id_employe, id_type_contrat, date_debut,id_poste, salaire) VALUES
+(1, 1, '2023-01-01', 1, 3000),
+(2, 2, '2023-06-01', 2, 2500),
+(3, 3, '2024-01-01', 3, 1200);
+
+INSERT INTO TypeRupture (nom, description, preavis_requis, indemnite) VALUES
+('Démission', 'Rupture volontaire par l’employé', TRUE, FALSE),
+('Licenciement', 'Rupture décidée par l’employeur', TRUE, TRUE),
+('Fin de contrat', 'Expiration du contrat à durée déterminée', FALSE, FALSE);
+
+
+INSERT INTO RuptureContrat (id_type_rupture, id_employe, date_notification, date_fin_contrat, preavis_effectue, motif, indemnite_verse) VALUES
+(1, 2, '2024-11-01', '2024-11-30', TRUE, 'Nouvelle opportunité professionnelle', 0.00),
+(2, 3, '2024-11-15', '2024-12-31', FALSE, 'Faute grave', 1500.00);
