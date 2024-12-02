@@ -21,9 +21,12 @@ CREATE TABLE IF NOT EXISTS paye_details(
 	FOREIGN KEY(id_employe) REFERENCES Employes(id)
 );
 CREATE TABLE IF NOT EXISTS type_bonus_salaire(
-    id SERIAL NOT NULL,
+    id SERIAL PRIMARY KEY,
     nom VARCHAR(30) NOT NULL
 );
+insert into type_bonus_salaire VALUES 
+(default, 'INDEMNITE'), (default 'PRIME');
+
 CREATE TABLE bonus_salaire(
     id SERIAL PRIMARY KEY,
     id_employe INT REFERENCES Employes.id,

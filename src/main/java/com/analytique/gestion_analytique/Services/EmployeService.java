@@ -14,6 +14,7 @@ import com.analytique.gestion_analytique.Models.PayeDetails;
 import com.analytique.gestion_analytique.Models.AvanceRemboursement;
 import com.analytique.gestion_analytique.Models.BonusSalaire;
 import com.analytique.gestion_analytique.Models.Employe;
+import com.analytique.gestion_analytique.Models.HeuresSup;
 import com.analytique.gestion_analytique.Repositories.AvanceRemboursementRepository;
 import com.analytique.gestion_analytique.Repositories.AvanceRepository;
 import com.analytique.gestion_analytique.Repositories.BonusSalaireRepository;
@@ -24,6 +25,7 @@ import com.analytique.gestion_analytique.dto.receive.RemboursementReste;
 import com.analytique.gestion_analytique.dto.send.EmployeSend;
 import com.analytique.gestion_analytique.Repositories.HeuresSupRepository;
 import com.analytique.gestion_analytique.Repositories.PayeDetailsRepository;
+import com.analytique.gestion_analytique.Repositories.PayeRepository;
 @Service
 public class EmployeService {
 	public final BonusSalaireRepository bonusSalaireRepository;
@@ -143,37 +145,39 @@ public class EmployeService {
 			throw new Exception("Cet employe a deja ete paye");
 		}
 	}
-	public Paye payer(Integer IdEmploye, LocalDate datePaiement, Double heureNormale) throws Exception{
-		try{
-			controlerPaiement(IdEmploye, datePaiement.getMonthValue(), datePaiement.getYear());
-			AvanceRemboursement ar = remboursementMensuel(IdEmploye, datePaiement);
-			BigDecimal totalAvance = (ar != null) ? ar.getMontant() : BigDecimal.ZERO;
+	// public Paye payer(Integer IdEmploye, LocalDate datePaiement, Double heureNormale) throws Exception{
+	// 	try{
+	// 		controlerPaiement(IdEmploye, datePaiement.getMonthValue(), datePaiement.getYear());
+	// 		AvanceRemboursement ar = remboursementMensuel(IdEmploye, datePaiement);
+	// 		BigDecimal totalAvance = (ar != null) ? ar.getMontant() : BigDecimal.ZERO;
 			
-			List<HeuresSup> heuresSups = heuresSupRepository.findByEmployeAndMonthAndYear(Long.valueOf(IdEmploye), datePaiement.getMonthValue(), datePaiement.getYear());
-			Double montantHeureSup = heuresSups.stream().map(HeuresSup::getMontant).filter(montant -> montant != null).reduce(0.0,Double::sum);
-			double totalHeureSup = heuresSups.stream().map(HeuresSup::getTotalHeuresSup).filter(heureSup -> heureSup != null).reduce(0.0,Double::sum);
-			BigDecimal salaireBase = contratEmployeRepository.findByMaxDateAndEmployeId(IdEmploye).getSalaire();
-			Double totalSalaire = salaireBase.subtract(totalAvance).doubleValue() + montantHeureSup;
+	// 		List<HeuresSup> heuresSups = heuresSupRepository.findByEmployeAndMonthAndYear(Long.valueOf(IdEmploye), datePaiement.getMonthValue(), datePaiement.getYear());
+	// 		Double montantHeureSup = heuresSups.stream().map(HeuresSup::getMontant).filter(montant -> montant != null).reduce(0.0,Double::sum);
+	// 		double totalHeureSup = heuresSups.stream().map(HeuresSup::getTotalHeuresSup).filter(heureSup -> heureSup != null).reduce(0.0,Double::sum);
+	// 		BigDecimal salaireBase = contratEmployeRepository.findByMaxDateAndEmployeId(IdEmploye).getSalaire();
+	// 		Double totalSalaire = salaireBase.subtract(totalAvance).doubleValue() + montantHeureSup;
 
-			Paye paye = new Paye(null, employeRepository.getReferenceById(IdEmploye), datePaiement.getMonthValue(), datePaiement.getYear(), BigDecimal.valueOf(heureNormale), BigDecimal.valueOf(totalHeureSup), totalAvance, salaireBase, BigDecimal.valueOf(totalSalaire));
+	// 		Paye paye = new Paye(null, employeRepository.getReferenceById(IdEmploye), datePaiement.getMonthValue(), datePaiement.getYear(), BigDecimal.valueOf(heureNormale), BigDecimal.valueOf(totalHeureSup), totalAvance, salaireBase, BigDecimal.valueOf(totalSalaire));
 
-			// System.out.println(paye);
-			return payeRepository.save(paye);
-		}
-		catch (Exception e){
-			throw e;
-		}
-	}
+	// 		// System.out.println(paye);
+	// 		return payeRepository.save(paye);
+	// 	}
+	// 	catch (Exception e){
+	// 		throw e;
+	// 	}
+	// }
 
 	public Double calculerIrsa(Integer idEmploye){
 		return employeRepository.calculerIrsa(idEmploye);
 	}
 
 	public BigDecimal getPrime(Integer idEmploye, int mois, int annee){
-		return  bonusSalaireRepository.getPrimeByMonthAndYear(mois, annee, idEmploye).stream().map(BonusSalaire::getMontant).filter(montant -> montant != null).reduce(BigDecimal.ZERO,BigDecimal::add);
+		BigDecimal prime = (bonusSalaireRepository.getPrimeByMonthAndYear(mois, annee, idEmploye)!=null) ?bonusSalaireRepository.getPrimeByMonthAndYear(mois, annee, idEmploye).stream().map(BonusSalaire::getMontant).filter(montant -> montant != null).reduce(BigDecimal.ZERO,BigDecimal::add) : BigDecimal.ZERO;
+		return prime;
 	}
 	public BigDecimal getIndemnite(Integer idEmploye, int mois, int annee){
-		return bonusSalaireRepository.getIndemniteByMonthAndYear(mois, annee, idEmploye).stream().map(BonusSalaire::getMontant).filter(montant -> montant != null).reduce(BigDecimal.ZERO,BigDecimal::add);
+		BigDecimal indemnite = (bonusSalaireRepository.getIndemniteByMonthAndYear(mois, annee, idEmploye)!=null) ?bonusSalaireRepository.getIndemniteByMonthAndYear(mois, annee, idEmploye).stream().map(BonusSalaire::getMontant).filter(montant -> montant != null).reduce(BigDecimal.ZERO,BigDecimal::add) : BigDecimal.ZERO;
+		return indemnite;
 	}
 
 	public BigDecimal calculerCNAPS(BigDecimal salaireBase){

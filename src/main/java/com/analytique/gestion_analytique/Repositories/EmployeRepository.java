@@ -6,6 +6,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import com.analytique.gestion_analytique.Models.Employe;
+import com.analytique.gestion_analytique.Models.Paye;
 
 import java.util.List;
 
