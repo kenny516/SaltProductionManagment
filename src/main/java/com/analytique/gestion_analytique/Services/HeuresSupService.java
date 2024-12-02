@@ -86,16 +86,6 @@ public class HeuresSupService {
         // Le lundi de Pâques est le lendemain du dimanche de Pâques
         return LocalDate.of(annee, mois, jour).plusDays(1);
     }
-    
-    private LocalDate getAscension(int annee) {
-        // L'Ascension est 39 jours après le dimanche de Pâques
-        return getLundiDePâques(annee).minusDays(1).plusDays(39);
-    }
-    
-    private LocalDate getPentecôte(int annee) {
-        // La Pentecôte est 50 jours après le dimanche de Pâques
-        return getLundiDePâques(annee).minusDays(1).plusDays(50);
-    }
 
 
     public HeuresSup creerHeureSup(HeuresSup heureSup) {
