@@ -29,7 +29,6 @@ import com.analytique.gestion_analytique.Repositories.PostulationRepository;
 import com.analytique.gestion_analytique.Repositories.V_CandidatPostulationRepository;
 import com.analytique.gestion_analytique.dto.receive.CandidatRecieve;
 import com.analytique.gestion_analytique.dto.receive.PostulationRecieve;
-import com.analytique.gestion_analytique.dto.send.CandidatSend;
 
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
@@ -37,10 +36,8 @@ import jakarta.transaction.Transactional;
 
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Service
 public class CandidatService {
@@ -104,9 +101,8 @@ public class CandidatService {
 	}
 	
 
-	public CandidatSend getById(Integer id) {
-		Candidat c = candidatRepository.findById(id).get();
-		return new CandidatSend(c);
+	public Candidat getById(Integer id) {
+		return candidatRepository.findById(id).get();
 	}
 
 	@Transactional

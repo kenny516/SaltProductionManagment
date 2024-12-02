@@ -2,6 +2,8 @@ package com.analytique.gestion_analytique.Models;
 
 import java.time.LocalDate;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import jakarta.persistence.*;
 
 @Entity
@@ -22,6 +24,7 @@ public class Formation {
     private String description;
 
     @ManyToOne
+		@JsonBackReference
     @JoinColumn(name = "candidat_id", nullable = false)
     private Candidat candidat;
 
