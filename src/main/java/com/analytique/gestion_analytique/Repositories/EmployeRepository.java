@@ -26,5 +26,7 @@ public interface EmployeRepository extends JpaRepository<Employe, Integer> {
 
 	@Query(value="SELECT * FROM Paye where mois = :mois and annee = :annee and id_employe = :id_employe", nativeQuery = true) 
 	Paye getPaye(@Param("mois") Integer mois, @Param("annee") Integer annee, @Param("id_employe") Integer id_employe);
-
+	
+	@Query(value = "SELECT calculer_irsa(:idEmploye)", nativeQuery = true)
+    Double calculerIrsa(@Param("idEmploye") Integer idEmploye);
 }
