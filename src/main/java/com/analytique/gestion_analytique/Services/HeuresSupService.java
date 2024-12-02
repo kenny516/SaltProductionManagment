@@ -85,7 +85,12 @@ public class HeuresSupService {
         heureSup.setTauxHoraire(tauxHoraire);
         heureSup.setMontant(tauxHoraire * heureSup.getTotalHeuresSup());
 
-        if (v_hs.getTotalHeuresSup() + heures <= 20) {
+        Double totalheuresup = heures;
+        if (v_hs != null) {
+            totalheuresup += v_hs.getTotalHeuresSup();
+        }
+
+        if (totalheuresup <= 20) {
             return heuresSupRepository.save(heureSup);
         }
 
