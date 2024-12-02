@@ -91,7 +91,7 @@ RETURNS TRIGGER AS $$
 BEGIN
     -- Update the date_fin in ContratEmploye for the current contract of the employee
     UPDATE ContratEmploye
-    SET date_fin = NEW.date_fin_contrat
+    SET date_fin = NEW.date_fin
     WHERE id = (SELECT id_contrat_actuel FROM employes WHERE id = NEW.id_employe);
 
     RETURN NEW;
@@ -123,7 +123,6 @@ AFTER INSERT ON ContratEmploye
 FOR EACH ROW
 EXECUTE FUNCTION update_employe_id_contrat_actuel();
 
--- Trigger Function
 CREATE OR REPLACE FUNCTION set_date_fin_contrat()
 RETURNS TRIGGER AS $$
 DECLARE
@@ -131,16 +130,21 @@ DECLARE
 BEGIN
     -- Récupérer la durée en mois à partir du type de contrat
     SELECT dureeMois
-    INTO STRICT contract_duration
+    INTO contract_duration
     FROM TypeContrat
     WHERE id = NEW.id_type_contrat;
+
+    -- Si aucune durée n'est trouvée, lever une exception ou définir une valeur par défaut
+    IF NOT FOUND THEN
+        RAISE EXCEPTION 'TypeContrat introuvable pour id_type_contrat=%', NEW.id_type_contrat;
+    END IF;
 
     -- Si la durée est null, la date de fin est null
     IF contract_duration IS NULL THEN
         NEW.date_fin := NULL;
     ELSE
         -- Calculer la date de fin en ajoutant la durée en mois à la date de début
-        NEW.date_fin := NEW.date_debut + INTERVAL '1 month' * contract_duration;
+        NEW.date_fin := NEW.date_debut + INTERVAL '1' MONTH * contract_duration;
     END IF;
 
     RETURN NEW;
@@ -155,12 +159,7 @@ EXECUTE FUNCTION set_date_fin_contrat();
 
 
 CREATE OR REPLACE VIEW v_employes_actuels AS
-SELECT
-    e.id,
-    e.id_contrat_actuel,
-    c.date_debut,
-    c.salaire,
-    c.taux_horaire
+SELECT e.*, c.salaire
 FROM
     Employes e
 JOIN
@@ -206,3 +205,5 @@ INSERT INTO TypeRupture (nom, description, preavis_requis, indemnite) VALUES
 INSERT INTO RuptureContrat (id_type_rupture, id_employe, date_notification, date_fin_contrat, preavis_effectue, motif, indemnite_verse) VALUES
 (1, 2, '2024-11-01', '2024-11-30', TRUE, 'Nouvelle opportunité professionnelle', 0.00),
 (2, 3, '2024-11-15', '2024-12-31', FALSE, 'Faute grave', 1500.00);
+
+SELECT dureeMois FROM TypeContrat WHERE id = 1;
