@@ -39,7 +39,6 @@ public class CandidatToEmpService {
 	private NotificationRepository notificationRepository;
 	private ContratEmployeRepository contratEmployeRepository;
 
-
 	public CandidatToEmpService(PostulationRepository postulationRepository, EmployeRepository employeRepository,
 			CompetencesCandidatsRepository competencesCandidatsRepository,
 			CompetencesEmployesRepository competencesEmployesRepository, NotificationRepository notificationRepository,
@@ -51,8 +50,6 @@ public class CandidatToEmpService {
 		this.notificationRepository = notificationRepository;
 		this.contratEmployeRepository = contratEmployeRepository;
 	}
-
-
 
 	@Transactional
 	public Employe embaucherCandidat(Integer candidatId) {
@@ -98,11 +95,12 @@ public class CandidatToEmpService {
 		contrat.setTypeContrat(entityManager.getReference(TypeContrat.class, 2));
 		contrat.setDateDebut(employe.getDateEmbauche());
 
-		contratEmployeRepository.save(contrat);
+		contrat = contratEmployeRepository.save(contrat);
 
-		
+		employe.setContrat(contrat);
 
-		return employe;
+		return entityManager.merge(employe);
+
 	}
 
 }
