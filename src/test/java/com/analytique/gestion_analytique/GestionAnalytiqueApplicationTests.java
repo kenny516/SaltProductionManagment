@@ -31,7 +31,6 @@ class GestionAnalytiqueApplicationTests {
 	@Autowired
 	AvanceService as;
 
-<<<<<<< HEAD
 	@Test
 	void insertionCandidat(){
 		List<Conge> conges = congeService.getCongeValide();
@@ -41,12 +40,6 @@ class GestionAnalytiqueApplicationTests {
 		//cs.intsertNote(1, 1, 10);
 //		double nbrJour = congeService.nbJourParMois(4,12,2024);
 //		System.out.println(nbrJour);
-=======
-	// @Test
-	// void testCamelCase(){
-	// 	assertEquals(7, dpRepo.findAll().size());
-	// }
->>>>>>> main
 
 	// @Test
 	// void insertionCandidat(){
@@ -54,4 +47,5 @@ class GestionAnalytiqueApplicationTests {
 
 	// }
 
+}
 }
