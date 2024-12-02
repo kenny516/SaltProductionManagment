@@ -109,24 +109,4 @@ public class ContratEmploye {
 	public void setPoste(Poste poste) {
 		this.poste = poste;
 	}
-
-	public ContratEmploye modify(LocalDate date_debut, TypeContrat contrat, Poste poste,BigDecimal nouveauSalaire) {
-		ContratEmploye ce = new ContratEmploye();
-		if (date_debut == null && this.dateFin == null) {
-			this.dateFin = LocalDate.now();
-			ce.setDateDebut(LocalDate.now());
-		} else if (date_debut == null && this.dateFin != null) {
-			ce.setDateDebut(this.dateFin);
-		} else if (date_debut != null && this.dateFin == null) {
-			ce.setDateDebut(date_debut);
-			this.dateFin = date_debut;
-		} else {
-			ce.setDateDebut(date_debut);
-		}
-		ce.setPoste(poste == null ? this.getPoste() : poste);
-		ce.setTypeContrat(contrat == null ? this.getTypeContrat() : contrat);
-		ce.setSalaire(nouveauSalaire == null ? this.getSalaire() : nouveauSalaire);
-		ce.setEmploye(employe);
-		return ce;
-	}
 }

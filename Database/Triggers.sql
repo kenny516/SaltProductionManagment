@@ -36,32 +36,6 @@ AFTER INSERT OR UPDATE ON Postulations
 FOR EACH ROW
 EXECUTE FUNCTION evaluer_statut_candidat();
 
---- INSERTION DateFin dans contrat
-
-CREATE OR REPLACE FUNCTION calculate_date_fin()
-RETURNS TRIGGER AS $$
-DECLARE
-    contract_duration INT;  -- Variable temporaire pour stocker dureeMois
-BEGIN
-    -- Récupérer la durée en mois à partir du type de contrat
-    SELECT dureeMois
-    INTO STRICT contract_duration
-    FROM TypeContrat
-    WHERE id = NEW.id_type_contrat;
-
-    -- Calculer la date de fin en ajoutant la durée en mois à la date de début
-    NEW.date_fin := NEW.date_debut  + INTERVAL '1 month' * contract_duration;
-
-    RETURN NEW;
-END;
-$$ LANGUAGE plpgsql;
-
--- Appliquer le trigger à la table ContratEmploye avant insertion
-CREATE OR REPLACE TRIGGER trg_calculate_date_fin
-BEFORE INSERT ON ContratEmploye
-FOR EACH ROW
-EXECUTE FUNCTION calculate_date_fin();
-
 -- Create the trigger function
 CREATE OR REPLACE FUNCTION update_offre_status()
 RETURNS TRIGGER AS $$

@@ -6,6 +6,7 @@ import org.springframework.data.repository.query.Param;
 
 import com.analytique.gestion_analytique.Models.Candidat;
 
+import java.util.List;
 
 public interface CandidatRepository extends JpaRepository<Candidat, Integer> {
 
