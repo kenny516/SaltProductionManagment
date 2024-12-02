@@ -17,7 +17,7 @@ public class Conge {
 
     @ManyToOne
     @JoinColumn(name = "id_employe", nullable = false)
-    private Employe Employe;
+    private Employe employe;
 
     @ManyToOne
     @JoinColumn(name = "id_type_conge", nullable = false)

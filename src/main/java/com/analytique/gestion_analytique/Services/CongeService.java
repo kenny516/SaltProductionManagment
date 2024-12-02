@@ -92,4 +92,42 @@ public class CongeService {
     }
 
 
+    public double nbrCongeDisponible(Integer idTypeConge,Integer idEmploye, Integer annee) {
+        double congeDisponible = 0;
+        Map<Integer, Integer> congePerYear = congeByYear(idTypeConge,idEmploye);
+        congeDisponible = (12*2.5) - congePerYear.get(annee);
+        return congeDisponible;
+    }
+
+    public double getNbrHeuresCongeParMois(Integer idEmploye, Integer mois, Integer annee) {
+        double joursConge = repository.nbrJourCongeParMois(idEmploye, mois, annee) == null 
+            ? 0 
+            : repository.nbrJourCongeParMois(idEmploye, mois, annee);
+        
+        // Convertir les jours de congé en heures (8 heures par jour)
+        return joursConge * 8;
+    }    
+
+    public double getNbrHeuresCongeNonPayeParMois(Integer idEmploye, Integer mois, Integer annee) {
+        Double joursCongeNonPaye = repository.nbrJourCongeNonPayeParMois(idEmploye, mois, annee) == null
+            ? 0
+            : repository.nbrJourCongeNonPayeParMois(idEmploye, mois, annee);
+    
+        // Convertir les jours de congé non payés en heures (8 heures par jour)
+        return joursCongeNonPaye * 8;
+    }
+    
+    public double getMontantDroitConge(Integer idEmploye, Integer mois, Integer annee) {
+        Employe employe = employeService.getEmployeById(idEmploye);
+        
+        if (employe == null || employe.getContrat().getTauxHoraire() == null) {
+            throw new IllegalArgumentException("L'employé ou son taux horaire est introuvable.");
+        }
+
+        double tauxHoraire = employe.getContrat().getTauxHoraire().doubleValue();
+    
+        double heuresCongesPayes = getNbrHeuresCongeNonPayeParMois(idEmploye, mois, annee);
+    
+        return heuresCongesPayes * tauxHoraire;
+    }
 }
