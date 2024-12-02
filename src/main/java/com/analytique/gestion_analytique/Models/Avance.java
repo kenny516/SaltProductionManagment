@@ -7,6 +7,7 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 
@@ -21,6 +22,7 @@ public class Avance {
     @ManyToOne
     @JoinColumn(name = "id_employe", nullable = false)
     // @JsonManagedReference
+    @JsonBackReference
     private Employe employe;
 
     private BigDecimal montant;
