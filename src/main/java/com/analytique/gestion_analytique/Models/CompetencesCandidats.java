@@ -1,5 +1,7 @@
 package com.analytique.gestion_analytique.Models;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import jakarta.persistence.*;
 
 @Entity
@@ -8,6 +10,7 @@ import jakarta.persistence.*;
 public class CompetencesCandidats {
 	@Id
 	@ManyToOne
+	@JsonBackReference
 	@JoinColumn(name = "idCandidat")
 	private Candidat candidat;
 

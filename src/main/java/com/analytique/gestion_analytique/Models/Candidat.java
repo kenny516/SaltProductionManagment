@@ -87,7 +87,6 @@ public class Candidat {
 	}
 
 	public void setFormations(List<Formation> formations) {
-		formations.forEach(f -> f.setCandidat(null));
 		this.formations = formations;
 	}
 
@@ -96,7 +95,6 @@ public class Candidat {
 	}
 
 	public void setExperiences(List<Experience> experiences) {
-		experiences.forEach(e -> e.setCandidat(null));
 		this.experiences = experiences;
 
 	}
@@ -127,10 +125,7 @@ public class Candidat {
 	}
 
 	public void setPostulations(List<Postulation> postulations) {
-		postulations.forEach(p -> {
-			p.setCandidat(null);
-			p.getNotes().forEach(note -> note.setPostulation(null));
-		});
+		
 		this.postulations = postulations;
 	}
 
