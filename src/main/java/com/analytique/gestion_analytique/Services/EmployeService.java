@@ -20,9 +20,10 @@ import com.analytique.gestion_analytique.Repositories.EmployeRepository;
 import com.analytique.gestion_analytique.Repositories.PayeRepository;
 import com.analytique.gestion_analytique.dto.receive.RemboursementReste;
 import com.analytique.gestion_analytique.dto.send.EmployeSend;
-
+import com.analytique.gestion_analytique.Repositories.HeuresSupRepository;
 @Service
 public class EmployeService {
+	private final HeuresSupRepository heuresSupRepository;
 	private final EmployeRepository employeRepository;
 	private final CompetenceRepository competenceRepository;
 	private final ContratEmployeRepository contratEmployeRepository;
@@ -32,13 +33,15 @@ public class EmployeService {
 	JdbcTemplate jdbcTemplate;
 
 	public EmployeService(EmployeRepository employeRepository, CompetenceRepository competenceRepository,
-			ContratEmployeRepository contratEmployeRepository, AvanceRepository avanceRepository, AvanceRemboursementRepository avanceRemboursementRepository, JdbcTemplate jdbcTemplate) {
+			ContratEmployeRepository contratEmployeRepository, AvanceRepository avanceRepository, AvanceRemboursementRepository avanceRemboursementRepository, JdbcTemplate jdbcTemplate, PayeRepository payeRepository, HeuresSupRepository heuresSupRepository) {
 		this.employeRepository = employeRepository;
 		this.competenceRepository = competenceRepository;
 		this.contratEmployeRepository = contratEmployeRepository;
 		this.avanceRepository = avanceRepository;
 		this.avanceRemboursementRepository = avanceRemboursementRepository;
 		this.jdbcTemplate = jdbcTemplate;
+		this.payeRepository = payeRepository;
+		this.heuresSupRepository = heuresSupRepository;
 	}
 
 	public List<EmployeSend> getQualifiedEmployeesForPost(Integer posteId) {
@@ -124,17 +127,32 @@ public class EmployeService {
 		return null;
 	}
 
-	public Paye payer(Integer IdEmploye, LocalDate datePaiement, Double heureNormale){
-		AvanceRemboursement ar = remboursementMensuel(IdEmploye, datePaiement);
-		BigDecimal totalAvance = ar.getMontant();
-		List<HeuresSup> heuresSups = new HeuresSupService().getHeuresSupByEmployeAndMonthAndYear(Long.valueOf(IdEmploye), datePaiement.getMonthValue(), datePaiement.getYear());
-		double montantHeureSup = heuresSups.stream().map(HeuresSup::getMontant).filter(montant -> montant != null).reduce(0.0,Double::sum);
-		double totalHeureSup = heuresSups.stream().map(HeuresSup::getTotalHeuresSup).filter(heureSup -> heureSup != null).reduce(0.0,Double::sum);
-		BigDecimal salaireBase = contratEmployeRepository.findByMaxDateAndEmployeId(IdEmploye).getSalaire();
-		Double totalSalaire = salaireBase.subtract(totalAvance).doubleValue() + montantHeureSup;
+	public void validerPaiement(Integer id_employe, int mois, int annee)throws Exception{
+		Paye paye = employeRepository.getPaye(mois, annee, id_employe);
+		if(paye != null){
+			throw new Exception("Cet employe a deja ete paye");
+		}
+	}
+	public Paye payer(Integer IdEmploye, LocalDate datePaiement, Double heureNormale) throws Exception{
+		try{
+			validerPaiement(IdEmploye, datePaiement.getMonthValue(), datePaiement.getYear());
+			AvanceRemboursement ar = remboursementMensuel(IdEmploye, datePaiement);
+			BigDecimal totalAvance = (ar != null) ? ar.getMontant() : BigDecimal.ZERO;
+			
+			List<HeuresSup> heuresSups = heuresSupRepository.findByEmployeAndMonthAndYear(Long.valueOf(IdEmploye), datePaiement.getMonthValue(), datePaiement.getYear());
+			Double montantHeureSup = heuresSups.stream().map(HeuresSup::getMontant).filter(montant -> montant != null).reduce(0.0,Double::sum);
+			double totalHeureSup = heuresSups.stream().map(HeuresSup::getTotalHeuresSup).filter(heureSup -> heureSup != null).reduce(0.0,Double::sum);
+			BigDecimal salaireBase = contratEmployeRepository.findByMaxDateAndEmployeId(IdEmploye).getSalaire();
+			Double totalSalaire = salaireBase.subtract(totalAvance).doubleValue() + montantHeureSup;
 
-		Paye paye = new Paye(null, employeRepository.getReferenceById(IdEmploye), datePaiement.getMonthValue(), datePaiement.getYear(), heureNormale, totalHeureSup, totalAvance.doubleValue(), salaireBase.doubleValue(), totalSalaire);
-		return payeRepository.save(paye);
+			Paye paye = new Paye(null, employeRepository.getReferenceById(IdEmploye), datePaiement.getMonthValue(), datePaiement.getYear(), BigDecimal.valueOf(heureNormale), BigDecimal.valueOf(totalHeureSup), totalAvance, salaireBase, BigDecimal.valueOf(totalSalaire));
+
+			// System.out.println(paye);
+			return payeRepository.save(paye);
+		}
+		catch (Exception e){
+			throw e;
+		}
 	}
 	
 }

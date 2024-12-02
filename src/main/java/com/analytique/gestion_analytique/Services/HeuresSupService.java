@@ -14,6 +14,13 @@ public class HeuresSupService {
 
     @Autowired
     private HeuresSupRepository heuresSupRepository;
+    
+    public HeuresSupService(HeuresSupRepository heuresSupRepository){
+        this.heuresSupRepository = heuresSupRepository;
+    }
+    public HeuresSupService(){
+        
+    }
 
     public Double determinerTaux(LocalDate semaine, Long idEmploye, Double heuresAjoutees) {
         List<HeuresSup> heuresSupSemaine = heuresSupRepository.findByEmployeAndWeek(idEmploye, semaine);
