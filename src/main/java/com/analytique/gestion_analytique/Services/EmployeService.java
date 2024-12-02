@@ -76,6 +76,10 @@ public class EmployeService {
 		this.jdbcTemplate = jdbcTemplate;
 	}
 
+	public Employe getEmployeById(Integer id) {
+		return employeRepository.findById(id).orElse(null);
+	}
+
 	public List<EmployeSend> getQualifiedEmployeesForPost(Integer posteId) {
 		return employeRepository.findQualifiedEmployeesForPost(posteId)
 				.stream()
