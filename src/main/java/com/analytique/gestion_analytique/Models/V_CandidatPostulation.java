@@ -1,16 +1,11 @@
 package com.analytique.gestion_analytique.Models;
 
 import java.time.LocalDate;
-import java.util.List;
-
-import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 
 @Entity
@@ -46,8 +41,6 @@ public class V_CandidatPostulation {
 
     private String status;
 
-    @OneToMany(mappedBy = "postulation", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private List<NoteCandidat> noteCandidat;
 
     // Getters and Setters
     public Integer getId() {
@@ -146,12 +139,4 @@ public class V_CandidatPostulation {
         this.status = status;
     }
 
-    public List<NoteCandidat> getNoteCandidat() {
-        return noteCandidat;
-    }
-
-    public void setNoteCandidat(List<NoteCandidat> noteCandidat) {
-			noteCandidat.forEach(nc -> nc.setPostulation(null));
-        this.noteCandidat = noteCandidat;
-    }
 }

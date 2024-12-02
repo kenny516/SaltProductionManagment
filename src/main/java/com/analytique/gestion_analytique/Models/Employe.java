@@ -104,7 +104,6 @@ public class Employe {
 	}
 
 	public void setContrat(ContratEmploye contrat) {
-		contrat.setEmploye(null);
 		this.contrat = contrat;
 	}
 
