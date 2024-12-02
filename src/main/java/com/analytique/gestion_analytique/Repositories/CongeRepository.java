@@ -9,6 +9,8 @@ import java.util.List;
 
 public interface CongeRepository extends JpaRepository<Conge, Integer> {
 
+        List<Conge> findByEmployeIdAndIdTypeCongeEstPayeFalse(Integer employeId);
+
     @Query(value = """
             SELECT sum(duree)
             FROM conge
@@ -74,7 +76,5 @@ public interface CongeRepository extends JpaRepository<Conge, Integer> {
     Double nbrJourCongeParMoisPaye(@Param("idEmploye") Integer idEmploye,
                                @Param("mois") Integer mois,
                                @Param("annee") Integer annee);
-
-
 
 }
