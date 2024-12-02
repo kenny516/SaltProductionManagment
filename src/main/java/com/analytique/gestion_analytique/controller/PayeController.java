@@ -37,13 +37,12 @@ public class PayeController {
     
 
     @GetMapping("/{idEmploye}")
-    public List<Paye> getListByEmp(@PathVariable Integer idEmploye) {
+    public List<Paye> getListByEmp(@PathVariable Integer idEmploye) throws Exception {
         try {
-            return employeService.getByIdEmploye(idEmploye);
+            return employeService.getPayeByIdEmploye(idEmploye);
         } catch (Exception e) {
-            System.out.println(e.getMessage());
+           throw e;
         }
-        return null;
     }
     
     

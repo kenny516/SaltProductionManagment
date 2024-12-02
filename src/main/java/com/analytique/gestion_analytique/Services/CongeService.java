@@ -6,7 +6,7 @@ import com.analytique.gestion_analytique.Repositories.CongeRepository;
 import com.analytique.gestion_analytique.Repositories.EmployeRepository;
 
 import org.springframework.stereotype.Service;
-
+import java.util.HashMap;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
@@ -18,12 +18,10 @@ public class CongeService {
     private final CongeRepository repository;
     private final SoldeCongeService soldeCongeService;
     private final EmployeRepository employeRepository;
-        private EmployeService employeService;
     
-        public CongeService(CongeRepository repository, SoldeCongeService soldeCongeService, EmployeService employeService, EmployeRepository employeRepository) {
+        public CongeService(CongeRepository repository, SoldeCongeService soldeCongeService,EmployeRepository employeRepository) {
             this.repository = repository;
             this.soldeCongeService = soldeCongeService;
-            this.employeService = employeService;
             this.employeRepository = employeRepository;
         }
     
@@ -99,7 +97,28 @@ public class CongeService {
             return repository.congeParAns(idEmploye, anne);
         }
     
-    
+        public Map<Integer, Integer> congeByYear(Integer idTypeConge, Integer idEmploye) {
+            List<Conge> conges = repository.findByEmployeId(idTypeConge, idEmploye);
+            Map<Integer, Integer> congePerYear = new HashMap<>();
+            for (Conge conge : conges) {
+                if (conge.getDateDebut().getYear() != conge.getDateFin().getYear()) {
+                    LocalDate finAnnee = LocalDate.of(conge.getDateDebut().getYear(), 12, 31);
+                    long nbJours = ChronoUnit.DAYS.between(conge.getDateDebut(), finAnnee) + 1;
+                    congePerYear.put(conge.getDateDebut().getYear(),
+                            congePerYear.getOrDefault(conge.getDateDebut().getYear(), 0) + (int) nbJours);
+                    // date fin
+                    LocalDate debutAnneeSuivante = LocalDate.of(conge.getDateFin().getYear(), 1, 1);
+                    nbJours = ChronoUnit.DAYS.between(debutAnneeSuivante, conge.getDateFin()) + 1;
+                    congePerYear.put(conge.getDateFin().getYear(),
+                            congePerYear.getOrDefault(conge.getDateFin().getYear(), 0) + (int) nbJours);
+                } else {
+                    long nbJours = ChronoUnit.DAYS.between(conge.getDateDebut(), conge.getDateFin()) + 1;
+                    congePerYear.put(conge.getDateDebut().getYear(),
+                            congePerYear.getOrDefault(conge.getDateDebut().getYear(), 0) + (int) nbJours);
+                }
+            }
+            return congePerYear;
+        }
         public double nbrCongeDisponible(Integer idTypeConge,Integer idEmploye, Integer annee) {
             double congeDisponible = 0;
             Map<Integer, Integer> congePerYear = congeByYear(idTypeConge,idEmploye);

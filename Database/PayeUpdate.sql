@@ -25,12 +25,12 @@ CREATE TABLE IF NOT EXISTS type_bonus_salaire(
     nom VARCHAR(30) NOT NULL
 );
 insert into type_bonus_salaire VALUES 
-(default, 'INDEMNITE'), (default 'PRIME');
+(default, 'INDEMNITE'), (default,'PRIME');
 
 CREATE TABLE bonus_salaire(
     id SERIAL PRIMARY KEY,
-    id_employe INT REFERENCES Employes.id,
-    type_bonus INT REFERENCES type_bonus_salaire.id,
+    id_employe INT REFERENCES employes(id),
+    type_bonus INT REFERENCES type_bonus_salaire(id),
     montant NUMERIC(10,2),
     date_bonus DATE
 );
@@ -38,31 +38,31 @@ CREATE TABLE bonus_salaire(
 CREATE OR REPLACE FUNCTION calculer_irsa(p_id_employe INT)
 RETURNS NUMERIC(10, 2) AS $$
 DECLARE
-    salaire NUMERIC(10, 2);
+    sal NUMERIC(10, 2);
     irsa_total NUMERIC(10, 2) := 0;
 BEGIN
-    SELECT salaire INTO salaire
+    SELECT salaire INTO sal
     FROM ContratEmploye
     WHERE id_employe = p_id_employe 
     AND date_debut = (SELECT MAX(date_debut) FROM ContratEmploye WHERE id_employe = p_id_employe);
 
-    IF salaire > 600000 THEN
+    IF sal > 600000 THEN
         irsa_total := irsa_total + (salaire - 600000) * 0.20;
-        salaire := 600000;
+        sal := 600000;
     END IF;
 
-    IF salaire > 500000 THEN
-        irsa_total := irsa_total + (salaire - 500000) * 0.15;
-        salaire := 500000;
+    IF sal > 500000 THEN
+        irsa_total := irsa_total + (sal - 500000) * 0.15;
+        sal := 500000;
     END IF;
 
-    IF salaire > 400000 THEN
-        irsa_total := irsa_total + (salaire - 400000) * 0.10;
-        salaire := 400000;
+    IF sal > 400000 THEN
+        irsa_total := irsa_total + (sal - 400000) * 0.10;
+        sal := 400000;
     END IF;
 
-    IF salaire > 350000 THEN
-        irsa_total := irsa_total + (salaire - 350000) * 0.05;
+    IF sal > 350000 THEN
+        irsa_total := irsa_total + (sal - 350000) * 0.05;
     END IF;
 
     RETURN irsa_total;

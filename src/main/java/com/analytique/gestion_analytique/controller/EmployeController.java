@@ -64,14 +64,14 @@ public class EmployeController {
 
 	@PostMapping("/payer")
 	public ResponseEntity<PayeDetails> payer(
-            @RequestParam Integer id,
+            @RequestParam(name="idEmploye") Integer id,
             @RequestParam(name="datePaiement") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate datePaiement,
             @RequestParam(required = false, name="heureNormale", defaultValue = "160.0") Double heureNormale) {
         try {
             PayeDetails paye = employeService.validerPaiement(id, datePaiement, heureNormale);
             return ResponseEntity.ok(paye);
         } catch (Exception e) {
-			System.out.println(e.getMessage());
+			e.printStackTrace();
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
         }
     }

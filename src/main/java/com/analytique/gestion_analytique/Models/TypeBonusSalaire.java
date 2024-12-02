@@ -16,7 +16,7 @@ import java.time.LocalDate;
 public class TypeBonusSalaire {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Integer id;
 
     @Column(name = "nom", length = 30, nullable = false)
     private String nom;

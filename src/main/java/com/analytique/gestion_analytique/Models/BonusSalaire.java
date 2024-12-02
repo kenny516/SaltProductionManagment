@@ -14,7 +14,7 @@ import java.time.LocalDate;
 public class BonusSalaire {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Integer id;
 
     @ManyToOne
     @JoinColumn(name = "id_employe", nullable = false)
