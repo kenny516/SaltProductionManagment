@@ -1,21 +1,29 @@
 package com.analytique.gestion_analytique.controller;
 
-import java.util.ArrayList;
+import java.time.LocalDate;
 import java.util.List;
 
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.analytique.gestion_analytique.Models.CategoriePersonnel;
+import com.analytique.gestion_analytique.Models.Paye;
+import com.analytique.gestion_analytique.Models.PayeDetails;
 import com.analytique.gestion_analytique.Repositories.CategoriePersonnelRepository;
 import com.analytique.gestion_analytique.Services.EmployeService;
+import com.analytique.gestion_analytique.dto.receive.RemboursementReste;
 import com.analytique.gestion_analytique.dto.send.EmployeSend;
 
+import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+
 
 @RestController
 @RequestMapping("/api/employe")
@@ -49,22 +57,30 @@ public class EmployeController {
 		return employeService.getQualifiedEmployeesForPost(id);
 	}
 
-	@GetMapping("/categories-personnel")
-	public List<CategoriePersonnel> getCategoriesPersonnel() {
-		List<CategoriePersonnel> fetched = categoriePersonnelRepository.findAll();
-
-		List<CategoriePersonnel> categs = new ArrayList<>();
-		
-		CategoriePersonnel tous = new CategoriePersonnel();
-		tous.setId(0);
-		tous.setNom("Tous");
-		tous.setDescription("Toutes les catégories de personnel");
-
-		// categs.add(tous);
-
-		categs.addAll(fetched);
-
-		return categs;
+	@GetMapping("/{id}/avances")
+	public List<RemboursementReste> getAllAvances(@PathVariable Integer id, @RequestParam(required = false, name = "unpaid") Boolean unpaid) {
+		return employeService.getAllAvances(id, unpaid);
 	}
+
+	@PostMapping("/payer")
+	public ResponseEntity<PayeDetails> payer(
+            @RequestParam(name="idEmploye") Integer id,
+            @RequestParam(name="datePaiement") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate datePaiement,
+            @RequestParam(required = false, name="heureNormale", defaultValue = "160.0") Double heureNormale) {
+        try {
+            PayeDetails paye = employeService.validerPaiement(id, datePaiement, heureNormale);
+            return ResponseEntity.ok(paye);
+        } catch (Exception e) {
+			e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+        }
+    }
+	
+
+
+	
+
+	
+	
 	
 }
