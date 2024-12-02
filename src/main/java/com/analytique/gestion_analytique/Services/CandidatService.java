@@ -16,6 +16,7 @@ import com.analytique.gestion_analytique.Models.Notification;
 import com.analytique.gestion_analytique.Models.OffreEmploi;
 import com.analytique.gestion_analytique.Models.Postulation;
 import com.analytique.gestion_analytique.Models.TypeNote;
+import com.analytique.gestion_analytique.Models.V_CandidatPostulation;
 import com.analytique.gestion_analytique.Repositories.CandidatRepository;
 import com.analytique.gestion_analytique.Repositories.CandidatsDiplomeRepo;
 import com.analytique.gestion_analytique.Repositories.CompetencesCandidatsRepository;
@@ -25,6 +26,7 @@ import com.analytique.gestion_analytique.Repositories.NoteCandidatRepository;
 import com.analytique.gestion_analytique.Repositories.NotificationRepository;
 import com.analytique.gestion_analytique.Repositories.OffreEmploiRepository;
 import com.analytique.gestion_analytique.Repositories.PostulationRepository;
+import com.analytique.gestion_analytique.Repositories.V_CandidatPostulationRepository;
 import com.analytique.gestion_analytique.dto.receive.CandidatRecieve;
 import com.analytique.gestion_analytique.dto.receive.PostulationRecieve;
 import com.analytique.gestion_analytique.dto.send.CandidatSend;
@@ -54,11 +56,15 @@ public class CandidatService {
 	private ExperienceRepo experienceRepo;
 	private CandidatsDiplomeRepo candidatsDiplomeRepo;
 	private NotificationRepository notificationRepository;
+	private V_CandidatPostulationRepository candidatPostulationRepository;
+
+	
 
 	public CandidatService(CandidatRepository candidatRepository, PostulationRepository postulationRepository,
 			OffreEmploiRepository offreRepository, CompetencesCandidatsRepository cCandidatsRepository,
 			NoteCandidatRepository noteCandidatRepository, FormationRepo formationRepo, ExperienceRepo experienceRepo,
-			CandidatsDiplomeRepo candidatsDiplomeRepo, NotificationRepository notificationRepository) {
+			CandidatsDiplomeRepo candidatsDiplomeRepo, NotificationRepository notificationRepository,
+			V_CandidatPostulationRepository candidatPostulationRepository) {
 		this.candidatRepository = candidatRepository;
 		this.postulationRepository = postulationRepository;
 		this.offreRepository = offreRepository;
@@ -68,34 +74,24 @@ public class CandidatService {
 		this.experienceRepo = experienceRepo;
 		this.candidatsDiplomeRepo = candidatsDiplomeRepo;
 		this.notificationRepository = notificationRepository;
+		this.candidatPostulationRepository = candidatPostulationRepository;
 	}
 
-	public List<Candidat> findAll() {
-		List<Candidat> candidats = candidatRepository.findAllPostule();
-		candidats.forEach(c -> c.nullCandidat());
+	public List<V_CandidatPostulation> findAll() {
+		List<V_CandidatPostulation> candidats = candidatPostulationRepository.findAllPostule();
 		return candidats;
 	}
 
-	public List<Candidat> findCandidatNonRefus(){
-		List<Candidat> candidats = new ArrayList<>(candidatRepository.findAllNonRefus().stream()
-				.map(c -> c.duplicateSimple())
-				.collect(Collectors.toList()));
+	public List<V_CandidatPostulation> findCandidatNonRefus(){
+		List<V_CandidatPostulation> candidats = candidatPostulationRepository.findAllNonRefus();
 		
 		return candidats; 
 	}
 
-	public List<Candidat> getCandidatsRetenus(Integer offreId) {
-		// Récupérer toutes les postulations retenues pour un poste donné
-		List<Postulation> postulationsRetenues = postulationRepository.findByOffreEmploiIdAndStatus(offreId, "Retenu");
+	public List<V_CandidatPostulation> getCandidatsRetenus(Integer offreId) {
 
 		// Créer une liste pour stocker les candidats
-		List<Candidat> candidatsRetenus = new ArrayList<>();
-
-		// Ajouter les candidats associés aux postulations retenues
-		for (Postulation postulation : postulationsRetenues) {
-			candidatsRetenus.add(postulation.getCandidat());
-		}
-		// Retourner la liste des candidats retenus
+		List<V_CandidatPostulation> candidatsRetenus = candidatPostulationRepository.findByOffreIdAndOffreStatusAndStatus(offreId, true, "Retenu");
 		return candidatsRetenus;
 	}
 
@@ -136,21 +132,10 @@ public class CandidatService {
 		return result;
 	}
 
-	public List<Candidat> getElligibles(Integer posteId) {
+	public List<V_CandidatPostulation> getElligibles(Integer posteId) {
 
-		List<Candidat> posts = posteId == null ? candidatRepository.findElligibles()
-				: candidatRepository.findElligiblesByPoste(posteId);
-
-		posts.forEach(p -> {
-			p.nullCandidat();
-			for (int i = 0; i < p.getPostulations().size(); i++) {
-				if (p.getPostulations().get(i).getStatus() == "Refus" || p.getPostulations().get(i).getNotes().size() < 3) {
-					p.getPostulations().remove(i);
-					i--;
-					continue;
-				}
-			}
-		});
+		List<V_CandidatPostulation> posts = posteId == null ? candidatPostulationRepository.findElligibles()
+				: candidatPostulationRepository.findElligiblesByPoste(posteId);
 
 		return posts;
 	}
