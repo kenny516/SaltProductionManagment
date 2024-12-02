@@ -77,4 +77,13 @@ public interface CongeRepository extends JpaRepository<Conge, Integer> {
                                @Param("mois") Integer mois,
                                @Param("annee") Integer annee);
 
+        @Query("SELECT SUM(CAST(DATEDIFF(DAY, c.dateDebut, c.dateFin) + 1 AS double)) " +
+        "FROM Conge c WHERE c.employe.id = :idEmploye AND " +
+        "MONTH(c.dateDebut) = :mois AND YEAR(c.dateDebut) = :annee AND " +
+        "c.idTypeConge.estPaye = false")
+        Double nbrJourCongeNonPayeParMois(@Param("idEmploye") Integer idEmploye, 
+                                          @Param("mois") Integer mois, 
+                                          @Param("annee") Integer annee);
+                        
+
 }
