@@ -8,34 +8,64 @@ import java.util.Optional;
 
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
-
+import com.analytique.gestion_analytique.Models.Paye;
 import com.analytique.gestion_analytique.Models.AvanceRemboursement;
+import com.analytique.gestion_analytique.Models.ContratEmploye;
 import com.analytique.gestion_analytique.Models.Employe;
+import com.analytique.gestion_analytique.Models.Poste;
+import com.analytique.gestion_analytique.Models.TypeContrat;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.analytique.gestion_analytique.Models.Poste;
+import com.analytique.gestion_analytique.Models.TypeContrat;
+import com.analytique.gestion_analytique.Models.ContratEmploye;
+import com.analytique.gestion_analytique.Models.Employe;
+import com.analytique.gestion_analytique.Models.HeuresSup;
 import com.analytique.gestion_analytique.Repositories.AvanceRemboursementRepository;
 import com.analytique.gestion_analytique.Repositories.AvanceRepository;
 import com.analytique.gestion_analytique.Repositories.CompetenceRepository;
 import com.analytique.gestion_analytique.Repositories.ContratEmployeRepository;
 import com.analytique.gestion_analytique.Repositories.EmployeRepository;
+import com.analytique.gestion_analytique.Repositories.PayeRepository;
 import com.analytique.gestion_analytique.dto.receive.RemboursementReste;
 import com.analytique.gestion_analytique.dto.send.EmployeSend;
 
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
+import jakarta.transaction.Transactional;
+import com.analytique.gestion_analytique.Repositories.HeuresSupRepository;
+
+import com.analytique.gestion_analytique.Repositories.HeuresSupRepository;
 @Service
 public class EmployeService {
+	@PersistenceContext
+	EntityManager entityManager;
+
+
+	private final HeuresSupRepository heuresSupRepository;
 	private final EmployeRepository employeRepository;
 	private final CompetenceRepository competenceRepository;
 	private final ContratEmployeRepository contratEmployeRepository;
 	private final AvanceRepository avanceRepository;
 	private final AvanceRemboursementRepository avanceRemboursementRepository;
+	private final PayeRepository payeRepository;
 	JdbcTemplate jdbcTemplate;
 
-	public EmployeService(EmployeRepository employeRepository, CompetenceRepository competenceRepository,
-			ContratEmployeRepository contratEmployeRepository, AvanceRepository avanceRepository,
-			AvanceRemboursementRepository avanceRemboursementRepository, JdbcTemplate jdbcTemplate) {
+	
+
+	public EmployeService(HeuresSupRepository heuresSupRepository, EmployeRepository employeRepository,
+			CompetenceRepository competenceRepository, ContratEmployeRepository contratEmployeRepository,
+			AvanceRepository avanceRepository, AvanceRemboursementRepository avanceRemboursementRepository,
+			PayeRepository payeRepository, JdbcTemplate jdbcTemplate) {
+		this.heuresSupRepository = heuresSupRepository;
 		this.employeRepository = employeRepository;
 		this.competenceRepository = competenceRepository;
 		this.contratEmployeRepository = contratEmployeRepository;
 		this.avanceRepository = avanceRepository;
 		this.avanceRemboursementRepository = avanceRemboursementRepository;
+		this.payeRepository = payeRepository;
 		this.jdbcTemplate = jdbcTemplate;
 	}
 
@@ -124,4 +154,59 @@ public class EmployeService {
 		return null;
 	}
 
+	public ContratEmploye modifierContrat(Integer idEmploye, LocalDate date_debut, Integer contrat, Integer poste,BigDecimal nouveauSalaire){
+		TypeContrat tc = contrat == null ? null :entityManager.getReference(TypeContrat.class,contrat );
+		Poste p = poste == null ? null : entityManager.getReference(Poste.class, poste);
+
+		return modifierContrat(idEmploye, date_debut, tc, p, nouveauSalaire);
+	}
+
+	@Transactional
+	public ContratEmploye modifierContrat(Integer idEmploye, LocalDate date_debut, TypeContrat contrat, Poste poste,BigDecimal nouveauSalaire){
+		Employe e = getOne(idEmploye).get();
+		ContratEmploye nouveauContratEmploye = e.getContrat().modify(date_debut, contrat, poste, nouveauSalaire);
+
+		entityManager.persist(e.getContrat());
+		nouveauContratEmploye = contratEmployeRepository.save(nouveauContratEmploye);
+		return nouveauContratEmploye;
+	}
+
+
+	public void validerPaiement(Integer id_employe, int mois, int annee)throws Exception{
+		Paye paye = employeRepository.getPaye(mois, annee, id_employe);
+		if(paye != null){
+			throw new Exception("Cet employe a deja ete paye");
+		}
+	}
+	public Paye payer(Integer IdEmploye, LocalDate datePaiement, Double heureNormale) throws Exception{
+		try{
+			validerPaiement(IdEmploye, datePaiement.getMonthValue(), datePaiement.getYear());
+			AvanceRemboursement ar = remboursementMensuel(IdEmploye, datePaiement);
+			BigDecimal totalAvance = (ar != null) ? ar.getMontant() : BigDecimal.ZERO;
+			
+			List<HeuresSup> heuresSups = heuresSupRepository.findByEmployeAndMonthAndYear(Long.valueOf(IdEmploye), datePaiement.getMonthValue(), datePaiement.getYear());
+			Double montantHeureSup = heuresSups.stream().map(HeuresSup::getMontant).filter(montant -> montant != null).reduce(0.0,Double::sum);
+			double totalHeureSup = heuresSups.stream().map(HeuresSup::getTotalHeuresSup).filter(heureSup -> heureSup != null).reduce(0.0,Double::sum);
+			BigDecimal salaireBase = contratEmployeRepository.findByMaxDateAndEmployeId(IdEmploye).getSalaire();
+			Double totalSalaire = salaireBase.subtract(totalAvance).doubleValue() + montantHeureSup;
+
+			Paye paye = new Paye(null, employeRepository.getReferenceById(IdEmploye), datePaiement.getMonthValue(), datePaiement.getYear(), BigDecimal.valueOf(heureNormale), BigDecimal.valueOf(totalHeureSup), totalAvance, salaireBase, BigDecimal.valueOf(totalSalaire));
+
+			// System.out.println(paye);
+			return payeRepository.save(paye);
+		}
+		catch (Exception e){
+			throw e;
+		}
+	}
+	
+    public Employe getEmployeById(Integer id) {
+        Optional<Employe> employe = employeRepository.findById(id);
+        return employe.orElseThrow(() -> new RuntimeException("Employé introuvable pour l'id: " + id));
+    }
+
+	public List<Employe> getAllEmp() {
+        List<Employe> employes = employeRepository.findAll();
+        return employes;
+    }
 }
