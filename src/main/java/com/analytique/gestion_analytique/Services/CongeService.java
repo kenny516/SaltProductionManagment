@@ -135,29 +135,4 @@ public class CongeService {
         return congeDisponible;
     }
 
-    public BigDecimal getMontantCongesNonPayesForMonthAndYear(Integer employeId, int month, int year, BigDecimal tauxJournalier) {
-        // Définir les dates de début et de fin pour le mois et l'année spécifiés
-        LocalDate startOfMonth = LocalDate.of(year, month, 1);
-        LocalDate endOfMonth = startOfMonth.withDayOfMonth(startOfMonth.lengthOfMonth());
-
-        // Récupérer tous les congés non payés pour l'employé donné
-        List<Conge> congés = repository.findByEmployeIdAndIdTypeCongeEstPayeFalse(employeId);
-
-        BigDecimal totalDuree = BigDecimal.ZERO;
-
-        for (Conge conge : congés) {
-            // Vérifier si le congé se trouve dans le mois et l'année spécifiés
-            if ((conge.getDateDebut().isBefore(endOfMonth) || conge.getDateDebut().isEqual(endOfMonth)) &&
-                (conge.getDateFin().isAfter(startOfMonth) || conge.getDateFin().isEqual(startOfMonth))) {
-                
-                // Ajouter la durée du congé au total
-                totalDuree = totalDuree.add(conge.getDuree());
-            }
-        }
-
-        // Calculer le montant du droit de congé
-        BigDecimal montantConges = totalDuree.multiply(tauxJournalier);
-
-        return montantConges;
-    }
 }
