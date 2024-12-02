@@ -3,6 +3,7 @@ package com.analytique.gestion_analytique.controller;
 import java.util.List;
 
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.analytique.gestion_analytique.Models.Paye;
@@ -61,9 +62,9 @@ public class EmployeController {
 		return employeService.getAllAvances(id, unpaid);
 	}
 
-	@PostMapping("/{id}/payer")
+	@PostMapping("/payer")
 	public ResponseEntity<Paye> payer(
-            @PathVariable Integer id,
+            @RequestParam Integer id,
             @RequestParam(name="datePaiement") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate datePaiement,
             @RequestParam(required = false, name="heureNormale", defaultValue = "160.0") Double heureNormale) {
         try {
