@@ -16,6 +16,7 @@ import com.analytique.gestion_analytique.Models.Employe;
 import com.analytique.gestion_analytique.Models.HeuresSup;
 import com.analytique.gestion_analytique.Repositories.EmployeRepository;
 import com.analytique.gestion_analytique.Repositories.HeuresSupRepository;
+import com.analytique.gestion_analytique.Repositories.HeuresSupSemaineRepository;
 import com.analytique.gestion_analytique.dto.VueHeuresSupSemaineDTO;
 
 @Service
@@ -25,6 +26,8 @@ public class HeuresSupService {
     private HeuresSupRepository heuresSupRepository;
     @Autowired
     private EmployeRepository employeRepository;
+    @Autowired
+    HeuresSupSemaineRepository heuresSupSemaineRepository;
 
 
     public double determinerTauxHoraire(LocalDateTime dateDebut, LocalDateTime dateFin, double tauxHoraireBase) {
@@ -111,7 +114,7 @@ public class HeuresSupService {
         LocalDate dateDebut = heureSup.getDateDebut().toLocalDate();
         LocalDate premierJourSemaine = dateDebut.with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY));
 
-        VueHeuresSupSemaineDTO v_hs = heuresSupRepository.findVueHeuresSupByEmployeAndSemaine(heureSup.getEmploye().getId(), premierJourSemaine);
+        VueHeuresSupSemaine v_hs = heuresSupSemaineRepository.findBySemaineAndIdEmploye(heureSup.getEmploye().getId(), premierJourSemaine);
 
         double heures = Duration.between(heureSup.getDateDebut(), heureSup.getDateFin()).toHours();
         heureSup.setTotalHeuresSup(heures);
