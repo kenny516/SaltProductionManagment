@@ -176,6 +176,10 @@ INSERT INTO CategoriePersonnel (nom, description) VALUES
 ('Technique', 'Personnel technique'),
 ('Support', 'Personnel de support');
 
+INSERT INTO TypeContrat (id, nomType, dureeMois) VALUES 
+(1, 'CDD', 24),
+(2, 'ESSAI', 3),
+(3, 'CDI', null);
 
 INSERT INTO Postes (titre, description, departement, id_categorie_personnel) VALUES
 ('Secrétaire', 'Responsable des tâches administratives', 'Administration', 1),
