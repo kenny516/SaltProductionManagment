@@ -46,7 +46,7 @@ public class V_CandidatPostulation {
 
     private String status;
 
-    @OneToMany(mappedBy = "postulation", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "notecadindat", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<NoteCandidat> noteCandidat;
 
     // Getters and Setters

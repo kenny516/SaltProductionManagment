@@ -4,6 +4,8 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.LocalDate;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import jakarta.persistence.*;
 
 @Entity
@@ -17,6 +19,7 @@ public class ContratEmploye {
 
 	@ManyToOne
 	@JoinColumn(name = "id_employe")
+	@JsonBackReference
 	private Employe employe;
 
 	@ManyToOne
