@@ -1,5 +1,7 @@
 package com.analytique.gestion_analytique.Models;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import jakarta.persistence.*;
 
 @Entity
@@ -9,6 +11,7 @@ public class DetailsPoste {
     @Id
     @ManyToOne
     @JoinColumn(name = "idposte")
+		@JsonBackReference
     private Poste poste;
 
     @Id
