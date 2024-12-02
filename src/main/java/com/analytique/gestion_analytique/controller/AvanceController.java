@@ -15,7 +15,8 @@ import com.analytique.gestion_analytique.Models.AvanceRemboursement;
 import com.analytique.gestion_analytique.Repositories.AvanceRemboursementRepository;
 import com.analytique.gestion_analytique.Services.AvanceService;
 import com.analytique.gestion_analytique.dto.receive.AvanceReceive;
-import com.analytique.gestion_analytique.dto.receive.RemboursementReste;
+import org.springframework.web.bind.annotation.GetMapping;
+
 
 @RestController
 @RequestMapping("/api/avance")
@@ -27,6 +28,11 @@ public class AvanceController {
     public AvanceController(AvanceRemboursementRepository avanceRemboursementRepository, AvanceService avanceService) {
         this.avanceRemboursementRepository = avanceRemboursementRepository;
         this.avanceService = avanceService;
+    }
+
+    @GetMapping("")
+    public List<AvanceRemboursement> getAllUnpaid() {
+        return avanceService.getAllUnpaid();
     }
 
     @GetMapping("/intervalle-montant")
@@ -70,5 +76,8 @@ public class AvanceController {
 
         return response;
     }
+
+    
+    
 
 }

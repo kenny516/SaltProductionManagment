@@ -1,11 +1,15 @@
 package com.analytique.gestion_analytique.Services;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 
 import com.analytique.gestion_analytique.Models.Avance;
+import com.analytique.gestion_analytique.Models.AvanceRemboursement;
 import com.analytique.gestion_analytique.Models.Employe;
 import com.analytique.gestion_analytique.Repositories.AvanceRepository;
 import com.analytique.gestion_analytique.Repositories.EmployeRepository;
@@ -50,5 +54,31 @@ public class AvanceService {
         avance.setMontant(a.montant());
 
         return avanceRepository.save(avance);
+    }
+
+    public List<AvanceRemboursement> getAllUnpaid() {
+        String sql = "SELECT id, reste_payer from v_avances_impayes";
+
+        return jdbcTemplate.query(
+            sql,
+            rs -> {
+                List<AvanceRemboursement> remboursements = new ArrayList<>();
+
+                while (rs.next()) {
+                    Integer idAvance = rs.getInt(1);
+                    BigDecimal montantRestant = rs.getBigDecimal(2);
+                    Avance avance = avanceRepository.getReferenceById(idAvance);
+
+                    AvanceRemboursement ar = new AvanceRemboursement();
+                    ar.setAvance(avance);
+                    ar.setDateRemboursement(avance.getDateAvance());
+                    ar.setMontant(montantRestant);
+
+                    remboursements.add(ar);
+                }
+
+                return remboursements;
+            }
+        );
     }
 }
