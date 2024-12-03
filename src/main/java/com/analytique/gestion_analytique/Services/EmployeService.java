@@ -54,6 +54,8 @@ public class EmployeService {
 	private final RuptureContratRepository ruptureRepository;
 	JdbcTemplate jdbcTemplate;
 
+	
+
 	public EmployeService(BonusSalaireRepository bonusSalaireRepository, HeuresSupRepository heuresSupRepository,
 			EmployeRepository employeRepository, CompetenceRepository competenceRepository,
 			ContratEmployeRepository contratEmployeRepository, AvanceRepository avanceRepository,
@@ -72,11 +74,6 @@ public class EmployeService {
 		this.congeService = congeService;
 		this.ruptureRepository = ruptureRepository;
 		this.jdbcTemplate = jdbcTemplate;
-		this.payeRepository = payeRepository;
-		this.heuresSupRepository = heuresSupRepository;
-		this.bonusSalaireRepository = bonusSalaireRepository;
-		this.payeDetailsRepository = payeDetailsRepository;
-		this.congeService = congeService;
 	}
 
 	public List<EmployeSend> getQualifiedEmployeesForPost(Integer posteId) {
@@ -273,9 +270,8 @@ public class EmployeService {
 			BigDecimal nbHeureAbsence = BigDecimal.valueOf(congeService.getNbrHeuresCongeParMois(IdEmploye,
 					Integer.valueOf(datePaiement.getMonthValue()), Integer.valueOf(datePaiement.getYear())));
 			
-			RuptureContrat rpt = ruptureRepository.findrupture(IdEmploye);
 			
-			BigDecimal droitPreavis = rpt == null ? BigDecimal.ZERO : rpt.getIndemniteVerse();
+			BigDecimal droitPreavis = BigDecimal.ZERO;
 
 			// TODO: prendre montant a deduire du salaire pour les conges non payé
 			BigDecimal droitConge = BigDecimal.valueOf(congeService.getMontantDroitConge(IdEmploye,
