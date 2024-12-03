@@ -12,7 +12,6 @@ import org.springframework.web.server.ResponseStatusException;
 import com.analytique.gestion_analytique.Models.Avance;
 import com.analytique.gestion_analytique.Models.AvanceRemboursement;
 import com.analytique.gestion_analytique.Repositories.AvanceRemboursementRepository;
-import com.analytique.gestion_analytique.Repositories.AvanceRepository;
 import com.analytique.gestion_analytique.Services.AvanceService;
 import com.analytique.gestion_analytique.dto.receive.AvanceReceive;
 import com.analytique.gestion_analytique.dto.receive.RemboursementReste;
@@ -26,12 +25,10 @@ import org.springframework.web.bind.annotation.GetMapping;
 public class AvanceController {
     AvanceRemboursementRepository avanceRemboursementRepository;
     AvanceService avanceService;
-    AvanceRepository avanceRepository;
 
-    public AvanceController(AvanceRemboursementRepository avanceRemboursementRepository, AvanceService avanceService, AvanceRepository avanceRepository) {
+    public AvanceController(AvanceRemboursementRepository avanceRemboursementRepository, AvanceService avanceService) {
         this.avanceRemboursementRepository = avanceRemboursementRepository;
         this.avanceService = avanceService;
-        this.avanceRepository = avanceRepository;
     }
 
     @GetMapping("")

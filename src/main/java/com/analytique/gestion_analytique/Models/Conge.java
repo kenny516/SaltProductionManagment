@@ -1,7 +1,10 @@
 package com.analytique.gestion_analytique.Models;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.hibernate.annotations.ColumnDefault;
 
 import java.math.BigDecimal;
@@ -9,6 +12,8 @@ import java.time.LocalDate;
 
 @Data
 @Entity
+@AllArgsConstructor
+@NoArgsConstructor
 @Table(name = "conge")
 public class Conge {
     @Id
@@ -17,7 +22,8 @@ public class Conge {
 
     @ManyToOne
     @JoinColumn(name = "id_employe", nullable = false)
-    private Employe employe;
+    @JsonBackReference
+    private Employe Employe;
 
     @ManyToOne
     @JoinColumn(name = "id_type_conge", nullable = false)

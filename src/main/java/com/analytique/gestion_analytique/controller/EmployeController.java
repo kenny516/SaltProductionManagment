@@ -2,15 +2,18 @@ package com.analytique.gestion_analytique.controller;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Map;
 
 import com.analytique.gestion_analytique.dto.receive.RemboursementReste;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.analytique.gestion_analytique.Models.ContratEmploye;
 import com.analytique.gestion_analytique.Models.Paye;
 import com.analytique.gestion_analytique.Models.Employe;
 import com.analytique.gestion_analytique.Services.EmployeService;
+import com.analytique.gestion_analytique.dto.receive.RemboursementReste;
 import com.analytique.gestion_analytique.dto.send.EmployeSend;
 
 import org.springframework.format.annotation.DateTimeFormat;
@@ -59,6 +62,13 @@ public class EmployeController {
 		return employeService.getQualifiedEmployeesForPost(id);
 	}
 
+	// TODO : mbola tsy mety
+	@PostMapping("/{id}/contrat")
+	public ResponseEntity<?> modifierContrat(@PathVariable("id") Integer id , @RequestBody Map<String, Object> body){
+
+		return ResponseEntity.ok(employeService.getOne(id));
+	}
+  
 	@GetMapping("/{id}/avances")
 	public List<RemboursementReste> getAllAvances(@PathVariable Integer id, @RequestParam(required = false, name = "unpaid") Boolean unpaid) {
 		return employeService.getAllAvances(id, unpaid);

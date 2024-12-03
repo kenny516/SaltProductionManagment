@@ -127,4 +127,6 @@ public class RuptureContrat {
 		this.indemniteVerse = indemniteVerse;
 	}
 
+	
+
 }

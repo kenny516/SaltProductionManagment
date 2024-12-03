@@ -20,7 +20,7 @@ public class Paye {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "id_employe", nullable = false)
     private Employe employe;
 
