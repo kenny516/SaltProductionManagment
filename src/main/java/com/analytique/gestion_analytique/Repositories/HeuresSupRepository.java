@@ -19,3 +19,4 @@ public interface HeuresSupRepository extends JpaRepository<HeuresSup, Integer> {
     List<HeuresSup> findHeuresSupAfterToday(LocalDateTime today);
 
 }
+ 
