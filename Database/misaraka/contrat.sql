@@ -169,38 +169,6 @@ WHERE
     c.date_fin IS NULL OR c.date_fin >= NOW();
 
 
-INSERT INTO CategoriePersonnel (nom, description) VALUES
-('Administration', 'Personnel administratif'),
-('Technique', 'Personnel technique'),
-('Support', 'Personnel de support');
-
-INSERT INTO TypeContrat (id, nomType, dureeMois) VALUES 
-(1, 'CDD', 24),
-(2, 'ESSAI', 3),
-(3, 'CDI', null);
-
-INSERT INTO Postes (titre, description, departement, id_categorie_personnel) VALUES
-('Secrétaire', 'Responsable des taches administratives', 'Administration', 1),
-('Technicien informatique', 'Gestion du matériel informatique', 'Technique', 2),
-('Agent de maintenance', 'Responsable de entretien des installations', 'Support', 3);
-
-
-INSERT INTO Employes (nom, prenom, email, telephone, id_contrat_actuel) VALUES
-('Dupont', 'Jean', 'jean.dupont@example.com', '0612345678', NULL),
-('Durand', 'Sophie', 'sophie.durand@example.com', '0676543210', NULL),
-('Martin', 'Luc', 'luc.martin@example.com', '0654321098', NULL);
-
-INSERT INTO ContratEmploye (id_employe, id_type_contrat, date_debut,id_poste, salaire) VALUES
-(1, 1, '2023-01-01', 1, 3000),
-(2, 2, '2023-06-01', 2, 2500),
-(3, 3, '2024-01-01', 3, 1200);
-
-INSERT INTO TypeRupture (nom, description, preavis_requis, indemnite) VALUES
-('Démission', 'Rupture volontaire par employe', TRUE, FALSE),
-('Licenciement', 'Rupture décidée par employeur', TRUE, TRUE),
-('Fin de contrat', 'Expiration du contrat a duree determinee', FALSE, FALSE);
-
-
 SELECT dureeMois FROM TypeContrat WHERE id = 1;
 
 CREATE OR REPLACE VIEW v_rupture_contrat_actuel AS
@@ -279,7 +247,3 @@ BEFORE INSERT
 ON RuptureContrat
 FOR EACH ROW
 EXECUTE FUNCTION handle_rupture_contrat();
-
-
-INSERT INTO RuptureContrat (id_type_rupture, id_employe, date_notification, preavis_employe, preavis_entreprise, motif) VALUES
-(1, 1, CURRENT_DATE, TRUE, TRUE, 'Nouvelle opportunité professionnelle');

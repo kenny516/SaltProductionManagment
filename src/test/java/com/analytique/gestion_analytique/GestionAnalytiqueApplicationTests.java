@@ -1,8 +1,6 @@
 package com.analytique.gestion_analytique;
 
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-
 import java.math.BigDecimal;
 import java.time.LocalDate;
 

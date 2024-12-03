@@ -63,7 +63,7 @@ public class EmployeController {
 
 	// TODO : mbola tsy mety
 	@PostMapping("/{id}/contrat")
-	public ResponseEntity<?> modifierContrat(@PathVariable("id") Integer id , @RequestBody Map<String, Object> body){
+	public ResponseEntity<?> modifierContrat(@PathVariable("id") Integer id , @RequestBody ContratEmploye contrat){
 
 		return ResponseEntity.ok(employeService.getOne(id));
 	}
@@ -86,5 +86,7 @@ public class EmployeController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
         }
     }
+
+	
 	
 }
