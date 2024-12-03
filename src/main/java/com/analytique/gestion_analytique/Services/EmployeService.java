@@ -51,12 +51,10 @@ public class EmployeService {
 	private final AvanceRepository avanceRepository;
 	private final AvanceRemboursementRepository avanceRemboursementRepository;
 	private final PayeRepository payeRepository;
-public final PayeDetailsRepository payeDetailsRepository;
-public final CongeService congeService;
+	public final PayeDetailsRepository payeDetailsRepository;
+	public final CongeService congeService;
 	private final RuptureContratRepository ruptureRepository;
 	JdbcTemplate jdbcTemplate;
-
-	
 
 	public EmployeService(BonusSalaireRepository bonusSalaireRepository, HeuresSupRepository heuresSupRepository,
 			EmployeRepository employeRepository, CompetenceRepository competenceRepository,
@@ -182,87 +180,123 @@ public final CongeService congeService;
 		return nouveauContratEmploye;
 	}
 
-	public void controlerPaiement(Integer id_employe, int mois, int annee)throws Exception{
+	public void controlerPaiement(Integer id_employe, int mois, int annee) throws Exception {
 		Paye paye = employeRepository.getPaye(mois, annee, id_employe);
 		if (paye != null) {
 			throw new Exception("Cet employe a deja ete paye");
 		}
 	}
-	// public Paye payer(Integer IdEmploye, LocalDate datePaiement, Double heureNormale) throws Exception{
-	// 	try{
-	// 		controlerPaiement(IdEmploye, datePaiement.getMonthValue(), datePaiement.getYear());
-	// 		AvanceRemboursement ar = remboursementMensuel(IdEmploye, datePaiement);
-	// 		BigDecimal totalAvance = (ar != null) ? ar.getMontant() : BigDecimal.ZERO;
-			
-	// 		List<HeuresSup> heuresSups = heuresSupRepository.findByEmployeAndMonthAndYear(Long.valueOf(IdEmploye), datePaiement.getMonthValue(), datePaiement.getYear());
-	// 		Double montantHeureSup = heuresSups.stream().map(HeuresSup::getMontant).filter(montant -> montant != null).reduce(0.0,Double::sum);
-	// 		double totalHeureSup = heuresSups.stream().map(HeuresSup::getTotalHeuresSup).filter(heureSup -> heureSup != null).reduce(0.0,Double::sum);
-	// 		BigDecimal salaireBase = contratEmployeRepository.findByMaxDateAndEmployeId(IdEmploye).getSalaire();
-	// 		Double totalSalaire = salaireBase.subtract(totalAvance).doubleValue() + montantHeureSup;
+	// public Paye payer(Integer IdEmploye, LocalDate datePaiement, Double
+	// heureNormale) throws Exception{
+	// try{
+	// controlerPaiement(IdEmploye, datePaiement.getMonthValue(),
+	// datePaiement.getYear());
+	// AvanceRemboursement ar = remboursementMensuel(IdEmploye, datePaiement);
+	// BigDecimal totalAvance = (ar != null) ? ar.getMontant() : BigDecimal.ZERO;
 
-	// 		Paye paye = new Paye(null, employeRepository.getReferenceById(IdEmploye), datePaiement.getMonthValue(), datePaiement.getYear(), BigDecimal.valueOf(heureNormale), BigDecimal.valueOf(totalHeureSup), totalAvance, salaireBase, BigDecimal.valueOf(totalSalaire));
+	// List<HeuresSup> heuresSups =
+	// heuresSupRepository.findByEmployeAndMonthAndYear(Long.valueOf(IdEmploye),
+	// datePaiement.getMonthValue(), datePaiement.getYear());
+	// Double montantHeureSup =
+	// heuresSups.stream().map(HeuresSup::getMontant).filter(montant -> montant !=
+	// null).reduce(0.0,Double::sum);
+	// double totalHeureSup =
+	// heuresSups.stream().map(HeuresSup::getTotalHeuresSup).filter(heureSup ->
+	// heureSup != null).reduce(0.0,Double::sum);
+	// BigDecimal salaireBase =
+	// contratEmployeRepository.findByMaxDateAndEmployeId(IdEmploye).getSalaire();
+	// Double totalSalaire = salaireBase.subtract(totalAvance).doubleValue() +
+	// montantHeureSup;
 
-	// 		// System.out.println(paye);
-	// 		return payeRepository.save(paye);
-	// 	}
-	// 	catch (Exception e){
-	// 		throw e;
-	// 	}
+	// Paye paye = new Paye(null, employeRepository.getReferenceById(IdEmploye),
+	// datePaiement.getMonthValue(), datePaiement.getYear(),
+	// BigDecimal.valueOf(heureNormale), BigDecimal.valueOf(totalHeureSup),
+	// totalAvance, salaireBase, BigDecimal.valueOf(totalSalaire));
+
+	// // System.out.println(paye);
+	// return payeRepository.save(paye);
+	// }
+	// catch (Exception e){
+	// throw e;
+	// }
 	// }
 
-	public Double calculerIrsa(Integer idEmploye){
+	public Double calculerIrsa(Integer idEmploye) {
 		return employeRepository.calculerIrsa(idEmploye);
 	}
 
-	public BigDecimal getPrime(Integer idEmploye, int mois, int annee){
-		BigDecimal prime = (bonusSalaireRepository.getPrimeByMonthAndYear(mois, annee, idEmploye)!=null) ?bonusSalaireRepository.getPrimeByMonthAndYear(mois, annee, idEmploye).stream().map(BonusSalaire::getMontant).filter(montant -> montant != null).reduce(BigDecimal.ZERO,BigDecimal::add) : BigDecimal.ZERO;
+	public BigDecimal getPrime(Integer idEmploye, int mois, int annee) {
+		BigDecimal prime = (bonusSalaireRepository.getPrimeByMonthAndYear(mois, annee, idEmploye) != null)
+				? bonusSalaireRepository.getPrimeByMonthAndYear(mois, annee, idEmploye).stream().map(BonusSalaire::getMontant)
+						.filter(montant -> montant != null).reduce(BigDecimal.ZERO, BigDecimal::add)
+				: BigDecimal.ZERO;
 		return prime;
 	}
-	public BigDecimal getIndemnite(Integer idEmploye, int mois, int annee){
-		BigDecimal indemnite = (bonusSalaireRepository.getIndemniteByMonthAndYear(mois, annee, idEmploye)!=null) ?bonusSalaireRepository.getIndemniteByMonthAndYear(mois, annee, idEmploye).stream().map(BonusSalaire::getMontant).filter(montant -> montant != null).reduce(BigDecimal.ZERO,BigDecimal::add) : BigDecimal.ZERO;
+
+	public BigDecimal getIndemnite(Integer idEmploye, int mois, int annee) {
+		BigDecimal indemnite = (bonusSalaireRepository.getIndemniteByMonthAndYear(mois, annee, idEmploye) != null)
+				? bonusSalaireRepository.getIndemniteByMonthAndYear(mois, annee, idEmploye).stream()
+						.map(BonusSalaire::getMontant).filter(montant -> montant != null).reduce(BigDecimal.ZERO, BigDecimal::add)
+				: BigDecimal.ZERO;
 		return indemnite;
 	}
 
-	public BigDecimal calculerCNAPS(BigDecimal salaireBase){
+	public BigDecimal calculerCNAPS(BigDecimal salaireBase) {
 		// 1.500.000 ar ny plafond pour cnaps
 		BigDecimal baseCalcul = salaireBase.min(BigDecimal.valueOf(1500000));
-        return baseCalcul.multiply(BigDecimal.valueOf(0.01))
-                         .setScale(2, RoundingMode.HALF_UP);
+		return baseCalcul.multiply(BigDecimal.valueOf(0.01))
+				.setScale(2, RoundingMode.HALF_UP);
 	}
 
-	public BigDecimal calculerSanitaire(BigDecimal salaireBase){
-        return salaireBase.multiply(BigDecimal.valueOf(0.01));
+	public BigDecimal calculerSanitaire(BigDecimal salaireBase) {
+		return salaireBase.multiply(BigDecimal.valueOf(0.01));
 	}
 
-	public PayeDetails validerPaiement(Integer IdEmploye, LocalDate datePaiement, Double heureNormale) throws Exception{
+	public PayeDetails validerPaiement(Integer IdEmploye, LocalDate datePaiement, Double heureNormale) throws Exception {
 		try {
-			controlerPaiement(IdEmploye,datePaiement.getMonthValue(), datePaiement.getYear());
+			controlerPaiement(IdEmploye, datePaiement.getMonthValue(), datePaiement.getYear());
 			AvanceRemboursement ar = remboursementMensuel(IdEmploye, datePaiement);
 			BigDecimal totalAvance = (ar != null) ? ar.getMontant() : BigDecimal.ZERO;
-			List<HeuresSup> heuresSups = heuresSupRepository.findByEmployeAndMonthAndYear(Long.valueOf(IdEmploye), datePaiement.getMonthValue(), datePaiement.getYear());
-			Double montantHeureSup = heuresSups.stream().map(HeuresSup::getMontant).filter(montant -> montant != null).reduce(0.0,Double::sum);
-			double totalHeureSup = heuresSups.stream().map(HeuresSup::getTotalHeuresSup).filter(heureSup -> heureSup != null).reduce(0.0,Double::sum);
+			List<HeuresSup> heuresSups = heuresSupRepository.findByEmployeAndMonthAndYear(Long.valueOf(IdEmploye),
+					datePaiement.getMonthValue(), datePaiement.getYear());
+			Double montantHeureSup = heuresSups.stream().map(HeuresSup::getMontant).filter(montant -> montant != null)
+					.reduce(0.0, Double::sum);
+			double totalHeureSup = heuresSups.stream().map(HeuresSup::getTotalHeuresSup).filter(heureSup -> heureSup != null)
+					.reduce(0.0, Double::sum);
 			BigDecimal salaireBase = contratEmployeRepository.findByMaxDateAndEmployeId(IdEmploye).getSalaire();
-			// Double totalSalaire = salaireBase.subtract(totalAvance).doubleValue() + montantHeureSup;
+			// Double totalSalaire = salaireBase.subtract(totalAvance).doubleValue() +
+			// montantHeureSup;
 
-			// TODO: prendre nb heure conge 
-			BigDecimal nbHeureAbsence = BigDecimal.valueOf(congeService.getNbrHeuresCongeParMois(IdEmploye, Integer.valueOf(datePaiement.getMonthValue()), Integer.valueOf(datePaiement.getYear())));
-			// TODO: prendre mmontant preavis
-			BigDecimal droitPreavis = BigDecimal.ZERO;
+			// TODO: prendre nb heure conge
+			BigDecimal nbHeureAbsence = BigDecimal.valueOf(congeService.getNbrHeuresCongeParMois(IdEmploye,
+					Integer.valueOf(datePaiement.getMonthValue()), Integer.valueOf(datePaiement.getYear())));
+			
+			RuptureContrat rpt = ruptureRepository.findrupture(IdEmploye);
+			
+			BigDecimal droitPreavis = rpt == null ? BigDecimal.ZERO : rpt.getIndemniteVerse();
 			// TODO: prendre montant a deduire du salaire pour les conges non payé
-			BigDecimal droitConge = BigDecimal.valueOf(congeService.getMontantDroitConge(IdEmploye, Integer.valueOf(datePaiement.getMonthValue()), Integer.valueOf(datePaiement.getYear())));
+			BigDecimal droitConge = BigDecimal.valueOf(congeService.getMontantDroitConge(IdEmploye,
+					Integer.valueOf(datePaiement.getMonthValue()), Integer.valueOf(datePaiement.getYear())));
 
-			BigDecimal indemnite = getIndemnite(IdEmploye,datePaiement.getMonthValue(), datePaiement.getYear());
-			BigDecimal prime = getPrime(IdEmploye,datePaiement.getMonthValue(), datePaiement.getYear());
+			BigDecimal indemnite = getIndemnite(IdEmploye, datePaiement.getMonthValue(), datePaiement.getYear());
+			BigDecimal prime = getPrime(IdEmploye, datePaiement.getMonthValue(), datePaiement.getYear());
 			BigDecimal irsa = BigDecimal.valueOf(calculerIrsa(IdEmploye));
 			BigDecimal cnaps = calculerCNAPS(salaireBase);
 			BigDecimal sanitaire = calculerSanitaire(salaireBase);
 
-			BigDecimal total = salaireBase.add(BigDecimal.valueOf(montantHeureSup)).add(prime).add(indemnite).subtract(totalAvance).subtract(droitConge).add(droitPreavis).subtract(irsa).subtract(cnaps).subtract(sanitaire);
+			BigDecimal total = salaireBase.add(BigDecimal.valueOf(montantHeureSup)).add(prime).add(indemnite)
+					.subtract(totalAvance).subtract(droitConge).add(droitPreavis).subtract(irsa).subtract(cnaps)
+					.subtract(sanitaire);
 
-			PayeDetails payeDetails = new PayeDetails(employeRepository.getReferenceById(IdEmploye), Integer.valueOf(datePaiement.getMonthValue()), Integer.valueOf(datePaiement.getYear()), BigDecimal.valueOf(heureNormale), BigDecimal.valueOf(totalHeureSup), BigDecimal.valueOf(montantHeureSup), salaireBase, totalAvance, nbHeureAbsence, droitConge, droitPreavis, indemnite, prime, irsa, cnaps, sanitaire, total);
+			PayeDetails payeDetails = new PayeDetails(employeRepository.getReferenceById(IdEmploye),
+					Integer.valueOf(datePaiement.getMonthValue()), Integer.valueOf(datePaiement.getYear()),
+					BigDecimal.valueOf(heureNormale), BigDecimal.valueOf(totalHeureSup), BigDecimal.valueOf(montantHeureSup),
+					salaireBase, totalAvance, nbHeureAbsence, droitConge, droitPreavis, indemnite, prime, irsa, cnaps, sanitaire,
+					total);
 
-			Paye paye = new Paye(null, employeRepository.getReferenceById(IdEmploye), datePaiement.getMonthValue(), datePaiement.getYear(), BigDecimal.valueOf(heureNormale), BigDecimal.valueOf(totalHeureSup), totalAvance, salaireBase, total);
+			Paye paye = new Paye(null, employeRepository.getReferenceById(IdEmploye), datePaiement.getMonthValue(),
+					datePaiement.getYear(), BigDecimal.valueOf(heureNormale), BigDecimal.valueOf(totalHeureSup), totalAvance,
+					salaireBase, total);
 			payeRepository.save(paye);
 
 			return payeDetailsRepository.save(payeDetails);
@@ -272,10 +306,10 @@ public final CongeService congeService;
 		}
 	}
 
-	public List<Paye> getPayeByIdEmploye(Integer idEmploye){
+	public List<Paye> getPayeByIdEmploye(Integer idEmploye) {
 		return payeRepository.getByIdEmploye(idEmploye);
 	}
-	
+
 	public Employe getEmployeById(Integer id) {
 		Optional<Employe> employe = employeRepository.findById(id);
 		return employe.orElseThrow(() -> new RuntimeException("Employé introuvable pour l'id: " + id));
