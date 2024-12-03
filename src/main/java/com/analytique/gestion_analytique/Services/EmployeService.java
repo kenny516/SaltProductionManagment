@@ -72,6 +72,11 @@ public class EmployeService {
 		this.congeService = congeService;
 		this.ruptureRepository = ruptureRepository;
 		this.jdbcTemplate = jdbcTemplate;
+		this.payeRepository = payeRepository;
+		this.heuresSupRepository = heuresSupRepository;
+		this.bonusSalaireRepository = bonusSalaireRepository;
+		this.payeDetailsRepository = payeDetailsRepository;
+		this.congeService = congeService;
 	}
 
 	public List<EmployeSend> getQualifiedEmployeesForPost(Integer posteId) {
@@ -265,13 +270,13 @@ public class EmployeService {
 			// Double totalSalaire = salaireBase.subtract(totalAvance).doubleValue() +
 			// montantHeureSup;
 
-			// TODO: prendre nb heure conge
 			BigDecimal nbHeureAbsence = BigDecimal.valueOf(congeService.getNbrHeuresCongeParMois(IdEmploye,
 					Integer.valueOf(datePaiement.getMonthValue()), Integer.valueOf(datePaiement.getYear())));
 			
 			RuptureContrat rpt = ruptureRepository.findrupture(IdEmploye);
 			
 			BigDecimal droitPreavis = rpt == null ? BigDecimal.ZERO : rpt.getIndemniteVerse();
+
 			// TODO: prendre montant a deduire du salaire pour les conges non payé
 			BigDecimal droitConge = BigDecimal.valueOf(congeService.getMontantDroitConge(IdEmploye,
 					Integer.valueOf(datePaiement.getMonthValue()), Integer.valueOf(datePaiement.getYear())));
@@ -304,7 +309,8 @@ public class EmployeService {
 		}
 	}
 
-	public List<Paye> getPayeByIdEmploye(Integer idEmploye) {
+	public List<Paye> getPayeByIdEmploye(Integer idEmploye){
+
 		return payeRepository.getByIdEmploye(idEmploye);
 	}
 
