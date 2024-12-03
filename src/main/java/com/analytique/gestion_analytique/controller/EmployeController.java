@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.analytique.gestion_analytique.Models.CategoriePersonnel;
+import com.analytique.gestion_analytique.Models.ContratEmploye;
 import com.analytique.gestion_analytique.Models.Paye;
 import com.analytique.gestion_analytique.Models.PayeDetails;
 import com.analytique.gestion_analytique.Repositories.CategoriePersonnelRepository;
@@ -57,6 +58,13 @@ public class EmployeController {
 		return employeService.getQualifiedEmployeesForPost(id);
 	}
 
+	// TODO : mbola tsy mety
+	@PostMapping("/{id}/contrat")
+	public ResponseEntity<?> modifierContrat(@PathVariable("id") Integer id , @RequestBody ContratEmploye contrat){
+
+		return ResponseEntity.ok(employeService.getOne(id));
+	}
+  
 	@GetMapping("/{id}/avances")
 	public List<RemboursementReste> getAllAvances(@PathVariable Integer id, @RequestParam(required = false, name = "unpaid") Boolean unpaid) {
 		return employeService.getAllAvances(id, unpaid);
@@ -75,6 +83,15 @@ public class EmployeController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
         }
     }
+
+	
+	
+
+
+	
+
+	
+	
 	
 
 

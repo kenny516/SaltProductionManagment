@@ -40,4 +40,3 @@ CREATE TRIGGER before_insert_calculate_total_heures_sup
 BEFORE INSERT ON HeuresSup
 FOR EACH ROW
 EXECUTE FUNCTION calculate_total_heures_sup();
-
