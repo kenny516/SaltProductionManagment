@@ -35,13 +35,20 @@ public class CongeController {
 
     @PostMapping("")
     public ResponseEntity<?> createConge(@RequestBody Conge conge) {
-        double jourRestant = congeService.CongePossible(
+        double jourRestant = congeService.nbrCongeDisponible(
                 conge.getIdTypeConge().getId(),
                 conge.getEmploye().getId(),
-                conge.getDateFin().getYear() - 3,
                 conge.getDateFin().getYear()
         );
         TypeConge typeConge = typeCongeService.getTypeCongeById(conge.getIdTypeConge().getId());
+        if (typeConge.getDureeMax().doubleValue() < conge.getDuree().doubleValue()) {
+            String errorMessage = String.format(
+                    "Erreur : la durée du congé (%.2f) dépasse la durée maximale (%.2f) autorisée.",
+                    conge.getDuree().doubleValue(),
+                    typeConge.getDureeMax()
+            );
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorMessage);
+        }
         if (jourRestant < conge.getDuree().doubleValue() && typeConge.getCumulable()) {
             String errorMessage = String.format(
                     "Erreur : jours restants (%.2f) insuffisants pour accorder un congé de %.2f jours.",
