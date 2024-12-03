@@ -247,8 +247,7 @@ public final CongeService congeService;
 
 			// TODO: prendre nb heure conge 
 			BigDecimal nbHeureAbsence = BigDecimal.valueOf(congeService.getNbrHeuresCongeParMois(IdEmploye, Integer.valueOf(datePaiement.getMonthValue()), Integer.valueOf(datePaiement.getYear())));
-			// TODO: prendre mmontant preavis
-			BigDecimal droitPreavis = BigDecimal.ZERO;
+			BigDecimal droitPreavis = ruptureRepository.findrupture(IdEmploye) == null ? BigDecimal.ZERO : ruptureRepository.findrupture(IdEmploye).getIndemniteVerse();
 			// TODO: prendre montant a deduire du salaire pour les conges non payé
 			BigDecimal droitConge = BigDecimal.valueOf(congeService.getMontantDroitConge(IdEmploye, Integer.valueOf(datePaiement.getMonthValue()), Integer.valueOf(datePaiement.getYear())));
 
