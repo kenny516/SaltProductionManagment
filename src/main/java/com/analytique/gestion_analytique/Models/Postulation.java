@@ -34,10 +34,7 @@ public class Postulation {
 	private List<NoteCandidat> notes = new ArrayList<>();
 
 	@Transient
-	private int progress;
-
-	@Transient
-	private int currentStep;
+	public int progress,curentStep;
 
 	public Postulation(Candidat candidat, OffreEmploi offre, LocalDate datePostulation) {
 		this.candidat = candidat;
@@ -58,6 +55,7 @@ public class Postulation {
 	}
 
 	public void setCandidat(Candidat candidat) {
+		candidat.nullCandidat();
 		this.candidat = candidat;
 	}
 
@@ -94,14 +92,26 @@ public class Postulation {
 
 	public void setNotes(List<NoteCandidat> notes) {
 		this.notes = notes;
+		setProgress((int)notes.size()*100/RecrutementConst.nombreEpreuve);
+		setCurentStep(notes.size());
 	}
 
 	public int getProgress() {
-		return notes.size() == 0 ? 0
-				: (notes.size() * 100) / RecrutementConst.nombreEpreuve;
+		return progress;
 	}
 
-	public int getCurrentStep() {
-		return notes.size();
+	public void setProgress(int progress) {
+		this.progress = progress;
 	}
+
+	public int getCurentStep() {
+		return curentStep;
+	}
+
+	public void setCurentStep(int curentStep) {
+		this.curentStep = curentStep;
+	}
+
+	
+
 }

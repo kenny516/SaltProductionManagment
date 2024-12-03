@@ -39,6 +39,9 @@ public class Employe {
 	@JsonIgnore
 	private List<Avance> Avances;
 
+	@OneToMany(mappedBy = "employe", cascade = CascadeType.ALL, orphanRemoval=true)
+	private List<BonusSalaire> bonusSalaires;
+
 	public Employe(String nom, String prenom, String email, String telephone, LocalDate dateEmbauche,
 			ContratEmploye contrat) {
 		this.nom = nom;

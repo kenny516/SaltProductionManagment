@@ -24,6 +24,8 @@ CREATE TABLE CategoriePersonnel(
 
 ALTER TABLE Postes ADD COLUMN id_categorie_personnel INTEGER NOT NULL REFERENCES CategoriePersonnel(id);
 
+
+
 CREATE OR REPLACE FUNCTION update_taux_horaire()
 RETURNS TRIGGER AS $$
 BEGIN
@@ -75,10 +77,9 @@ CREATE TABLE RuptureContrat(
 	id_employe INTEGER NOT NULL,
 	date_notification DATE NOT NULL,
 	date_fin_contrat DATE NOT NULL,
-	preavis_employe BOOLEAN NOT NULL,
-	preavis_entreprise BOOLEAN NOT NULL,
+	preavis_effectue BOOLEAN NOT NULL,
 	motif VARCHAR(50),
-	indemnite_verse NUMERIC(15, 2) default 0,
+	indemnite_verse NUMERIC(15, 2) NOT NULL,
 	PRIMARY KEY(id),
 	FOREIGN KEY(id_type_rupture) REFERENCES TypeRupture(id),
 	FOREIGN KEY(id_employe) REFERENCES employes(id)
@@ -122,6 +123,7 @@ AFTER INSERT ON ContratEmploye
 FOR EACH ROW
 EXECUTE FUNCTION update_employe_id_contrat_actuel();
 
+-- Trigger Function
 CREATE OR REPLACE FUNCTION set_date_fin_contrat()
 RETURNS TRIGGER AS $$
 DECLARE
@@ -129,21 +131,16 @@ DECLARE
 BEGIN
     -- Récupérer la durée en mois à partir du type de contrat
     SELECT dureeMois
-    INTO contract_duration
+    INTO STRICT contract_duration
     FROM TypeContrat
     WHERE id = NEW.id_type_contrat;
-
-    -- Si aucune durée n'est trouvée, lever une exception ou définir une valeur par défaut
-    IF NOT FOUND THEN
-        RAISE EXCEPTION 'TypeContrat introuvable pour id_type_contrat=%', NEW.id_type_contrat;
-    END IF;
 
     -- Si la durée est null, la date de fin est null
     IF contract_duration IS NULL THEN
         NEW.date_fin := NULL;
     ELSE
         -- Calculer la date de fin en ajoutant la durée en mois à la date de début
-        NEW.date_fin := NEW.date_debut + INTERVAL '1' MONTH * contract_duration;
+        NEW.date_fin := NEW.date_debut + INTERVAL '1 month' * contract_duration;
     END IF;
 
     RETURN NEW;
@@ -158,7 +155,12 @@ EXECUTE FUNCTION set_date_fin_contrat();
 
 
 CREATE OR REPLACE VIEW v_employes_actuels AS
-SELECT e.*, c.salaire
+SELECT
+    e.id,
+    e.id_contrat_actuel,
+    c.date_debut,
+    c.salaire,
+    c.taux_horaire
 FROM
     Employes e
 JOIN

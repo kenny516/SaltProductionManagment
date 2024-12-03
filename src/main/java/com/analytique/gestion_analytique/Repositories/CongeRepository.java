@@ -9,6 +9,8 @@ import java.util.List;
 
 public interface CongeRepository extends JpaRepository<Conge, Integer> {
 
+        List<Conge> findByEmployeIdAndIdTypeCongeEstPayeFalse(Integer employeId);
+
     @Query(value = """
             SELECT sum(duree)
             FROM conge
@@ -17,7 +19,7 @@ public interface CongeRepository extends JpaRepository<Conge, Integer> {
               AND extract(YEAR FROM date_fin) <= :anneeFin
               AND id_employe = :idEmploye
             group by id_employe;""", nativeQuery = true)
-    Double totalCongeByEmploye(@Param("idTypeConge") Integer idTypeConge, @Param("idEmploye") Integer idEmploye, @Param("anneDebut") Integer anneDebut, @Param("anneeFin") Integer anneeFin);
+    Double totalCongeByEmploye(@Param("idTypeConge")Integer idTypeConge ,@Param("idEmploye") Integer idEmploye, @Param("anneDebut") Integer anneDebut, @Param("anneeFin") Integer anneeFin);
 
     @Query(value = """
             SELECT *
@@ -75,6 +77,13 @@ public interface CongeRepository extends JpaRepository<Conge, Integer> {
                                @Param("mois") Integer mois,
                                @Param("annee") Integer annee);
 
-
+        @Query("SELECT SUM(CAST(DATEDIFF(DAY, c.dateDebut, c.dateFin) + 1 AS double)) " +
+        "FROM Conge c WHERE c.employe.id = :idEmploye AND " +
+        "MONTH(c.dateDebut) = :mois AND YEAR(c.dateDebut) = :annee AND " +
+        "c.idTypeConge.estPaye = false")
+        Double nbrJourCongeNonPayeParMois(@Param("idEmploye") Integer idEmploye, 
+                                          @Param("mois") Integer mois, 
+                                          @Param("annee") Integer annee);
+                        
 
 }

@@ -1,35 +1,34 @@
 package com.analytique.gestion_analytique;
 
 
-import java.math.BigDecimal;
-import java.time.LocalDate;
-
-import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import com.analytique.gestion_analytique.Models.ContratEmploye;
-import com.analytique.gestion_analytique.Services.EmployeService;
+import com.analytique.gestion_analytique.Repositories.DetailsPosteRepository;
+import com.analytique.gestion_analytique.Services.AvanceService;
+import com.analytique.gestion_analytique.Services.CandidatService;
 
-import jakarta.transaction.Transactional;
 
 @SpringBootTest
 class GestionAnalytiqueApplicationTests {
-	
+
 	@Autowired
-	EmployeService es;
+	DetailsPosteRepository dpRepo;
+	@Autowired
+	CandidatService cs ;
 
-	@Test
-	@Transactional
-	public void modificationContrat(){
-		ContratEmploye ce = es.modifierContrat(1, LocalDate.parse("2025-01-01"), 1, 2, new BigDecimal(20000000));
-		// assertEquals(4, ce.getId());
+	@Autowired
+	AvanceService as;
 
-		ce = es.modifierContrat(2, null, 1, 2, new BigDecimal(20000000));
-		// assertEquals(5, ce.getId());
+	// @Test
+	// void testCamelCase(){
+	// 	assertEquals(7, dpRepo.findAll().size());
+	// }
 
-		ce = es.modifierContrat(3, null, null, 3, null);
-		// assertEquals(6, ce.getId());
-	}
+	// @Test
+	// void insertionCandidat(){
+	// 	cs.intsertNote(1, 1, 10);
+
+	// }
 
 }
