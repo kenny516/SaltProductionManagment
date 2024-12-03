@@ -56,10 +56,15 @@ public final CongeService congeService;
 	private final RuptureContratRepository ruptureRepository;
 	JdbcTemplate jdbcTemplate;
 
-	public EmployeService(HeuresSupRepository heuresSupRepository, EmployeRepository employeRepository,
-			CompetenceRepository competenceRepository, ContratEmployeRepository contratEmployeRepository,
-			AvanceRepository avanceRepository, AvanceRemboursementRepository avanceRemboursementRepository,
-			PayeRepository payeRepository, RuptureContratRepository ruptureRepository, JdbcTemplate jdbcTemplate) {
+	
+
+	public EmployeService(BonusSalaireRepository bonusSalaireRepository, HeuresSupRepository heuresSupRepository,
+			EmployeRepository employeRepository, CompetenceRepository competenceRepository,
+			ContratEmployeRepository contratEmployeRepository, AvanceRepository avanceRepository,
+			AvanceRemboursementRepository avanceRemboursementRepository, PayeRepository payeRepository,
+			PayeDetailsRepository payeDetailsRepository, CongeService congeService,
+			RuptureContratRepository ruptureRepository, JdbcTemplate jdbcTemplate) {
+		this.bonusSalaireRepository = bonusSalaireRepository;
 		this.heuresSupRepository = heuresSupRepository;
 		this.employeRepository = employeRepository;
 		this.competenceRepository = competenceRepository;
@@ -67,13 +72,10 @@ public final CongeService congeService;
 		this.avanceRepository = avanceRepository;
 		this.avanceRemboursementRepository = avanceRemboursementRepository;
 		this.payeRepository = payeRepository;
-		this.ruptureRepository = ruptureRepository;
-		this.jdbcTemplate = jdbcTemplate;
-		this.payeRepository = payeRepository;
-		this.heuresSupRepository = heuresSupRepository;
-		this.bonusSalaireRepository = bonusSalaireRepository;
 		this.payeDetailsRepository = payeDetailsRepository;
 		this.congeService = congeService;
+		this.ruptureRepository = ruptureRepository;
+		this.jdbcTemplate = jdbcTemplate;
 	}
 
 	public List<EmployeSend> getQualifiedEmployeesForPost(Integer posteId) {

@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.analytique.gestion_analytique.Models.CategoriePersonnel;
+import com.analytique.gestion_analytique.Models.ContratEmploye;
 import com.analytique.gestion_analytique.Models.Paye;
 import com.analytique.gestion_analytique.Models.PayeDetails;
 import com.analytique.gestion_analytique.Repositories.CategoriePersonnelRepository;
