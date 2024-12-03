@@ -18,14 +18,12 @@ public class CongeService {
 	private final CongeRepository repository;
 	private final SoldeCongeService soldeCongeService;
 	private final EmployeRepository employeRepository;
-	private final EmployeService employeService;
 
 	public CongeService(CongeRepository repository, SoldeCongeService soldeCongeService,
-						EmployeRepository employeRepository, EmployeService employeService) {
+						EmployeRepository employeRepository) {
 		this.repository = repository;
 		this.soldeCongeService = soldeCongeService;
 		this.employeRepository = employeRepository;
-		this.employeService = employeService;
 	}
 
 	public List<Conge> getAllConges() {
@@ -126,10 +124,10 @@ public class CongeService {
 	}
 
 	public double nbrCongeDisponible(Integer idTypeConge, Integer idEmploye, Integer annee) {
-		Employe employe = employeService.getEmployeById(idEmploye);
+		Employe employe = employeRepository.findById(idEmploye).orElse(new Employe());
 		double congeDisponible = 0;
 		Map<Integer, Integer> congePerYear = congeByYear(idTypeConge, idEmploye);
-		congeDisponible = (12 * 2.5) - congePerYear.get(annee);
+//		congeDisponible = (12 * 2.5) - congePerYear.get(annee);
 		for(int i = employe.getDateEmbauche().getYear();i<=annee;i++){
 			Double anneConge = (12*2.5);
 			int an = i;
