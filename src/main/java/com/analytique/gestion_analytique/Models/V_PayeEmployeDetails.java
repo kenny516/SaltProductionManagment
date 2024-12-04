@@ -6,18 +6,15 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import java.math.BigDecimal;
+import java.time.LocalDate;
 
 @Data
 @Entity
 @Table(name = "V_Paye_Employe_Details")
 public class V_PayeEmployeDetails {
-
     @Id
     @Column(name = "id")
     private Integer id;
-    
-    @Column(name = "email")
-    private String email; 
 
     @Column(name = "nom")
     private String nom;
@@ -25,26 +22,29 @@ public class V_PayeEmployeDetails {
     @Column(name = "prenom")
     private String prenom;
 
+    @Column(name = "email")
+    private String email;
+
     @Column(name = "telephone")
     private String telephone;
 
     @Column(name = "date_embauche")
-    private java.sql.Date dateEmbauche;
+    private LocalDate dateEmbauche;
 
     @Column(name = "contrat_date_debut")
-    private java.sql.Date contratDateDebut;
+    private LocalDate contratDateDebut;
 
     @Column(name = "contrat_date_fin")
-    private java.sql.Date contratDateFin;
+    private LocalDate contratDateFin;
 
-    @Column(name = "contrat_salaire")
-    private BigDecimal contratSalaire;
+    @Column(name = "salaire")
+    private BigDecimal salaire;
 
-    @Column(name = "contrat_taux_horaire")
-    private BigDecimal contratTauxHoraire;
+    @Column(name = "taux_horaire")
+    private BigDecimal tauxHoraire;
 
-    @Column(name = "poste_titre")
-    private String posteTitre;
+    @Column(name = "titre")
+    private String titre;
 
     @Column(name = "poste_description")
     private String posteDescription;
@@ -52,51 +52,63 @@ public class V_PayeEmployeDetails {
     @Column(name = "poste_departement")
     private String posteDepartement;
 
-    @Column(name = "paye_mois")
-    private Integer payeMois;
+    @Column(name = "mois")
+    private Integer mois;
 
-    @Column(name = "paye_annee")
-    private Integer payeAnnee;
+    @Column(name = "annee")
+    private Integer annee;
 
-    @Column(name = "paye_heure_normale")
-    private BigDecimal payeHeureNormale;
+    @Column(name = "heure_normale")
+    private BigDecimal heureNormale;
 
-    @Column(name = "paye_heure_sup")
-    private BigDecimal payeHeureSup;
+    @Column(name = "heure_sup")
+    private BigDecimal heureSup;
 
-    @Column(name = "paye_montant_heure_sup")
-    private BigDecimal payeMontantHeureSup;
+    @Column(name = "montant_heure_sup")
+    private BigDecimal montantHeureSup;
 
-    @Column(name = "paye_salaire_base")
-    private BigDecimal payeSalaireBase;
+    @Column(name = "salaire_base")
+    private BigDecimal salaireBase;
 
-    @Column(name = "paye_avance")
-    private BigDecimal payeAvance;
+    @Column(name = "avance")
+    private BigDecimal avance;
 
-    @Column(name = "paye_nb_heure_abs")
-    private BigDecimal payeNbHeureAbs;
+    @Column(name = "nb_heure_abs")
+    private BigDecimal nbHeureAbs;
 
-    @Column(name = "paye_droit_conge")
-    private BigDecimal payeDroitConge;
+    @Column(name = "droit_conge")
+    private BigDecimal droitConge;
 
-    @Column(name = "paye_droit_preavis")
-    private BigDecimal payeDroitPreavis;
+    @Column(name = "droit_preavis")
+    private BigDecimal droitPreavis;
 
-    @Column(name = "paye_indemnite")
-    private BigDecimal payeIndemnite;
+    @Column(name = "indemnite")
+    private BigDecimal indemnite;
 
-    @Column(name = "paye_prime_diverse")
-    private BigDecimal payePrimeDiverse;
+    @Column(name = "prime_diverse")
+    private BigDecimal primeDiverse;
 
-    @Column(name = "paye_irsa")
-    private BigDecimal payeIrsa;
+    @Column(name = "irsa")
+    private BigDecimal irsa;
 
-    @Column(name = "paye_cnaps")
-    private BigDecimal payeCnaps;
+    @Column(name = "cnaps")
+    private BigDecimal cnaps;
 
-    @Column(name = "paye_sanitaire")
-    private BigDecimal payeSanitaire;
+    @Column(name = "sanitaire")
+    private BigDecimal sanitaire;
 
-    @Column(name = "paye_total")
-    private BigDecimal payeTotal;
+    @Column(name = "total")
+    private BigDecimal total;
+
+    @Column(name = "irsa_5")
+    private BigDecimal irsa5;
+
+    @Column(name = "irsa_10")
+    private BigDecimal irsa10;
+
+    @Column(name = "irsa_15")
+    private BigDecimal irsa15;
+
+    @Column(name = "irsa_20")
+    private BigDecimal irsa20;
 }
