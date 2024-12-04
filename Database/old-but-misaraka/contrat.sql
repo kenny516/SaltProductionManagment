@@ -171,38 +171,81 @@ WHERE
     c.date_fin IS NULL OR c.date_fin >= NOW();
 
 
-INSERT INTO CategoriePersonnel (nom, description) VALUES
-('Administration', 'Personnel administratif'),
-('Technique', 'Personnel technique'),
-('Support', 'Personnel de support');
+SELECT dureeMois FROM TypeContrat WHERE id = 1;
 
-INSERT INTO TypeContrat (id, nomType, dureeMois) VALUES 
-(1, 'CDD', 24),
-(2, 'ESSAI', 3),
-(3, 'CDI', null);
-
-INSERT INTO Postes (titre, description, departement, id_categorie_personnel) VALUES
-('Secrétaire', 'Responsable des taches administratives', 'Administration', 1),
-('Technicien informatique', 'Gestion du matériel informatique', 'Technique', 2),
-('Agent de maintenance', 'Responsable de entretien des installations', 'Support', 3);
-
-
-INSERT INTO Employes (nom, prenom, email, telephone, id_contrat_actuel) VALUES
-('Dupont', 'Jean', 'jean.dupont@example.com', '0612345678', NULL),
-('Durand', 'Sophie', 'sophie.durand@example.com', '0676543210', NULL),
-('Martin', 'Luc', 'luc.martin@example.com', '0654321098', NULL);
-
-INSERT INTO ContratEmploye (id_employe, id_type_contrat, date_debut,id_poste, salaire) VALUES
-(1, 1, '2023-01-01', 1, 3000),
-(2, 2, '2023-06-01', 2, 2500),
-(3, 3, '2024-01-01', 3, 1200);
-
-INSERT INTO TypeRupture (nom, description, preavis_requis, indemnite) VALUES
-('Démission', 'Rupture volontaire par employe', TRUE, FALSE),
-('Licenciement', 'Rupture décidée par employeur', TRUE, TRUE),
-('Fin de contrat', 'Expiration du contrat a duree determinee', FALSE, FALSE);
+CREATE OR REPLACE VIEW v_rupture_contrat_actuel AS
+SELECT 
+    rc.*,
+		CASE 
+        WHEN rc.preavis_employe = rc.preavis_entreprise THEN rc.date_fin_contrat
+        ELSE rc.date_notification
+    END AS date_effective
+FROM 
+    RuptureContrat rc
+WHERE rc.indemnite_verse <> 0 and
+    DATE_PART('month', 
+        CASE 
+            WHEN rc.preavis_employe = rc.preavis_entreprise THEN rc.date_fin_contrat
+            ELSE rc.date_notification
+        END
+    ) = DATE_PART('month', CURRENT_DATE)
+    AND 
+    DATE_PART('year', 
+        CASE 
+            WHEN rc.preavis_employe = rc.preavis_entreprise THEN rc.date_fin_contrat
+            ELSE rc.date_notification
+        END
+    ) = DATE_PART('year', CURRENT_DATE);
 
 
-INSERT INTO RuptureContrat (id_type_rupture, id_employe, date_notification, date_fin_contrat, preavis_effectue, motif, indemnite_verse) VALUES
-(1, 2, '2024-11-01', '2024-11-30', TRUE, 'Nouvelle opportunité professionnelle', 0.00),
-(2, 3, '2024-11-15', '2024-12-31', FALSE, 'Faute grave', 1500.00);
+CREATE OR REPLACE FUNCTION handle_rupture_contrat()
+RETURNS TRIGGER AS $$
+DECLARE
+    salaire_actuel NUMERIC(20, 2); -- Stocke le salaire actuel de l'employé
+    est_preavis_requis BOOLEAN;       -- Indique si le préavis est requis pour le type de rupture
+    est_indemnite BOOLEAN;       -- Indique si le préavis est requis pour le type de rupture
+BEGIN
+    -- Récupérer le salaire actuel de l'employé
+    SELECT salaire
+    INTO salaire_actuel 
+    FROM ContratEmploye
+    WHERE id = (SELECT id_contrat_actuel FROM Employes WHERE id = NEW.id_employe);
+
+    -- Récupérer le statut du préavis requis du type de rupture
+    SELECT preavis_requis, indemnite
+    INTO est_preavis_requis, est_indemnite
+    FROM TypeRupture
+    WHERE id = NEW.id_type_rupture;
+
+    -- Calculer la date de fin du contrat
+    IF est_preavis_requis THEN
+        NEW.date_fin_contrat := NEW.date_notification + INTERVAL '1 MONTH';
+    ELSE
+        NEW.date_fin_contrat := NEW.date_notification;
+    END IF;
+
+    -- Si un préavis est requis
+    IF est_preavis_requis and est_indemnite THEN
+        IF NEW.preavis_employe = NEW.preavis_entreprise THEN
+            -- Les deux parties respectent ou ignorent le préavis, rien à faire
+            RETURN NEW;
+        ELSIF NOT NEW.preavis_employe THEN
+            -- L'employé ne respecte pas le préavis
+            NEW.indemnite_verse := NEW.indemnite_verse + salaire_actuel;
+        ELSE
+            -- L'entreprise ne respecte pas le préavis
+            NEW.indemnite_verse := NEW.indemnite_verse - salaire_actuel;
+        END IF;
+    END IF;
+
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+drop trigger before_insert_rupture_contrat on RuptureContrat;
+
+CREATE TRIGGER before_insert_rupture_contrat
+BEFORE INSERT
+ON RuptureContrat
+FOR EACH ROW
+EXECUTE FUNCTION handle_rupture_contrat();

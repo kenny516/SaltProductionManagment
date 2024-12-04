@@ -2,6 +2,8 @@ package com.analytique.gestion_analytique.Models;
 
 import java.time.LocalDateTime;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import jakarta.persistence.*;
 
 @Entity
@@ -11,10 +13,14 @@ public class HeuresSup {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    private Integer idEmploye;
+    @ManyToOne
+    @JoinColumn(name = "id_employe",referencedColumnName = "id", nullable = false)
+    private Employe employe;
 
+    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm")
     private LocalDateTime dateDebut;
 
+    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm")
     private LocalDateTime dateFin;
 
     private Double totalHeuresSup;
@@ -23,13 +29,13 @@ public class HeuresSup {
 
     private Double montant;
 
-    public HeuresSup(Integer idEmploye, LocalDateTime dateDebut, LocalDateTime dateFin, Double totalHeuresSup,
-            Double tauxHoraire, Double montant) {
-        this.idEmploye = idEmploye;
+    private Integer majoration;
+
+    public HeuresSup(Employe employe, LocalDateTime dateDebut, LocalDateTime dateFin, Double totalHeuresSup, Double montant) {
+        this.employe = employe;
         this.dateDebut = dateDebut;
         this.dateFin = dateFin;
         this.totalHeuresSup = totalHeuresSup;
-        this.tauxHoraire = tauxHoraire;
         this.montant = montant;
     }
 
@@ -44,12 +50,12 @@ public class HeuresSup {
         this.id = id;
     }
 
-    public Integer getIdEmploye() {
-        return idEmploye;
+    public Employe getEmploye() {
+        return employe;
     }
 
-    public void setIdEmploye(Integer idEmploye) {
-        this.idEmploye = idEmploye;
+    public void setEmploye(Employe employe) {
+        this.employe = employe;
     }
 
     public LocalDateTime getDateDebut() {
@@ -76,6 +82,14 @@ public class HeuresSup {
         this.totalHeuresSup = totalHeuresSup;
     }
 
+    public Double getMontant() {
+        return montant;
+    }
+
+    public void setMontant(Double montant) {
+        this.montant = montant;
+    }
+
     public Double getTauxHoraire() {
         return tauxHoraire;
     }
@@ -84,12 +98,12 @@ public class HeuresSup {
         this.tauxHoraire = tauxHoraire;
     }
 
-    public Double getMontant() {
-        return montant;
+    public Integer getMajoration() {
+        return majoration;
     }
 
-    public void setMontant(Double montant) {
-        this.montant = montant;
+    public void setMajoration(Integer majoration) {
+        this.majoration = majoration;
     }
 
 }

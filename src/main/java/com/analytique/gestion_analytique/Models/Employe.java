@@ -31,6 +31,7 @@ public class Employe {
 	private LocalDate dateEmbauche = LocalDate.now();
 
 	@ManyToOne
+	@JsonBackReference
 	@JoinColumn(name = "id_contrat_actuel")
 	private ContratEmploye contrat;
 
@@ -115,4 +116,5 @@ public class Employe {
 		this.contrat = contrat;
 	}
 
+	
 }

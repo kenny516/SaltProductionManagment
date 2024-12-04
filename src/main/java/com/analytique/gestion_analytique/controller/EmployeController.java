@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.analytique.gestion_analytique.Models.CategoriePersonnel;
+import com.analytique.gestion_analytique.Models.ContratEmploye;
 import com.analytique.gestion_analytique.Models.Paye;
 import com.analytique.gestion_analytique.Models.PayeDetails;
 import com.analytique.gestion_analytique.Repositories.CategoriePersonnelRepository;
@@ -23,7 +24,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-
 
 @RestController
 @RequestMapping("/api/employe")
@@ -52,35 +52,42 @@ public class EmployeController {
 		}
 	}
 
+	@GetMapping("/categories-personnel")
+	public ResponseEntity<?> getMethodName(@RequestParam String param) {
+		return ResponseEntity.ok(categoriePersonnelRepository.findAll());
+	}
+	
+
 	@GetMapping("/poste/{id}")
 	public List<EmployeSend> getEmployeByPoste(@PathVariable Integer id) {
 		return employeService.getQualifiedEmployeesForPost(id);
 	}
 
+	// TODO : mbola tsy mety
+	@PostMapping("/{id}/contrat")
+	public ResponseEntity<?> modifierContrat(@PathVariable("id") Integer id, @RequestBody ContratEmploye contrat) {
+
+		return ResponseEntity.ok(employeService.modifierContrat(id,contrat.getDateDebut(),contrat.getTypeContrat(),contrat.getPoste(),contrat.getSalaire()));
+	}
+
 	@GetMapping("/{id}/avances")
-	public List<RemboursementReste> getAllAvances(@PathVariable Integer id, @RequestParam(required = false, name = "unpaid") Boolean unpaid) {
+	public List<RemboursementReste> getAllAvances(@PathVariable Integer id,
+			@RequestParam(required = false, name = "unpaid") Boolean unpaid) {
 		return employeService.getAllAvances(id, unpaid);
 	}
 
 	@PostMapping("/payer")
 	public ResponseEntity<PayeDetails> payer(
-            @RequestParam(name="idEmploye") Integer id,
-            @RequestParam(name="datePaiement") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate datePaiement,
-            @RequestParam(required = false, name="heureNormale", defaultValue = "160.0") Double heureNormale) {
-        try {
-            PayeDetails paye = employeService.validerPaiement(id, datePaiement, heureNormale);
-            return ResponseEntity.ok(paye);
-        } catch (Exception e) {
+			@RequestParam(name = "idEmploye") Integer id,
+			@RequestParam(name = "datePaiement") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate datePaiement,
+			@RequestParam(required = false, name = "heureNormale", defaultValue = "160.0") Double heureNormale) {
+		try {
+			PayeDetails paye = employeService.validerPaiement(id, datePaiement, heureNormale);
+			return ResponseEntity.ok(paye);
+		} catch (Exception e) {
 			e.printStackTrace();
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
-        }
-    }
-	
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+		}
+	}
 
-
-	
-
-	
-	
-	
 }

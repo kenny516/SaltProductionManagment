@@ -35,10 +35,9 @@ public class CongeController {
 
     @PostMapping("")
     public ResponseEntity<?> createConge(@RequestBody Conge conge) {
-        double jourRestant = congeService.CongePossible(
+        double jourRestant = congeService.nbrCongeDisponible(
                 conge.getIdTypeConge().getId(),
                 conge.getEmploye().getId(),
-                conge.getDateFin().getYear() - 3,
                 conge.getDateFin().getYear()
         );
         TypeConge typeConge = typeCongeService.getTypeCongeById(conge.getIdTypeConge().getId());
@@ -71,6 +70,11 @@ public class CongeController {
     @GetMapping("/totalCongeByEmploye/{idTypeConge}/{idEmploye}/{anne}")
     public double totalCongeByEmploye(@PathVariable("idTypeConge")Integer idTypeConge,@PathVariable("idEmploye") Integer idEmploye, @PathVariable("anne") Integer anne) {
         return congeService.totalCongeByEmploye(idTypeConge,idEmploye, anne-3,anne);
+    }
+
+    @GetMapping("/congeParAns/{idEmploye}/{mois}/{anne}")
+    public double nbrJourCongeParMois(@PathVariable("idEmploye") Integer idEmploye,@PathVariable("mois") Integer mois,@PathVariable("anne") Integer anne){
+        return congeService.getNbrHeuresCongeParMois(idEmploye, mois, anne);
     }
 
 }

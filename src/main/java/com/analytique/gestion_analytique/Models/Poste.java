@@ -1,5 +1,9 @@
 package com.analytique.gestion_analytique.Models;
 
+import java.util.List;
+
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import jakarta.persistence.*;
 
 @Entity
@@ -21,6 +25,10 @@ public class Poste {
 	@ManyToOne
 	@JoinColumn(name = "id_categorie_personnel")
 	private CategoriePersonnel categoriePersonnel;
+
+	@OneToMany(mappedBy = "poste", cascade = CascadeType.ALL, orphanRemoval = true)
+	@JsonManagedReference
+	private List<DetailsPoste> details;
 
 	public Integer getId() {
 		return id;
@@ -60,6 +68,14 @@ public class Poste {
 
 	public void setCategoriePersonnel(CategoriePersonnel contrat) {
 		this.categoriePersonnel = contrat;
+	}
+
+	public List<DetailsPoste> getDetails() {
+		return details;
+	}
+
+	public void setDetails(List<DetailsPoste> details) {
+		this.details = details;
 	}
 
 	
