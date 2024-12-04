@@ -301,6 +301,7 @@ CREATE TABLE HeuresSup (
     total_heures_sup DOUBLE PRECISION,
     taux_horaire DOUBLE PRECISION,
     montant DOUBLE PRECISION,
+    majoration INT,
     PRIMARY KEY(id),
     FOREIGN KEY(id_employe) REFERENCES Employes(id)
 );
