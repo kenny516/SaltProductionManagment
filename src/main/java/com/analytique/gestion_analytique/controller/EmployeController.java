@@ -6,10 +6,9 @@ import java.util.List;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.analytique.gestion_analytique.Models.CategoriePersonnel;
 import com.analytique.gestion_analytique.Models.ContratEmploye;
-import com.analytique.gestion_analytique.Models.Paye;
 import com.analytique.gestion_analytique.Models.PayeDetails;
+import com.analytique.gestion_analytique.Models.RuptureContrat;
 import com.analytique.gestion_analytique.Repositories.CategoriePersonnelRepository;
 import com.analytique.gestion_analytique.Services.EmployeService;
 import com.analytique.gestion_analytique.dto.receive.RemboursementReste;
@@ -63,12 +62,17 @@ public class EmployeController {
 		return employeService.getQualifiedEmployeesForPost(id);
 	}
 
-	// TODO : mbola tsy mety
-	@PostMapping("/{id}/contrat")
-	public ResponseEntity<?> modifierContrat(@PathVariable("id") Integer id, @RequestBody ContratEmploye contrat) {
+	@PostMapping("/contrat")
+	public ResponseEntity<?> modifierContrat(@RequestBody ContratEmploye contrat) {
 
-		return ResponseEntity.ok(employeService.modifierContrat(id,contrat.getDateDebut(),contrat.getTypeContrat(),contrat.getPoste(),contrat.getSalaire()));
+		return ResponseEntity.ok(employeService.modifierContrat(contrat.getEmploye().getId(),contrat.getDateDebut(),contrat.getTypeContrat(),contrat.getPoste(),contrat.getSalaire()));
 	}
+
+	@PostMapping("/rupture")
+	public ResponseEntity<?> terminerContrat(@RequestBody RuptureContrat c) {
+		return ResponseEntity.ok(employeService.rompreContrat(c));
+	}
+	
 
 	@GetMapping("/{id}/avances")
 	public List<RemboursementReste> getAllAvances(@PathVariable Integer id,
