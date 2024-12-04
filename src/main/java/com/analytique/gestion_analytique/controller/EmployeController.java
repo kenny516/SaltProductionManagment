@@ -67,7 +67,7 @@ public class EmployeController {
 	@PostMapping("/{id}/contrat")
 	public ResponseEntity<?> modifierContrat(@PathVariable("id") Integer id, @RequestBody ContratEmploye contrat) {
 
-		return ResponseEntity.ok(employeService.getOne(id));
+		return ResponseEntity.ok(employeService.modifierContrat(id,contrat.getDateDebut(),contrat.getTypeContrat(),contrat.getPoste(),contrat.getSalaire()));
 	}
 
 	@GetMapping("/{id}/avances")
