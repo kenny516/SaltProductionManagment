@@ -41,6 +41,14 @@ public class CongeController {
                 conge.getDateFin().getYear()
         );
         TypeConge typeConge = typeCongeService.getTypeCongeById(conge.getIdTypeConge().getId());
+        if (typeConge.getDureeMax().doubleValue() < conge.getDuree().doubleValue()) {
+            String errorMessage = String.format(
+                    "Erreur : la durée du congé (%.2f) dépasse la durée maximale (%.2f) autorisée.",
+                    conge.getDuree().doubleValue(),
+                    typeConge.getDureeMax()
+            );
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorMessage);
+        }
         if (jourRestant < conge.getDuree().doubleValue() && typeConge.getCumulable()) {
             String errorMessage = String.format(
                     "Erreur : jours restants (%.2f) insuffisants pour accorder un congé de %.2f jours.",
@@ -68,8 +76,8 @@ public class CongeController {
     }
 
     @GetMapping("/totalCongeByEmploye/{idTypeConge}/{idEmploye}/{anne}")
-    public double totalCongeByEmploye(@PathVariable("idTypeConge")Integer idTypeConge,@PathVariable("idEmploye") Integer idEmploye, @PathVariable("anne") Integer anne) {
-        return congeService.totalCongeByEmploye(idTypeConge,idEmploye, anne-3,anne);
+    public double totalCongeByEmploye(@PathVariable("idTypeConge") Integer idTypeConge, @PathVariable("idEmploye") Integer idEmploye, @PathVariable("anne") Integer anne) {
+        return congeService.totalCongeByEmploye(idTypeConge, idEmploye, anne - 3, anne);
     }
 
     @GetMapping("/congeParAns/{idEmploye}/{mois}/{anne}")

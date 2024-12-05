@@ -4,7 +4,7 @@ CREATE TABLE TypeConge
     nom       VARCHAR(20)           NOT NULL,
     est_paye  BOOLEAN DEFAULT false NOT NULL,
     cumulable BOOLEAN DEFAULT false NOT NULL,
-    duree_max NUMERIC(4, 2), -- en annee
+    duree_max NUMERIC(10, 2), -- en annee
     PRIMARY KEY (id)
 );
 --
