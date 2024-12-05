@@ -52,7 +52,7 @@ public class EmployeController {
 	}
 
 	@GetMapping("/categories-personnel")
-	public ResponseEntity<?> getMethodName(@RequestParam String param) {
+	public ResponseEntity<?> getCategoriePersonnel() {
 		return ResponseEntity.ok(categoriePersonnelRepository.findAll());
 	}
 	
