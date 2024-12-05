@@ -80,4 +80,9 @@ public class CongeController {
         return congeService.totalCongeByEmploye(idTypeConge, idEmploye, anne - 3, anne);
     }
 
+    @GetMapping("/congeParAns/{idEmploye}/{mois}/{anne}")
+    public double nbrJourCongeParMois(@PathVariable("idEmploye") Integer idEmploye,@PathVariable("mois") Integer mois,@PathVariable("anne") Integer anne){
+        return congeService.getNbrHeuresCongeParMois(idEmploye, mois, anne);
+    }
+
 }

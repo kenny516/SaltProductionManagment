@@ -27,7 +27,7 @@ CREATE TABLE Offre_emploi (
     status BOOLEAN,
     Date_publication DATE DEFAULT CURRENT_DATE,
     poste_id INT REFERENCES Postes(id) ON DELETE CASCADE,
-		salaire numeric(20,2),
+	salaire numeric(20,2),
     nbr_candidat_dm INT
 );
 
@@ -301,6 +301,7 @@ CREATE TABLE HeuresSup (
     total_heures_sup DOUBLE PRECISION,
     taux_horaire DOUBLE PRECISION,
     montant DOUBLE PRECISION,
+    majoration INT,
     PRIMARY KEY(id),
     FOREIGN KEY(id_employe) REFERENCES Employes(id)
 );

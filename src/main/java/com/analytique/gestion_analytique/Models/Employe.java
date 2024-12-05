@@ -3,6 +3,7 @@ package com.analytique.gestion_analytique.Models;
 import java.time.LocalDate;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import jakarta.persistence.*;
@@ -30,6 +31,7 @@ public class Employe {
 	private LocalDate dateEmbauche = LocalDate.now();
 
 	@ManyToOne
+	@JsonBackReference
 	@JoinColumn(name = "id_contrat_actuel")
 	private ContratEmploye contrat;
 

@@ -93,7 +93,7 @@ public class ContratEmploye {
 
 	public BigDecimal getTauxHoraire() {
 		if (tauxHoraire == null) {
-			setTauxHoraire(this.salaire.divide(new BigDecimal("173.33")).setScale(2, RoundingMode.HALF_UP));
+			setTauxHoraire(this.salaire.divide(new BigDecimal("173.33"), 2, RoundingMode.HALF_UP));
 		}
 		return tauxHoraire;
 	}

@@ -1,3 +1,4 @@
+
 -- Insertion de types de congé
 INSERT INTO TypeConge (nom, est_paye, cumulable, duree_max)
 VALUES
@@ -111,6 +112,7 @@ VALUES
 (2, 1, 10, 2024, 2026),
 (2, 1, 11, 2024, 2026),
 (2, 1, 12, 2024, 2026);
+
 
 
 INSERT INTO Conge (id_employe, id_type_conge, date_debut, date_fin,motif, status)

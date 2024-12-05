@@ -152,6 +152,10 @@ public class CongeService {
 		return joursConge * 8;
 	}
 
+	public double nbJourParMois(Integer idEmploye, Integer mois, Integer annee) {
+		return repository.nbrJourCongeParMois(idEmploye, mois, annee);
+	}
+
 	public double getNbrHeuresCongeNonPayeParMois(Integer idEmploye, Integer mois, Integer annee) {
 		Double joursCongeNonPaye = repository.nbrJourCongeNonPayeParMois(idEmploye, mois, annee) == null
 				? 0
