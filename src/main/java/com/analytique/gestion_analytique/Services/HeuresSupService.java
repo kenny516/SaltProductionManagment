@@ -30,21 +30,26 @@ public class HeuresSupService {
     HeuresSupSemaineRepository heuresSupSemaineRepository;
 
 
-    public double determinerTauxHoraire(LocalDateTime dateDebut, LocalDateTime dateFin, double tauxHoraireBase) {
-        int dayOfWeek = dateDebut.getDayOfWeek().getValue();
+    public double determinerTauxHoraire(HeuresSup hs, double tauxHoraireBase) {
+        int dayOfWeek = hs.getDateDebut().getDayOfWeek().getValue();
         double coefficient;
 
+        double heures = Duration.between(hs.getDateDebut(), hs.getDateFin()).toHours();
+
         // Vérification des jours spéciaux
-        if (dayOfWeek == 7) { // Dimanche
+        if (dayOfWeek == 7 & heures <= 5) { // Dimanche
             coefficient = 1.4;
-        } else if (isJourFerie(dateDebut)) { // Jours fériés
+            hs.setMajoration(40);
+        } else if (isJourFerie(hs.getDateDebut())& heures <= 5) { // Jours fériés
+            hs.setMajoration(100);
             coefficient = 2.0;
         } else {
-            long heures = Duration.between(dateDebut, dateFin).toHours();
             if (heures <= 8) {
                 coefficient = 1.3;
+                hs.setMajoration(30);
             } else {
                 coefficient = 1.5;
+                hs.setMajoration(50);
             }
         }
 
@@ -72,6 +77,8 @@ public class HeuresSupService {
 
         Optional<Employe> emp = employeRepository.findById(a);
 
+        heureSup.setEmploye(emp.get());
+
         // Obtenir le premier jour de la semaine à partir de la date de début
         LocalDate dateDebut = heureSup.getDateDebut().toLocalDate();
         LocalDate premierJourSemaine = dateDebut.with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY));
@@ -81,7 +88,7 @@ public class HeuresSupService {
         double heures = Duration.between(heureSup.getDateDebut(), heureSup.getDateFin()).toHours();
         heureSup.setTotalHeuresSup(heures);
 
-        Double tauxHoraire = determinerTauxHoraire(heureSup.getDateDebut(), heureSup.getDateFin(), emp.get().getContrat().getTauxHoraire().doubleValue());
+        Double tauxHoraire = determinerTauxHoraire(heureSup, emp.get().getContrat().getTauxHoraire().doubleValue());
         heureSup.setTauxHoraire(tauxHoraire);
         heureSup.setMontant(tauxHoraire * heureSup.getTotalHeuresSup());
 
@@ -101,6 +108,11 @@ public class HeuresSupService {
     public List<HeuresSup> getHeuresSupAfterToday() {
         LocalDate today = LocalDate.now();
         return heuresSupRepository.findHeuresSupAfterToday(today.atStartOfDay());
+    }
+
+    public double TotalmontantEmpHeursupMajore (Integer idEmploye, Integer mois, Integer annee, Integer majoration)
+    {
+        return heuresSupRepository.findTotalMontantByEmployeAndDateAndMajoration(idEmploye,mois,annee,majoration);
     }
 
 }

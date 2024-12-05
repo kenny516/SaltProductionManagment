@@ -70,4 +70,14 @@ public class Poste {
 		this.categoriePersonnel = contrat;
 	}
 
+	public List<DetailsPoste> getDetails() {
+		return details;
+	}
+
+	public void setDetails(List<DetailsPoste> details) {
+		this.details = details;
+	}
+
+	
+
 }
