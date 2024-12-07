@@ -9,7 +9,7 @@ public class TypeContrat {
     private Integer id;
 
     @Column(name = "nomtype", nullable = false, unique = true, length = 50)
-    private String nomType;
+    private String nom;
 
     @Column(name = "dureemois")
     private Integer dureeMois;
@@ -22,12 +22,12 @@ public class TypeContrat {
         this.id = id;
     }
 
-    public String getNomType() {
-        return nomType;
+    public String getNom() {
+        return nom;
     }
 
-    public void setNomType(String nomType) {
-        this.nomType = nomType;
+    public void setNom(String nomType) {
+        this.nom = nomType;
     }
 
     public Integer getDureeMois() {

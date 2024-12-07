@@ -150,7 +150,7 @@ public class CandidatController {
 		}
 	}
 
-	@GetMapping("/non_refus")
+	@GetMapping("/non-refus")
 	public List<V_CandidatPostulation> getNonRefus(){
 		return candidatService.findCandidatNonRefus();
 	}

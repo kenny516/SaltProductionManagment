@@ -9,7 +9,9 @@ import org.springframework.web.bind.annotation.RestController;
 import com.analytique.gestion_analytique.Models.ContratEmploye;
 import com.analytique.gestion_analytique.Models.PayeDetails;
 import com.analytique.gestion_analytique.Models.RuptureContrat;
+import com.analytique.gestion_analytique.Models.TypeRupture;
 import com.analytique.gestion_analytique.Repositories.CategoriePersonnelRepository;
+import com.analytique.gestion_analytique.Repositories.TypeRuptureRepository;
 import com.analytique.gestion_analytique.Services.EmployeService;
 import com.analytique.gestion_analytique.dto.receive.RemboursementReste;
 import com.analytique.gestion_analytique.dto.send.EmployeSend;
@@ -31,15 +33,23 @@ public class EmployeController {
 
 	EmployeService employeService;
 	CategoriePersonnelRepository categoriePersonnelRepository;
+	TypeRuptureRepository typeRuptureRepository;
 
-	public EmployeController(EmployeService employeService, CategoriePersonnelRepository categoriePersonnelRepository) {
+	public EmployeController(EmployeService employeService, CategoriePersonnelRepository categoriePersonnelRepository,
+			TypeRuptureRepository typeRuptureRepository) {
 		this.employeService = employeService;
 		this.categoriePersonnelRepository = categoriePersonnelRepository;
+		this.typeRuptureRepository = typeRuptureRepository;
 	}
 
 	@GetMapping("")
 	public List<EmployeSend> getAll() {
 		return employeService.getAll();
+	}
+
+	@GetMapping("/type-rupture")
+	public List<TypeRupture> getAllTypeRuptures(){
+		return typeRuptureRepository.findAll();
 	}
 
 	@GetMapping("/{id}")
@@ -55,7 +65,6 @@ public class EmployeController {
 	public ResponseEntity<?> getCategoriePersonnel() {
 		return ResponseEntity.ok(categoriePersonnelRepository.findAll());
 	}
-	
 
 	@GetMapping("/poste/{id}")
 	public List<EmployeSend> getEmployeByPoste(@PathVariable Integer id) {
@@ -65,7 +74,8 @@ public class EmployeController {
 	@PostMapping("/contrat")
 	public ResponseEntity<?> modifierContrat(@RequestBody ContratEmploye contrat) {
 
-		return ResponseEntity.ok(employeService.modifierContrat(contrat.getEmploye().getId(),contrat.getDateDebut(),contrat.getTypeContrat(),contrat.getPoste(),contrat.getSalaire()));
+		return ResponseEntity.ok(employeService.modifierContrat(contrat.getEmploye().getId(), contrat.getDateDebut(),
+				contrat.getTypeContrat(), contrat.getPoste(), contrat.getSalaire()));
 	}
 
 	@PostMapping("/rupture")
