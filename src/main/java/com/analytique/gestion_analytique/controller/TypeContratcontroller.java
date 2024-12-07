@@ -11,7 +11,7 @@ import com.analytique.gestion_analytique.Models.TypeContrat;
 import com.analytique.gestion_analytique.Repositories.TypeContratRepository;
 
 @RestController
-@RequestMapping("/api/type_contrat")
+@RequestMapping("/api/type-contrat")
 @CrossOrigin(origins = "http://localhost:3000")
 
 public class TypeContratcontroller {
