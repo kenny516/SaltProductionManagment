@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 
 
 @RestController
-@RequestMapping("/api/type_note")
+@RequestMapping("/api/type-note")
 @CrossOrigin(origins = "http://localhost:3000")
 public class TypeNoteController {
 	private TypeNoteRepository typeNoteRepository;

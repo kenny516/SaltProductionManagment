@@ -1,3 +1,16 @@
+CREATE TABLE Paye(
+                     id SERIAL,
+                     id_employe INTEGER NOT NULL,
+                     mois INTEGER NOT NULL,
+                     annee INTEGER NOT NULL,
+                     heure_normale NUMERIC(5, 2) NOT NULL,
+                     heure_sup NUMERIC(20, 2),
+                     avance NUMERIC(20, 2),
+                     salaire_base NUMERIC(20, 2) NOT NULL,
+                     total NUMERIC(20, 2) NOT NULL,
+                     PRIMARY KEY(id),
+                     FOREIGN KEY(id_employe) REFERENCES Employes(id)
+);
 CREATE TABLE IF NOT EXISTS paye_details(
     id SERIAL,
 	id_employe INTEGER NOT NULL,
@@ -30,7 +43,7 @@ CREATE TABLE IF NOT EXISTS type_bonus_salaire(
     id SERIAL PRIMARY KEY,
     nom VARCHAR(30) NOT NULL
 );
-insert into type_bonus_salaire VALUES 
+insert into type_bonus_salaire VALUES
 (default, 'INDEMNITE'), (default,'PRIME');
 
 CREATE TABLE bonus_salaire(
@@ -49,7 +62,7 @@ DECLARE
 BEGIN
     SELECT salaire INTO sal
     FROM ContratEmploye
-    WHERE id_employe = p_id_employe 
+    WHERE id_employe = p_id_employe
     AND date_debut = (SELECT MAX(date_debut) FROM ContratEmploye WHERE id_employe = p_id_employe);
 
     IF sal > 600000 THEN
@@ -155,7 +168,7 @@ WHERE ce.date_debut = (
 
 
 CREATE OR REPLACE VIEW V_Paye_Employe_Details AS
-SELECT 
+SELECT
     emp.id,
     emp.nom,
     emp.prenom,

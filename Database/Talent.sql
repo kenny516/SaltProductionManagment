@@ -561,8 +561,13 @@ BEGIN
         NEW.date_fin_contrat := NEW.date_notification;
     END IF;
 
+    -- Si indemnite_verse est null, la mettre à zéro
+    IF NEW.indemnite_verse IS NULL THEN
+        NEW.indemnite_verse := 0;
+    END IF;
+
     -- Si un préavis est requis
-    IF est_preavis_requis and est_indemnite THEN
+    IF est_preavis_requis THEN
         IF NEW.preavis_employe = NEW.preavis_entreprise THEN
             -- Les deux parties respectent ou ignorent le préavis, rien à faire
             RETURN NEW;

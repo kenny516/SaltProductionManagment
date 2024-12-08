@@ -6,11 +6,12 @@ import java.util.List;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.analytique.gestion_analytique.Models.CategoriePersonnel;
 import com.analytique.gestion_analytique.Models.ContratEmploye;
-import com.analytique.gestion_analytique.Models.Paye;
 import com.analytique.gestion_analytique.Models.PayeDetails;
+import com.analytique.gestion_analytique.Models.RuptureContrat;
+import com.analytique.gestion_analytique.Models.TypeRupture;
 import com.analytique.gestion_analytique.Repositories.CategoriePersonnelRepository;
+import com.analytique.gestion_analytique.Repositories.TypeRuptureRepository;
 import com.analytique.gestion_analytique.Services.EmployeService;
 import com.analytique.gestion_analytique.dto.receive.RemboursementReste;
 import com.analytique.gestion_analytique.dto.send.EmployeSend;
@@ -32,15 +33,23 @@ public class EmployeController {
 
 	EmployeService employeService;
 	CategoriePersonnelRepository categoriePersonnelRepository;
+	TypeRuptureRepository typeRuptureRepository;
 
-	public EmployeController(EmployeService employeService, CategoriePersonnelRepository categoriePersonnelRepository) {
+	public EmployeController(EmployeService employeService, CategoriePersonnelRepository categoriePersonnelRepository,
+			TypeRuptureRepository typeRuptureRepository) {
 		this.employeService = employeService;
 		this.categoriePersonnelRepository = categoriePersonnelRepository;
+		this.typeRuptureRepository = typeRuptureRepository;
 	}
 
 	@GetMapping("")
 	public List<EmployeSend> getAll() {
 		return employeService.getAll();
+	}
+
+	@GetMapping("/type-rupture")
+	public List<TypeRupture> getAllTypeRuptures(){
+		return typeRuptureRepository.findAll();
 	}
 
 	@GetMapping("/{id}")
@@ -53,22 +62,27 @@ public class EmployeController {
 	}
 
 	@GetMapping("/categories-personnel")
-	public ResponseEntity<?> getMethodName(@RequestParam String param) {
+	public ResponseEntity<?> getCategoriePersonnel() {
 		return ResponseEntity.ok(categoriePersonnelRepository.findAll());
 	}
-	
 
 	@GetMapping("/poste/{id}")
 	public List<EmployeSend> getEmployeByPoste(@PathVariable Integer id) {
 		return employeService.getQualifiedEmployeesForPost(id);
 	}
 
-	// TODO : mbola tsy mety
-	@PostMapping("/{id}/contrat")
-	public ResponseEntity<?> modifierContrat(@PathVariable("id") Integer id, @RequestBody ContratEmploye contrat) {
+	@PostMapping("/contrat")
+	public ResponseEntity<?> modifierContrat(@RequestBody ContratEmploye contrat) {
 
-		return ResponseEntity.ok(employeService.modifierContrat(id,contrat.getDateDebut(),contrat.getTypeContrat(),contrat.getPoste(),contrat.getSalaire()));
+		return ResponseEntity.ok(employeService.modifierContrat(contrat.getEmploye().getId(), contrat.getDateDebut(),
+				contrat.getTypeContrat(), contrat.getPoste(), contrat.getSalaire()));
 	}
+
+	@PostMapping("/rupture")
+	public ResponseEntity<?> terminerContrat(@RequestBody RuptureContrat c) {
+		return ResponseEntity.ok(employeService.rompreContrat(c));
+	}
+	
 
 	@GetMapping("/{id}/avances")
 	public List<RemboursementReste> getAllAvances(@PathVariable Integer id,
