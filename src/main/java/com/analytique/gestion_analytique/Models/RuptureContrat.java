@@ -24,7 +24,7 @@ public class RuptureContrat {
 	@Column(name = "date_notification", nullable = false)
 	private LocalDate dateNotification;
 
-	@Column(name = "date_fin_contrat", nullable = false)
+	@Column(name = "date_fin_contrat")
 	private LocalDate dateFinContrat;
 
 	@Column(name = "preavis_employe", nullable = false)
@@ -36,7 +36,7 @@ public class RuptureContrat {
 	@Column(name = "motif")
 	private String motif;
 
-	@Column(name = "indemnite_verse", nullable = false, precision = 15, scale = 2)
+	@Column(name = "indemnite_verse",precision = 15, scale = 2)
 	private BigDecimal indemniteVerse;
 
 	// Constructeurs
