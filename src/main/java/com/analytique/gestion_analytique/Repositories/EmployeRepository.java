@@ -7,6 +7,7 @@ import org.springframework.stereotype.Repository;
 
 import com.analytique.gestion_analytique.Models.Employe;
 import com.analytique.gestion_analytique.Models.Paye;
+import com.analytique.gestion_analytique.Models.PayeDetails;
 
 import java.util.List;
 
@@ -26,7 +27,7 @@ public interface EmployeRepository extends JpaRepository<Employe, Integer> {
 	List<Employe> findQualifiedEmployeesForPost(@Param("posteId") Integer posteId);
 
 	@Query(value="SELECT * FROM paye_details where mois = :mois and annee = :annee and id_employe = :id_employe", nativeQuery = true) 
-	Paye getPaye(@Param("mois") Integer mois, @Param("annee") Integer annee, @Param("id_employe") Integer id_employe);
+	PayeDetails getPaye(@Param("mois") Integer mois, @Param("annee") Integer annee, @Param("id_employe") Integer id_employe);
 	
 	@Query(value = "SELECT calculer_irsa(:idEmploye)", nativeQuery = true)
     Double calculerIrsa(@Param("idEmploye") Integer idEmploye);

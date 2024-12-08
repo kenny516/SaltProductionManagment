@@ -112,7 +112,7 @@ public class HeuresSupService {
 
     public double TotalmontantEmpHeursupMajore (Integer idEmploye, Integer mois, Integer annee, Integer majoration)
     {
-        return heuresSupRepository.findTotalMontantByEmployeAndDateAndMajoration(idEmploye,mois,annee,majoration);
+        return heuresSupRepository.findTotalMontantByEmployeAndDateAndMajoration(idEmploye,mois,annee,majoration) != null ? heuresSupRepository.findTotalMontantByEmployeAndDateAndMajoration(idEmploye,mois,annee,majoration) : 0.0;
     }
 
 }

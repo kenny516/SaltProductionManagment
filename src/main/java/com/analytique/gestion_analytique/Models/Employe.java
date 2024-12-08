@@ -54,7 +54,7 @@ public class Employe {
 
 	public Employe() {
 	}
-
+	@JsonIgnore
 	public List<Avance> getAvances() {
 		return Avances;
 	}

@@ -183,7 +183,7 @@ public class EmployeService {
 	}
 
 	public void controlerPaiement(Integer id_employe, int mois, int annee) throws Exception {
-		Paye paye = employeRepository.getPaye(mois, annee, id_employe);
+		PayeDetails paye = employeRepository.getPaye(mois, annee, id_employe);
 		if (paye != null) {
 			throw new Exception("Cet employe a deja ete paye");
 		}
@@ -275,7 +275,6 @@ public class EmployeService {
 			
 			BigDecimal droitPreavis = BigDecimal.ZERO;
 
-			// TODO: prendre montant a deduire du salaire pour les conges non payé
 			BigDecimal droitConge = BigDecimal.valueOf(congeService.getMontantDroitConge(IdEmploye,
 					Integer.valueOf(datePaiement.getMonthValue()), Integer.valueOf(datePaiement.getYear())));
 
@@ -284,10 +283,6 @@ public class EmployeService {
 			BigDecimal irsa = BigDecimal.valueOf(calculerIrsa(IdEmploye));
 			BigDecimal cnaps = calculerCNAPS(salaireBase);
 			BigDecimal sanitaire = calculerSanitaire(salaireBase);
-			double heureSup30 = heuresSupService.TotalmontantEmpHeursupMajore(IdEmploye,  datePaiement.getMonthValue(), datePaiement.getYear(), 30);
-			double heureSup40 = heuresSupService.TotalmontantEmpHeursupMajore(IdEmploye,  datePaiement.getMonthValue(), datePaiement.getYear(), 40);
-			double heureSup50 = heuresSupService.TotalmontantEmpHeursupMajore(IdEmploye,  datePaiement.getMonthValue(), datePaiement.getYear(), 50);
-			double heureSup100 = heuresSupService.TotalmontantEmpHeursupMajore(IdEmploye,  datePaiement.getMonthValue(), datePaiement.getYear(), 100);
 
 			BigDecimal total = salaireBase.add(BigDecimal.valueOf(montantHeureSup)).add(prime).add(indemnite)
 					.subtract(totalAvance).subtract(droitConge).add(droitPreavis).subtract(irsa).subtract(cnaps)
@@ -295,7 +290,7 @@ public class EmployeService {
 
 			PayeDetails payeDetails = new PayeDetails(employeRepository.getReferenceById(IdEmploye),
 					Integer.valueOf(datePaiement.getMonthValue()), Integer.valueOf(datePaiement.getYear()),
-					BigDecimal.valueOf(heureNormale), BigDecimal.valueOf(totalHeureSup),BigDecimal.valueOf(heureSup30),BigDecimal.valueOf(heureSup40), BigDecimal.valueOf(heureSup50), BigDecimal.valueOf(heureSup100), BigDecimal.valueOf(montantHeureSup),
+					BigDecimal.valueOf(heureNormale), BigDecimal.valueOf(totalHeureSup),BigDecimal.valueOf(montantHeureSup),
 					salaireBase, totalAvance, nbHeureAbsence, droitConge, droitPreavis, indemnite, prime, irsa, cnaps, sanitaire,
 					total);
 

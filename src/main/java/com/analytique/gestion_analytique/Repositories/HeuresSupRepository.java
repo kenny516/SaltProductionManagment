@@ -18,7 +18,7 @@ public interface HeuresSupRepository extends JpaRepository<HeuresSup, Long> {
     @Query("SELECT h FROM HeuresSup h WHERE h.dateDebut >= :today")
     List<HeuresSup> findHeuresSupAfterToday(LocalDateTime today);
 
-    @Query(value="SELECT SUM(hs.montant) FROM HeuresSup h " +
+    @Query(value="SELECT SUM(h.montant) FROM HeuresSup h " +
        "WHERE h.id_employe = :employeId " +
        "AND EXTRACT(MONTH FROM h.date_debut) = :mois " +
        "AND EXTRACT(YEAR FROM h.date_debut) = :annee " +

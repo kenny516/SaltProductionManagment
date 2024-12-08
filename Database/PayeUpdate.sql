@@ -18,10 +18,6 @@ CREATE TABLE IF NOT EXISTS paye_details(
 	annee INTEGER NOT NULL,
 	heure_normale NUMERIC(5, 2) NOT NULL DEFAULT 160.0,
 	heure_sup NUMERIC(20, 2) DEFAULT 0,
-    heure_sup30 NUMERIC(20, 2) DEFAULT 0,
-    heure_sup40 NUMERIC(20, 2) DEFAULT 0,
-    heure_sup50 NUMERIC(20, 2) DEFAULT 0,
-    heure_sup100 NUMERIC(20, 2) DEFAULT 0,
     montant_heure_sup NUMERIC(20, 2) NOT NULL,
 	salaire_base NUMERIC(20, 2) NOT NULL,
 	avance NUMERIC(20, 2),
@@ -147,6 +143,25 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
+CREATE OR REPLACE FUNCTION get_total_heures_sup(
+    emp INT,
+    month_ INT,
+    year_ INT,
+    maj NUMERIC
+)
+RETURNS NUMERIC AS $$
+BEGIN
+    RETURN (
+        SELECT SUM(h.montant)
+        FROM HeuresSup h
+        WHERE h.id_employe = emp
+          AND EXTRACT(MONTH FROM h.date_debut) = month_
+          AND EXTRACT(YEAR FROM h.date_debut) = year_
+          AND h.majoration = maj
+    );
+END;
+$$ LANGUAGE plpgsql;
+
 
 
 CREATE OR REPLACE VIEW V_irsa_employe AS 
@@ -165,6 +180,7 @@ WHERE ce.date_debut = (
     FROM ContratEmploye 
     WHERE id_employe = emp.id
 );
+
 
 
 CREATE OR REPLACE VIEW V_Paye_Employe_Details AS
@@ -186,10 +202,10 @@ SELECT
     pd.annee AS annee,
     pd.heure_normale AS heure_normale,
     pd.heure_sup AS heure_sup,
-    pd.heure_sup30 ,
-    pd.heure_sup40 ,
-    pd.heure_sup50 ,
-    pd.heure_sup100  ,
+    (SELECT get_total_heures_sup(emp.id, pd.mois, pd.annee, 30)) as heure_sup30,
+    (SELECT get_total_heures_sup(emp.id, pd.mois, pd.annee, 40)) as heure_sup40,
+    (SELECT get_total_heures_sup(emp.id, pd.mois, pd.annee, 50)) as heure_sup50,
+    (SELECT get_total_heures_sup(emp.id, pd.mois, pd.annee, 100)) as heure_sup100,
     pd.montant_heure_sup AS montant_heure_sup,
     pd.salaire_base AS salaire_base,
     pd.avance AS avance,
