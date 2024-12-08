@@ -13,6 +13,8 @@ import com.analytique.gestion_analytique.Models.TypeRupture;
 import com.analytique.gestion_analytique.Repositories.CategoriePersonnelRepository;
 import com.analytique.gestion_analytique.Repositories.TypeRuptureRepository;
 import com.analytique.gestion_analytique.Services.EmployeService;
+import com.analytique.gestion_analytique.Services.PayeDetailsService;
+import com.analytique.gestion_analytique.dto.PayeDetailsDto;
 import com.analytique.gestion_analytique.dto.receive.RemboursementReste;
 import com.analytique.gestion_analytique.dto.send.EmployeSend;
 
@@ -32,12 +34,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public class EmployeController {
 
 	EmployeService employeService;
+	PayeDetailsService payeDetailsService;
 	CategoriePersonnelRepository categoriePersonnelRepository;
 	TypeRuptureRepository typeRuptureRepository;
 
 	public EmployeController(EmployeService employeService, CategoriePersonnelRepository categoriePersonnelRepository,
-			TypeRuptureRepository typeRuptureRepository) {
+			TypeRuptureRepository typeRuptureRepository, PayeDetailsService payeDetailsService) {
 		this.employeService = employeService;
+		this.payeDetailsService = payeDetailsService;
 		this.categoriePersonnelRepository = categoriePersonnelRepository;
 		this.typeRuptureRepository = typeRuptureRepository;
 	}
@@ -91,13 +95,13 @@ public class EmployeController {
 	}
 
 	@PostMapping("/payer")
-	public ResponseEntity<PayeDetails> payer(
+	public ResponseEntity<PayeDetailsDto> payer(
 			@RequestParam(name = "idEmploye") Integer id,
 			@RequestParam(name = "datePaiement") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate datePaiement,
 			@RequestParam(required = false, name = "heureNormale", defaultValue = "160.0") Double heureNormale) {
 		try {
 			PayeDetails paye = employeService.validerPaiement(id, datePaiement, heureNormale);
-			return ResponseEntity.ok(paye);
+			return ResponseEntity.ok(PayeDetailsService.toDTO(paye));
 		} catch (Exception e) {
 			e.printStackTrace();
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);

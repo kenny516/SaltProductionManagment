@@ -52,6 +52,7 @@ public class EmployeService {
 	public final PayeDetailsRepository payeDetailsRepository;
 	public final CongeService congeService;
 	private final RuptureContratRepository ruptureRepository;
+	private final HeuresSupService heuresSupService;
 	JdbcTemplate jdbcTemplate;
 
 	
@@ -61,7 +62,7 @@ public class EmployeService {
 			ContratEmployeRepository contratEmployeRepository, AvanceRepository avanceRepository,
 			AvanceRemboursementRepository avanceRemboursementRepository, PayeRepository payeRepository,
 			PayeDetailsRepository payeDetailsRepository, CongeService congeService,
-			RuptureContratRepository ruptureRepository, JdbcTemplate jdbcTemplate) {
+			RuptureContratRepository ruptureRepository, HeuresSupService heuresSupService,JdbcTemplate jdbcTemplate) {
 		this.bonusSalaireRepository = bonusSalaireRepository;
 		this.heuresSupRepository = heuresSupRepository;
 		this.employeRepository = employeRepository;
@@ -74,6 +75,7 @@ public class EmployeService {
 		this.congeService = congeService;
 		this.ruptureRepository = ruptureRepository;
 		this.jdbcTemplate = jdbcTemplate;
+		this.heuresSupService = heuresSupService;
 	}
 
 	public List<EmployeSend> getQualifiedEmployeesForPost(Integer posteId) {
@@ -181,7 +183,7 @@ public class EmployeService {
 	}
 
 	public void controlerPaiement(Integer id_employe, int mois, int annee) throws Exception {
-		Paye paye = employeRepository.getPaye(mois, annee, id_employe);
+		PayeDetails paye = employeRepository.getPaye(mois, annee, id_employe);
 		if (paye != null) {
 			throw new Exception("Cet employe a deja ete paye");
 		}
@@ -273,7 +275,6 @@ public class EmployeService {
 			
 			BigDecimal droitPreavis = BigDecimal.ZERO;
 
-			// TODO: prendre montant a deduire du salaire pour les conges non payé
 			BigDecimal droitConge = BigDecimal.valueOf(congeService.getMontantDroitConge(IdEmploye,
 					Integer.valueOf(datePaiement.getMonthValue()), Integer.valueOf(datePaiement.getYear())));
 
@@ -289,7 +290,7 @@ public class EmployeService {
 
 			PayeDetails payeDetails = new PayeDetails(employeRepository.getReferenceById(IdEmploye),
 					Integer.valueOf(datePaiement.getMonthValue()), Integer.valueOf(datePaiement.getYear()),
-					BigDecimal.valueOf(heureNormale), BigDecimal.valueOf(totalHeureSup), BigDecimal.valueOf(montantHeureSup),
+					BigDecimal.valueOf(heureNormale), BigDecimal.valueOf(totalHeureSup),BigDecimal.valueOf(montantHeureSup),
 					salaireBase, totalAvance, nbHeureAbsence, droitConge, droitPreavis, indemnite, prime, irsa, cnaps, sanitaire,
 					total);
 
