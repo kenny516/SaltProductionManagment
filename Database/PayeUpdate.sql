@@ -151,16 +151,17 @@ CREATE OR REPLACE FUNCTION get_total_heures_sup(
 )
 RETURNS NUMERIC AS $$
 BEGIN
-    RETURN (
+    RETURN COALESCE((
         SELECT SUM(h.montant)
         FROM HeuresSup h
         WHERE h.id_employe = emp
           AND EXTRACT(MONTH FROM h.date_debut) = month_
           AND EXTRACT(YEAR FROM h.date_debut) = year_
           AND h.majoration = maj
-    );
+    ), 0);
 END;
 $$ LANGUAGE plpgsql;
+
 
 
 
