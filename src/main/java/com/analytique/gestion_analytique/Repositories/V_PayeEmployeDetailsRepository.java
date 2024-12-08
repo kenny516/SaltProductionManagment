@@ -10,8 +10,8 @@ import com.analytique.gestion_analytique.Models.V_PayeEmployeDetails;
 public interface V_PayeEmployeDetailsRepository extends JpaRepository<V_PayeEmployeDetails, Integer> {
 
     @Query(value = "SELECT * FROM V_Paye_Employe_Details " +
-                   "WHERE paye_mois = :mois " +
-                   "AND paye_annee = :annee " +
+                   "WHERE mois = :mois " +
+                   "AND annee = :annee " +
                    "AND id = :idEmploye", 
            nativeQuery = true)
     V_PayeEmployeDetails getPayeDetails(@Param("mois") Integer mois, 

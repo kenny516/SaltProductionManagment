@@ -52,6 +52,7 @@ public class EmployeService {
 	public final PayeDetailsRepository payeDetailsRepository;
 	public final CongeService congeService;
 	private final RuptureContratRepository ruptureRepository;
+	private final HeuresSupService heuresSupService;
 	JdbcTemplate jdbcTemplate;
 
 	
@@ -61,7 +62,7 @@ public class EmployeService {
 			ContratEmployeRepository contratEmployeRepository, AvanceRepository avanceRepository,
 			AvanceRemboursementRepository avanceRemboursementRepository, PayeRepository payeRepository,
 			PayeDetailsRepository payeDetailsRepository, CongeService congeService,
-			RuptureContratRepository ruptureRepository, JdbcTemplate jdbcTemplate) {
+			RuptureContratRepository ruptureRepository, HeuresSupService heuresSupService,JdbcTemplate jdbcTemplate) {
 		this.bonusSalaireRepository = bonusSalaireRepository;
 		this.heuresSupRepository = heuresSupRepository;
 		this.employeRepository = employeRepository;
@@ -74,6 +75,7 @@ public class EmployeService {
 		this.congeService = congeService;
 		this.ruptureRepository = ruptureRepository;
 		this.jdbcTemplate = jdbcTemplate;
+		this.heuresSupService = heuresSupService;
 	}
 
 	public List<EmployeSend> getQualifiedEmployeesForPost(Integer posteId) {
@@ -282,6 +284,10 @@ public class EmployeService {
 			BigDecimal irsa = BigDecimal.valueOf(calculerIrsa(IdEmploye));
 			BigDecimal cnaps = calculerCNAPS(salaireBase);
 			BigDecimal sanitaire = calculerSanitaire(salaireBase);
+			double heureSup30 = heuresSupService.TotalmontantEmpHeursupMajore(IdEmploye,  datePaiement.getMonthValue(), datePaiement.getYear(), 30);
+			double heureSup40 = heuresSupService.TotalmontantEmpHeursupMajore(IdEmploye,  datePaiement.getMonthValue(), datePaiement.getYear(), 40);
+			double heureSup50 = heuresSupService.TotalmontantEmpHeursupMajore(IdEmploye,  datePaiement.getMonthValue(), datePaiement.getYear(), 50);
+			double heureSup100 = heuresSupService.TotalmontantEmpHeursupMajore(IdEmploye,  datePaiement.getMonthValue(), datePaiement.getYear(), 100);
 
 			BigDecimal total = salaireBase.add(BigDecimal.valueOf(montantHeureSup)).add(prime).add(indemnite)
 					.subtract(totalAvance).subtract(droitConge).add(droitPreavis).subtract(irsa).subtract(cnaps)
@@ -289,7 +295,7 @@ public class EmployeService {
 
 			PayeDetails payeDetails = new PayeDetails(employeRepository.getReferenceById(IdEmploye),
 					Integer.valueOf(datePaiement.getMonthValue()), Integer.valueOf(datePaiement.getYear()),
-					BigDecimal.valueOf(heureNormale), BigDecimal.valueOf(totalHeureSup), BigDecimal.valueOf(montantHeureSup),
+					BigDecimal.valueOf(heureNormale), BigDecimal.valueOf(totalHeureSup),BigDecimal.valueOf(heureSup30),BigDecimal.valueOf(heureSup40), BigDecimal.valueOf(heureSup50), BigDecimal.valueOf(heureSup100), BigDecimal.valueOf(montantHeureSup),
 					salaireBase, totalAvance, nbHeureAbsence, droitConge, droitPreavis, indemnite, prime, irsa, cnaps, sanitaire,
 					total);
 

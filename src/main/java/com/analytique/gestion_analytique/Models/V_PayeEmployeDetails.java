@@ -63,6 +63,14 @@ public class V_PayeEmployeDetails {
 
     @Column(name = "heure_sup")
     private BigDecimal heureSup;
+    @Column(name = "heure_sup30")
+    private BigDecimal heureSup30;
+    @Column(name = "heure_sup40")
+    private BigDecimal heureSup40;
+    @Column(name = "heure_sup50")
+    private BigDecimal heureSup50;
+    @Column(name = "heure_sup100")
+    private BigDecimal heureSup100;
 
     @Column(name = "montant_heure_sup")
     private BigDecimal montantHeureSup;

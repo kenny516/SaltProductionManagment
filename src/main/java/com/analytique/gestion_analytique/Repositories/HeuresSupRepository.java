@@ -18,10 +18,10 @@ public interface HeuresSupRepository extends JpaRepository<HeuresSup, Long> {
     @Query("SELECT h FROM HeuresSup h WHERE h.dateDebut >= :today")
     List<HeuresSup> findHeuresSupAfterToday(LocalDateTime today);
 
-    @Query("SELECT SUM(hs.montant) FROM HeuresSup hs WHERE hs.employe.id = :employeId " +
-           "AND FUNCTION('MONTH', hs.dateDebut) = :mois " +
-           "AND FUNCTION('YEAR', hs.dateDebut) = :annee " +
-           "AND hs.majoration = :majoration")
-    Double findTotalMontantByEmployeAndDateAndMajoration(Integer employeId, Integer mois, Integer annee, Integer majoration);
+    @Query(value="SELECT SUM(hs.montant) FROM HeuresSup hs WHERE hs.employe.id = :employeId " +
+           "AND EXTRACT(MONTH FROM hs.date_debut) = :mois " +
+           "AND EXTRACT(YEAR FROM hs.date_debut) = :annee " +
+           "AND hs.majoration = :majoration", nativeQuery = true)
+    Double findTotalMontantByEmployeAndDateAndMajoration(@Param("employeId")Integer employeId,@Param("mois") Integer mois, @Param("annee")Integer annee, Integer majoration);
 }
  
