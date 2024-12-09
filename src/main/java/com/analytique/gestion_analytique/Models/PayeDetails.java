@@ -37,6 +37,7 @@ public class PayeDetails {
     @Column(name = "heure_sup", precision = 20, scale = 2)
     private BigDecimal heureSup;
 
+
     @Column(name = "montant_heure_sup", precision = 20, scale = 2)
     private BigDecimal MontantHeureSup;
 
@@ -74,7 +75,7 @@ public class PayeDetails {
     private BigDecimal total;
 
     public PayeDetails(Employe employe, Integer mois, Integer annee, 
-                       BigDecimal heureNormale, BigDecimal heureSup, 
+                       BigDecimal heureNormale, BigDecimal heureSup,
                        BigDecimal montantHeureSup, BigDecimal salaireBase, 
                        BigDecimal avance, BigDecimal nbHeureAbs, 
                        BigDecimal droitConge, BigDecimal droitPreavis, 
@@ -86,6 +87,7 @@ public class PayeDetails {
         this.annee = annee;
         this.heureNormale = heureNormale != null ? heureNormale : BigDecimal.valueOf(160.0);
         this.heureSup = heureSup;
+
         this.MontantHeureSup = montantHeureSup;
         this.salaireBase = salaireBase;
         this.avance = avance;
