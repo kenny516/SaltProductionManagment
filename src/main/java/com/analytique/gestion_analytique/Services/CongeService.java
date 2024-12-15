@@ -6,12 +6,15 @@ import com.analytique.gestion_analytique.Repositories.CongeRepository;
 import com.analytique.gestion_analytique.Repositories.EmployeRepository;
 
 import org.springframework.stereotype.Service;
+
+import java.time.DayOfWeek;
 import java.util.HashMap;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 @Service
 public class CongeService {
@@ -55,6 +58,15 @@ public class CongeService {
 			}
 		}
 	}
+	public void updateCongeDure(Integer id, BigDecimal duree) {
+		if (repository.existsById(id)) {
+			Conge existingConge = repository.findById(id).orElse(null);
+			if (existingConge != null) {
+				existingConge.setDuree(duree);
+				repository.save(existingConge);
+			}
+		}
+	}
 
 	public void deleteConge(Integer id) {
 		repository.deleteById(id);
@@ -63,7 +75,7 @@ public class CongeService {
 	// utils
 	public void updateStatus(List<Conge> conges) {
 		for (Conge conge : conges) {
-			BigDecimal duree = BigDecimal.valueOf(ChronoUnit.DAYS.between(conge.getDateDebut(), conge.getDateFin()) + 1);
+			BigDecimal duree = BigDecimal.valueOf(getBusinessDaysBetween(conge.getDateDebut(), conge.getDateFin(), null));
 			conge.setDuree(duree);
 			String currentStatus = conge.getStatus();
 			if ((conge.getDateDebut().isBefore(LocalDate.now()) || conge.getDateDebut().isEqual(LocalDate.now()))
@@ -77,10 +89,28 @@ public class CongeService {
 			}
 		}
 	}
+	public static Integer getBusinessDaysBetween(LocalDate startDate, LocalDate endDate, Set<LocalDate> holidays) {
+		Integer businessDays = 0;
+		LocalDate date = startDate;
+
+		while (!date.isAfter(endDate)) {
+			DayOfWeek dayOfWeek = date.getDayOfWeek();
+			// Vérifie si c'est un jour ouvrable (lundi à vendredi) et pas un jour férié
+			if (dayOfWeek != DayOfWeek.SATURDAY && dayOfWeek != DayOfWeek.SUNDAY && (holidays == null || !holidays.contains(date))) {
+				businessDays++;
+			}
+			date = date.plusDays(1);
+		}
+
+		return businessDays;
+	}
 
 	public List<Conge> getCongeValide() {
 		List<Conge> conges = repository.findAll();
 		updateStatus(conges);
+        for (Conge conge : conges) {
+            updateCongeDure(conge.getId(), conge.getDuree());
+        }
 		return conges;
 	}
 
