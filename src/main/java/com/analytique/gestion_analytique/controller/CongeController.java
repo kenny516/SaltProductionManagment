@@ -9,6 +9,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
 
@@ -41,7 +42,8 @@ public class CongeController {
                 conge.getDateFin().getYear()
         );
         TypeConge typeConge = typeCongeService.getTypeCongeById(conge.getIdTypeConge().getId());
-        if (typeConge.getDureeMax().doubleValue() < conge.getDuree().doubleValue()) {
+        Integer dure = CongeService.getBusinessDaysBetween(conge.getDateDebut(), conge.getDateFin(),null);
+        if (typeConge.getDureeMax().doubleValue() < dure.doubleValue()) {
             String errorMessage = String.format(
                     "Erreur : la durée du congé (%.2f) dépasse la durée maximale (%.2f) autorisée.",
                     conge.getDuree().doubleValue(),
@@ -49,11 +51,11 @@ public class CongeController {
             );
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorMessage);
         }
-        if (jourRestant < conge.getDuree().doubleValue() && typeConge.getCumulable()) {
+        if (jourRestant < dure && typeConge.getCumulable()) {
             String errorMessage = String.format(
                     "Erreur : jours restants (%.2f) insuffisants pour accorder un congé de %.2f jours.",
                     jourRestant,
-                    conge.getDuree().doubleValue()
+                    dure.doubleValue()
             );
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorMessage);
         }
