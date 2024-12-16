@@ -12,7 +12,7 @@ CREATE OR REPLACE VIEW V_Details_Candidat AS
 SELECT c.*,     
        SUM(EXTRACT(YEAR FROM AGE(COALESCE(e.date_fin, CURRENT_DATE), e.date_debut)) * 12 +
            EXTRACT(MONTH FROM AGE(COALESCE(e.date_fin, CURRENT_DATE), e.date_debut))) AS DureeExperience
-FROM Candidat c
+FROM Candidats c
 JOIN experience e ON e.candidat_id = c.id
 GROUP BY c.id;
 
