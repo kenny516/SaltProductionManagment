@@ -62,7 +62,7 @@ BEGIN
     AND date_debut = (SELECT MAX(date_debut) FROM ContratEmploye WHERE id_employe = p_id_employe);
 
     IF sal > 600000 THEN
-        irsa_total := irsa_total + (salaire - 600000) * 0.20;
+        irsa_total := irsa_total + (sal - 600000) * 0.20;
         sal := 600000;
     END IF;
 
